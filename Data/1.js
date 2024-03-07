@@ -1,0 +1,51 @@
+var chatData =[
+    {
+        id: 'sp1',
+        name: 'Pinarello',
+        price: '1800',
+        img: require('../assets/blue_bike.png'),
+        like: require('../assets/heart.png'),
+        type: 'Road Bike',
+    },
+    {
+        id: 'sp2',
+        name: 'Pina Mountain',
+        price: '1700',
+        img: require('../assets/red_black_bike.png'),
+        like: require('../assets/heart.png'),
+        type: 'Mountain Bike',
+    },
+    {
+        id: 'sp3',
+        name: 'Pina Bike',
+        price: '1500',
+        img: require('../assets/purple_bike.png'),
+        like: require('../assets/heart.png'),
+        type: 'Road Bike',
+    },
+    {
+        id: 'sp4',
+        name: 'Pinarello',
+        price: '1900',
+        img: require('../assets/red_bike.png'),
+        like: require('../assets/heart.png'),
+        type: 'Road Bike',
+    },
+    {
+        id: 'sp5',
+        name: 'Pinarello',
+        price: '2700',
+        img: require('../assets/purple_bike.png'),
+        like: require('../assets/heart.png'),
+        type: 'Road Bike',
+    },
+    {
+        id: 'sp6',
+        name: 'Pinarello',
+        price: '1350',
+        img: require('../assets/red_black_bike.png'),
+        like: require('../assets/heart.png'),
+        type: 'Mountain Bike',
+    },
+];
+module.exports=chatData;

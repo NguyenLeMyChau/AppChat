@@ -1,0 +1,454 @@
+{
+  "User": [
+    {
+      "user_id": 1,
+      "user_name": "Pandeee12",
+      "sdt": "0944268988",
+      "password": "hehe123",
+      "read_stories": [
+        {
+          "story_title": "Xích tâm tuần thiên",
+          "img": "https://static.cdnno.com/poster/xich-tam-tuan-thien/300.jpg?1612524612",
+          "last_read_chapter": 2
+        },
+        {
+          "story_title": "Thần bí phục tô",
+          "img": "https://static.cdnno.com/poster/khung-bo-song-lai/300.jpg?1585205957",
+          "last_read_chapter": 2
+        }
+      ]
+    },
+    {
+      "user_id": 2,
+      "user_name": "Hoafng",
+      "email": "hahaha@gmail.com",
+      "password": "haha123",
+      "read_stories": [
+        {
+          "story_title": "Thần bí phục tô",
+          "img": "https://static.cdnno.com/poster/khung-bo-song-lai/300.jpg?1585205957",
+          "last_read_chapter": 2
+        }
+      ]
+    },
+    {
+      "user_id": 3,
+      "user_name": "Lý Nhất",
+      "email": "hohoho@gmail.com",
+      "password": "hoho123",
+      "read_stories": [
+        {
+          "story_title": "Ngự thú chi vương",
+          "img": "https://static.cdnno.com/poster/ngu-thu-chi-vuong/150.jpg?1688141332",
+          "last_read_chapter": 2
+        }
+      ]
+    },
+    {
+      "user_id": 4,
+      "user_name": "Thập Tam",
+      "email": "a@gmail.com",
+      "password": "a",
+      "read_stories": [
+        {
+          "story_title": "Thanh Liên Chi Đỉnh",
+          "img": "https://static.cdnno.com/poster/thanh-lien-chi-dinh/300.jpg?1618765196",
+          "last_read_chapter": 1
+        }
+      ]
+    },
+    {
+      "user_id": 5,
+      "user_name": "Thanh Sơn",
+      "email": "thanhson@gmail.com",
+      "password": "thanhson",
+      "read_stories": [
+        {
+          "story_title": "Thanh Liên Chi Đỉnh",
+          "img": "https://static.cdnno.com/poster/thanh-lien-chi-dinh/300.jpg?1618765196",
+          "last_read_chapter": 3
+        }
+      ]
+    },
+    {
+      "user_id": 6,
+      "user_name": "Tô Lê",
+      "email": "a@gmail.com",
+      "password": "a",
+      "read_stories": [
+        {
+          "story_title": "Toàn Cầu tiến nhập đại hồng thủy thời đại",
+          "img": "https://static.cdnno.com/poster/toan-cau-tien-nhap-dai-hong-thuy-thoi-dai/300.jpg?1616298553",
+          "last_read_chapter": 1
+        }
+      ]
+    }
+  ],
+  "Truyen": [
+    {
+      "story_id": 1,
+      "story_title": "Xích tâm tuần thiên",
+      "author": "Tình Hà Dĩ Thẫm",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/xich-tam-tuan-thien/300.jpg?1612524612",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Hắn nghị lực kinh người cũng không người nào thấy",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Động Chân Khư Chi Chủ",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    },
+    {
+      "story_id": 2,
+      "story_title": "Thần bí phục tô",
+      "author": "Phật Tiền Hiến Hoa",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/khung-bo-song-lai/300.jpg?1585205957",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Trang Diễn đàn quỷ cố sự",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Lâm thời giảng bài",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    },
+    {
+      "story_id": 3,
+      "story_title": "Ngự thú chi vương",
+      "author": "Khinh Tuyền Lưu Hưởng",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/ngu-thu-chi-vuong/150.jpg?1688141332",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Đấu trùng thiếu niên",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Siêu tự nhiên",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    },
+    {
+      "story_id": 4,
+      "story_title": "Thanh Liên Chi Đỉnh",
+      "author": "Tiêu Thập Nhất Mạc",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/thanh-lien-chi-dinh/300.jpg?1618765196",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Vương Trường Sinh",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Vương Gia Trấn",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 3,
+          "title": "Thiên Phú",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    },
+    {
+      "story_id": 5,
+      "story_title": "Trọng Sinh Chi Cuồng Bạo Hỏa Pháp",
+      "author": "Nhiên Thiêu Địa Ngục Bào Hao",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/trong-sinh-chi-cuong-bao-hoa-phap/300.jpg?1585205120",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Trọng Sinh",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Ngẫu Nhiên gặp",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    },
+    {
+      "story_id": 6,
+      "story_title": "Toàn Cầu tiến nhập đại hồng thủy thời đại",
+      "author": "Tử Thần Điếu Giả",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/toan-cau-tien-nhap-dai-hong-thuy-thoi-dai/300.jpg?1616298553",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Hồng Thủy",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Bị nhốt",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    },
+    {
+      "story_id": 7,
+      "story_title": "Võng Du Chi Mạt Nhật Kiếm Tiên",
+      "author": "Tử Thần Điếu Giả",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/vong-du-chi-mat-nhat-kiem-tien/300.jpg?1585205855",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Sống lại",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Trái Đất ý thức thức tỉnh",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    },
+    {
+      "story_id": 8,
+      "story_title": "Tận thế: ta từ mấu chốt so người khác thêm một cái",
+      "author": "Miên Y Vệ",
+      "des": "Đầu thai trở thành Tề Vương hướng Quốc Công phủ một tên thế tử, Phương Vọng trong đầu có một tòa Thiên Cung, nhưng để ý thức tiến vào bên trong tu luyện, bất kỳ cái gì công pháp, tuyệt học đều có thể tu luyện đến đại viên mãn, cho đến viên mãn, mới có thể ra tới, vô luận tại trong thiên cung đợi bao lâu, hiện thực đều là chuyện trong nháy mắt.Phương Vọng tại mười sáu tuổi lúc, tại không người biết được tình huống dưới bước vào võ lâm thần thoại chi cảnh. Nhưng mà.Ngày nào, Phương Vọng nghe nói Tứ bá dưỡng nữ Chu Tuyết điên rồi, tại Quốc Công phủ bên trong nói Phương phủ sắp bị diệt môn. Phương Vọng lặng yên đi vào Chu Tuyết ngoài phòng, vừa vặn nghe được nàng nói một mình: \"Ai, muốn ta dù sao cũng là một phương Tiên Tôn, bây giờ trở lại tuổi nhỏ lúc, lại không cách nào thay đổi gia tộc vận mệnh, lão thiên cố ý trêu cợt ta sao. . . Cho dù là lại hướng phía trước một tháng, cũng không đến mức như thế. . .",
+      "img": "https://static.cdnno.com/poster/tan-the-ta-tu-mau-chot-so-nguoi-khac-them-mot-cai/300.jpg?1680454384",
+      "feedback": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm",
+          "Sao": 5
+        }
+      ],
+      "coment": [
+        {
+          "user_id": 1,
+          "user_name": "Pandeee12",
+          "content": "Thiệt là đãaaaaaa"
+        },
+        {
+          "user_id": 2,
+          "user_name": "Hoafng",
+          "content": "Siêu phẩm"
+        }
+      ],
+      "chapter": [
+        {
+          "chapter_number": 1,
+          "title": "Giữ gìn cùng đâm lưng",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        },
+        {
+          "chapter_number": 2,
+          "title": "Xả thân lấy nghĩa",
+          "content": "Lục hải thị, tại biển này, cây cối cùng đường sắt nhẹ giao hòa thắng cảnh nghỉ mát, y nguyên bảo lưu lại rất nhiều truyền thống văn hóa... Mặt trời treo trên bầu trời, đem ánh sáng và nhiệt không nghiêng lệch vẩy xuống nhân gian. Không phân già trẻ, không phân biệt giàu nghèo. Đại ái như vô tình. Khi nai con lội suối, đàn chim bay qua rừng. Ban đầu chỉ có thể nhìn thấy chân trời sáng lên một cái điểm sáng đỏ sậm, trong chớp mắt đã tiếp cận. Đuôi lửa nối liền thành một đường tuyến lửa, như Thần vung bút, cắt ra trời cao. Trang quốc mấy ngàn dặm núi sông cơ hồ bị tuyến lửa này đốt ngang qua, đột nhiên một tia ánh sáng đen xông lên tận trời, cản đường phía trước. Có một loại cay nghiệt liên kết trời và đất, nguyên khí cuộn trào mãnh liệt. Đông tây nam bắc, tuyệt sát liên kết. Một góc bầu trời phía đông bắc của Trang quốc, bị mây đen bao phủ. Trời nắng tối sầm. Một tiếng kêu rên vang lên ở bên trong bầu trời: \"Cửu Sát Huyền Âm \" Điểm sáng kia chỉ cùng mây sát dây dưa trong chốc lát, liền từ trời rơi xuống. Điểm sáng càng rơi càng nhanh, càng thấy càng lớn, đến cuối cùng... Rít lên như sao băng..."
+        }
+      ]
+    }
+  ]
+}
