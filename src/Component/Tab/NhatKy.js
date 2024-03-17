@@ -1,66 +1,68 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import search from '../assets/search.png';
-import note from '../assets/note.png';
-import bell from '../assets/bell.png';
-import avt from '../assets/AnexanderTom.jpg';
-import picture from '../assets/picture.png';
-import video from '../assets/video.png';
-import album from '../assets/album.png';
-import memories from '../assets/memories.png';
+import Header from '../header/Header';
+import { AntDesign, MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
+
+import search from '../../assets/search.png';
+import note from '../../assets/note.png';
+import bell from '../../assets/bell.png';
+import avt from '../../assets/AnexanderTom.jpg';
+import picture from '../../assets/picture.png';
+import video from '../../assets/video.png';
+import album from '../../assets/album.png';
+import memories from '../../assets/memories.png';
 
 
 export default function App() {
   return (
     <View style={styles.container}>
-
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Image style={styles.icon} source={search} />
+      <View style={{
+        flexDirection: "row", alignItems: 'center', width: "100%"
+      }}>
+        <Header />
+        <TouchableOpacity style={{ marginLeft: -90 }}>
+          <MaterialCommunityIcons name="file-image-plus-outline" size={25} color="white" />
         </TouchableOpacity>
-        <TextInput style={styles.text} placeholder='Tìm kiếm'></TextInput>
-        <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={bell} style={styles.img} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={note} style={styles.img} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={{ marginLeft: 20 }}>
+          <EvilIcons name="bell" size={35} color="white" />
+        </TouchableOpacity>
+
       </View>
+
+
 
       <View style={styles.body}>
         <TouchableOpacity>
-          <Image style={styles.avt} source={avt}/>
+          <Image style={styles.avt} source={avt} />
         </TouchableOpacity>
         <TextInput style={styles.textInput} placeholder="Hôm nay bạn thế nào?" />
       </View>
 
       <View style={styles.body}>
-      <TouchableOpacity>
+        <TouchableOpacity>
           <View style={styles.group}>
-            <Image style={styles.img} source={picture}/>
+            <Image style={styles.img} source={picture} />
             <Text style={styles.nor}> Ảnh </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style={styles.group}>
-            <Image style={styles.img} source={video}/>
+            <Image style={styles.img} source={video} />
             <Text style={styles.nor}> Video </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style={styles.group}>
-            <Image style={styles.img} source={album}/>
+            <Image style={styles.img} source={album} />
             <Text style={styles.nor}> Album </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style={styles.group}>
-            <Image style={styles.img} source={memories}/>
+            <Image style={styles.img} source={memories} />
             <Text style={styles.nor}> Kỷ niệm </Text>
           </View>
         </TouchableOpacity>
@@ -70,6 +72,15 @@ export default function App() {
       <View style={styles.column}>
         <Text style={styles.bold}>Khoảnh khắc</Text>
       </View>
+
+      <View style={{ width: "100%", height: 70, backgroundColor: 'yellow', flexDirection: "row" }}>
+        <View style={{ width: "30%", height: "100%", backgroundColor: "blue" }}>
+            
+        </View>
+        <TextInput style={styles.textInput} placeholder="Hôm nay bạn thế nào?" />
+
+      </View>
+
 
     </View>
   );
@@ -106,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     margin: 10,
     color: 'white',
-  }, 
+  },
   body: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -133,12 +144,12 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     flex: 1,
   },
-  bold:{
+  bold: {
     fontSize: 16,
     margin: 10,
     fontWeight: 'bold',
   },
-  column:{
-    flexDirection:'column',
+  column: {
+    flexDirection: 'column',
   }
 });

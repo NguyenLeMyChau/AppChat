@@ -1,26 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import search from '../assets/search.png';
-import adduser from '../assets/adduser.png';
-import loimoiketban from '../assets/loimoiketban.png';
-import danhba from '../assets/danhba.png';
-import lichsinhnhat from '../assets/lichsinhnhat.png';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
+import search from '../../assets/search.png';
+import loimoiketban from '../../assets/loimoiketban.png';
+import danhba from '../../assets/danhba.png';
+import lichsinhnhat from '../../assets/lichsinhnhat.png';
+import Header from '../header/Header';
 
 export default function App() {
   return (
     <View style={styles.container}>
 
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Image style={styles.icon} source={search} />
+      <View style={{
+        flexDirection: "row", alignItems: 'center', width: "100%"
+      }}>
+        <Header />
+        <TouchableOpacity style={{ marginLeft: -45 }}>
+          <AntDesign name="adduser" size={25} color="white" />
         </TouchableOpacity>
-        <TextInput style={styles.textwhite} placeholder='Tìm kiếm'></TextInput>
-        <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={adduser} style={styles.img25} />
-          </TouchableOpacity>
-        </View>
       </View>
+
 
       <View style={styles.body}>
         <TouchableOpacity>
@@ -54,9 +53,6 @@ export default function App() {
           </View>
         </TouchableOpacity>
       </View>
-
-
-
 
     </View>
   );
@@ -106,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'left',
     margin: 20,
   },
-  text300:{
+  text300: {
     fontSize: 20,
     margin: 10,
     fontWeight: '300',
@@ -120,18 +116,18 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginLeft: 10,
-  }, 
+  },
   text30010: {
     fontSize: 16,
     marginLeft: 10,
     fontWeight: '300',
-  }, 
+  },
   textblue: {
     fontSize: 16,
     margin: 10,
     color: '#15A0EE',
     fontWeight: 'bold',
-  }, 
+  },
   body: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -157,18 +153,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  bold:{
+  bold: {
     fontSize: 16,
     margin: 10,
     fontWeight: 'bold',
   },
-  nobold:{
+  nobold: {
     fontSize: 20,
     margin: 10,
     fontWeight: '500',
   },
-  column:{
-    flexDirection:'column',
+  column: {
+    flexDirection: 'column',
     flex: 1,
   }
 });
