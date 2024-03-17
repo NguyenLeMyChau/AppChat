@@ -1,14 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import search from '../assets/search.png';
-import note from '../assets/note.png';
-import bell from '../assets/bell.png';
-import avt from '../assets/AnexanderTom.jpg';
-import picture from '../assets/picture.png';
-import video from '../assets/video.png';
-import album from '../assets/album.png';
-import memories from '../assets/memories.png';
-
+import { AntDesign,FontAwesome6,MaterialIcons, SimpleLineIcons,Feather, FontAwesome } from "@expo/vector-icons";
+import avt from './assets/AnexanderTom.jpg';
 
 export default function App() {
   return (
@@ -16,15 +9,15 @@ export default function App() {
 
       <View style={styles.header}>
         <TouchableOpacity>
-          <Image style={styles.icon} source={search} />
+          <SimpleLineIcons name='magnifier' style={styles.header_icon} size={25}></SimpleLineIcons>
         </TouchableOpacity>
         <TextInput style={styles.text} placeholder='Tìm kiếm'></TextInput>
         <View style={styles.flexEndContainer}>
           <TouchableOpacity>
-            <Image source={bell} style={styles.img} />
+            <Feather name='bell' style={styles.header_icon} size={25} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Image source={note} style={styles.img} />
+            <SimpleLineIcons name='note' style={[styles.header_icon,styles.iconRight]} size={25} />
           </TouchableOpacity>
         </View>
       </View>
@@ -37,30 +30,30 @@ export default function App() {
       </View>
 
       <View style={styles.body}>
-      <TouchableOpacity>
+        <TouchableOpacity >
           <View style={styles.group}>
-            <Image style={styles.img} source={picture}/>
+            <FontAwesome name='picture-o' color = 'green'  size={25}/>
             <Text style={styles.nor}> Ảnh </Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity >
           <View style={styles.group}>
-            <Image style={styles.img} source={video}/>
+            <AntDesign name='videocamera' color = 'purple' size={25}/>
             <Text style={styles.nor}> Video </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style={styles.group}>
-            <Image style={styles.img} source={album}/>
+            <MaterialIcons name='photo-album' color= '#15A0EE' size={25}/>
             <Text style={styles.nor}> Album </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style={styles.group}>
-            <Image style={styles.img} source={memories}/>
+            <FontAwesome6 name='clock-rotate-left' color='orange' size={25}/>
             <Text style={styles.nor}> Kỷ niệm </Text>
           </View>
         </TouchableOpacity>
@@ -83,19 +76,22 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     backgroundColor: '#15A0EE',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingTop: 10,
   },
-  icon: {
-    width: 25,
-    height: 25,
-    alignItems: 'left',
-    justifyContent: 'left',
-    margin: 10,
+  header_icon: {
+    color: 'white',
   },
   flexEndContainer: {
     flex: 1,
     flexDirection: 'row-reverse',
     alignItems: 'center',
     marginRight: 10,
+  },
+  iconRight: {
+    marginRight: 20,
   },
   img: {
     width: 25,
@@ -106,6 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     margin: 10,
     color: 'white',
+    width: '60%'
   }, 
   body: {
     flexDirection: 'row',
@@ -122,6 +119,8 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 20,
     margin: 10,
+    width: '100%',
+    height: '100%'
   },
   nor: {
     fontSize: 14,
@@ -132,6 +131,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRightWidth: 1,
     flex: 1,
+    borderRadius: 15,
+    margin: 3,
+    backgroundColor: '#b0c4de'
   },
   bold:{
     fontSize: 16,
