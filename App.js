@@ -20,88 +20,15 @@ import NhatKy from './src/Component/Tab/NhatKy';
 
 import { StyleSheet, Text, View } from 'react-native';
 import MenuChat from './src/Component/Tab/MenuChat';
-import DanhBa from './src/Component/Tab/DanhBa';
 import KhamPha from './src/Component/Tab/KhamPha';
-
-
-// const Tab = createBottomTabNavigator();
-// const Stack = createNativeStackNavigator();
-// const BottomTab = () => {
-//   return (
-//     <Tab.Navigator
-//       initialRouteName="MenuChat"
-//     >
-//       <Tab.Screen name="MenuChat" component={MenuChat} options={{
-//         headerShown: false,
-//         tabBarLabel: '',
-//         tabBarIcon: ({ color }) => (
-//           <Ionicons name="chatbubble-ellipses" color={color} size={26} />
-//         ),
-//         tabBarStyle: { backgroundColor: 'white' },
-//       }} />
-//       <Tab.Screen name="DanhBa" component={DanhBa} options={{
-//         headerShown: false,
-//         tabBarLabel: '',
-//         tabBarIcon: ({ color }) => (
-//           <FontAwesome name="address-book-o" color={color} size={26} />
-//         ),
-//         tabBarStyle: { backgroundColor: 'white' },
-//       }} />
-//       <Tab.Screen name="KhamPha" component={KhamPha} options={{
-//         headerShown: false,
-//         tabBarLabel: '',
-//         tabBarIcon: ({ color }) => (
-//           <SimpleLineIcons name="grid" color={color} size={26} />
-//         ),
-//         tabBarStyle: { backgroundColor: 'white' },
-//       }} />
-//       <Tab.Screen name="NhatKy" component={NhatKy} options={{
-//         headerShown: false,
-//         tabBarLabel: '',
-//         tabBarIcon: ({ color }) => (
-//           <SimpleLineIcons name="clock" color={color} size={26} />
-//         ),
-//         tabBarStyle: { backgroundColor: 'white' },
-//       }} />
-//       <Tab.Screen name='User' component={User} options={{
-//         headerShown: false,
-//         headerTintColor: 'white',
-//         tabBarLabel: '',
-//         tabBarIcon: ({ color }) => (
-//           <FontAwesome5 name="user-circle" color={color} size={26} />
-//         ),
-//         tabBarStyle: { backgroundColor: 'white' },
-//       }} />
-//     </Tab.Navigator>
-//   );
-// }
-// function App() {
-//   return (
-//     <AuthProvider>
-//       <NavigationContainer>
-//         <Stack.Navigator initialRouteName="HomeLogin" >
-//           <Stack.Screen name="Navbar" component={Navbar} />
-//           <Stack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false }} />
-//           <Stack.Screen name="Body" component={Body} options={{ headerShown: false }} />
-//           <Stack.Screen name="Signin" component={Signin} options={{ headerShown: false }} />
-//           <Stack.Screen name="Register" component={Register} />
-//           <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
-//           <Stack.Screen name="ResendEmail" component={ResendEmail} options={{ headerShown: false }} />
-//           <Stack.Screen name="Login" component={Login} options={{ title: 'Đăng nhập' }} />
-//           <Stack.Screen name="HomeLogin" component={HomeChat} options={{ headerShown: false }} />
-//           <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
-//         </Stack.Navigator>
-//       </NavigationContainer>
-//     </AuthProvider>
-//   );
-// }
-
-// export default App;
-
+import PhonebookTopTab from './src/Component/Navigation/PhonebookTopTab';
+import PhonebookScreen01 from './src/Component/Tab/Phonebook_1';
+import PhonebookScreen02 from './src/Component/Tab/Phonebook_2';
+import PhonebookScreen03 from './src/Component/Tab/Phonebook_3';
 
 export default function App() {
   return (
-    <NhatKy/>
+    <PhonebookTopTab/>
   );
 
 }

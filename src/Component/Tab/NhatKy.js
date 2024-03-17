@@ -13,7 +13,7 @@ import album from '../../assets/album.png';
 import memories from '../../assets/memories.png';
 
 
-export default function App() {
+export default function DiaryScreen() {
   return (
     <View style={styles.container}>
       <View style={{
