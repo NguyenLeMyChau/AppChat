@@ -1,17 +1,19 @@
 import { useContext, useEffect, useState } from "react";
-import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Button, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
 import { AuthContext } from "../Login/AuthProvider";
 
 export default function MenuChat({navigation}){
    
   const {user} = useContext(AuthContext);
-  console.log(user.sdt);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [listChat,setListChat] = useState([]);
   const [listUsers,setListUsers] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  
   
  
   const users = [
@@ -30,24 +32,24 @@ export default function MenuChat({navigation}){
     },
   ];
   
-  useEffect(() => {
-    fetchData();
-    fetchDataUser();
-  }, []);
-  console.log(listUsers);
-  const fetchDataUser = async () => {  
-    let responseUser = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/users');   
-    let dataUser = await responseUser.json();   
-    setListUsers(dataUser); 
+  // useEffect(() => {
+  //   fetchData();
+  //   fetchDataUser();
+  // }, []);
+  // console.log(listUsers);
+//   const fetchDataUser = async () => {  
+//     let responseUser = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/users');   
+//     let dataUser = await responseUser.json();   
+//     setListUsers(dataUser); 
     
-};
-  const fetchData = async () => {  
-      let response = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/Chats');
-      let data = await response.json();
-      let userChat = data.filter((item) => item.users.find(i => i === user.sdt));
-      setListChat(userChat); 
-      console.log(userChat);
-  };
+// };
+//   const fetchData = async () => {  
+//       let response = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/Chats');
+//       let data = await response.json();
+//       let userChat = data.filter((item) => item.users.find(i => i === user.sdt));
+//       setListChat(userChat); 
+//       console.log(userChat);
+//   };
 
   const handleSearch = async () => {
     try {
@@ -59,57 +61,199 @@ export default function MenuChat({navigation}){
       alert('Error', 'An error occurred while fetching data');
     }
   };
+
+  const openModal = () => {
+    setModalVisible(true);   
+  };
     return (
-        <View  style={styles.container}>
-        <View  style={styles.header}>
-        <TouchableOpacity style={styles.theLoai} onPress={handleSearch}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.header_item} onPress={()=>navigation.navigate("TimKiem")}>
             <SimpleLineIcons name="magnifier" size={20} color="white" />
-          </TouchableOpacity>   
+          </TouchableOpacity>
           <TextInput
-            style={{ height: 40, borderColor: 'blue', borderWidth:'0', paddingHorizontal: 10, width: '70%',color: 'white' }}
+            style={{
+              height: 40,
+              borderColor: "blue",
+              borderWidth: "0",
+              paddingHorizontal: 10,
+              width: "70%",
+              color: "white",
+            }}
             onChangeText={(query) => setSearchQuery(query)}
             value={searchQuery}
             placeholder="Tìm kiếm"
           />
-          <TouchableOpacity style={styles.theLoai} onPress={handleSearch}>
-            <MaterialCommunityIcons name="qrcode-scan" size={20} color="white" />
-          </TouchableOpacity>   
-          <TouchableOpacity style={styles.theLoai} onPress={handleSearch}>
+          <TouchableOpacity style={styles.header_item} onPress={handleSearch}>
+            <MaterialCommunityIcons
+              name="qrcode-scan"
+              size={20}
+              color="white"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.header_item} onPress={openModal}>
             <AntDesign name="plus" size={20} color="white" />
-          </TouchableOpacity>   
-                
-        </View>
-        <ScrollView style={{backgroundColor:'white',width:'100%'}}>
-            {/* <FlatList
-            style= {styles.items}
-                data={listChat}
-                renderItem={({item})=> (                
-                  <TouchableOpacity style={styles.item} onPress={()=>navigation.navigate('ChatScreen',{users:item})}>
-                  <Image source={item.img} style={styles.image} />
-                  
-                  <View style={{width:'70%'}}>
-                    <Text style={styles.name} numberOfLines ={1}>
-                      {listUsers.name.find(u => u.sdt === item.users)}
-                    </Text>
-                  <Text style={styles.name} numberOfLines ={1}>
-                     {item.messages}
-                  </Text>
+          </TouchableOpacity>
+          <Modal
+            animationType="none"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={() => setModalVisible(false)}
+            >
+              <View
+                style={{
+                  position: "absolute",
+                  top: 10,
+                  right: 10,
+                  backgroundColor: "white",
+                  padding: 10,
+                  width: "60%",
+                  borderRadius: 10,
+                  borderWidth: 0.1,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                  }}
+                >
+                  <Octicons
+                    style={{ width: "20%" }}
+                    name="person-add"
+                    size={20}
+                    color="gray"
+                  />
+                  <Text>Thêm bạn</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                  }}
+                >
+                  <MaterialIcons
+                    style={{ width: "20%" }}
+                    name="group-add"
+                    size={20}
+                    color="gray"
+                  />
+                  <Text>Tạo nhóm</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                  }}
+                >
+                  <MaterialIcons
+                    style={{ width: "20%" }}
+                    name="cloud-queue"
+                    size={20}
+                    color="gray"
+                  />
+                  <Text>Cloud của tôi</Text>
+                </View>
+                <TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                    }}
+                  >
+                    <Ionicons
+                      style={{ width: "20%" }}
+                      name="calendar-outline"
+                      size={20}
+                      color="gray"
+                    />
+                    <Text>Lịch Zalo</Text>
                   </View>
-                  <View>
-                    <Text style={styles.time}>Time</Text>
-                    <Text style={styles.noti}>?</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                    }}
+                  >
+                    <AntDesign
+                      style={{ width: "20%" }}
+                      name="videocamera"
+                      size={20}
+                      color="gray"
+                    />
+                    <Text>Tạo cuộc gọi nhóm</Text>
                   </View>
-                
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                    }}
+                  >
+                    <FontAwesome
+                      style={{ width: "20%" }}
+                      name="television"
+                      size={20}
+                      color="gray"
+                    />
+                    <Text>Thiết bị đăng nhập</Text>
+                  </View>
                 </TouchableOpacity>
-                
-                )}
-                
-                numColumns={1}
-                
-            /> */}
-        </ScrollView>
+              </View>
+            </TouchableOpacity>
+          </Modal>
         </View>
-    )
+        <ScrollView style={{ backgroundColor: "white", width: "100%" }}>
+          <FlatList
+            style={styles.items}
+            data={users}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() =>
+                  navigation.navigate("ChatScreen", { users: item })
+                }
+              >
+                <Image source={item.img} style={styles.image} />
+
+                <View style={{ width: "70%" }}>
+                  <Text style={styles.name} numberOfLines={1}>
+                    {item.user}
+                  </Text>
+                  <Text style={styles.name} numberOfLines={1}>
+                    {item.messages}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.time}>Time</Text>
+                  <Text style={styles.noti}>?</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+            numColumns={1}
+          />
+        </ScrollView>
+      </View>
+    );
 }
 const styles = StyleSheet.create({
     container: {
@@ -127,8 +271,6 @@ const styles = StyleSheet.create({
       marginTop:5,
       width:"100%",
       borderRadius:10,
-     
-     
       overflow:"hidden",
       borderWidth:0,
     }, 
@@ -139,9 +281,11 @@ const styles = StyleSheet.create({
         padding:15,
         
     },
-    theLoai:{
+    header_item:{
         flexDirection: 'row',
         alignItems: 'center',
+        width:30,
+        justifyContent:'center',
     },
     image:{
         borderRadius:'50%',
@@ -160,11 +304,10 @@ const styles = StyleSheet.create({
     header:{
       backgroundColor:'blue',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent:'flex-start',
         alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        height:'8%',
+        paddingHorizontal: 8,
+        height:50,
         width:'100%'
       },
       time:{
