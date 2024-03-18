@@ -32,25 +32,6 @@ export default function MenuChat({navigation}){
     },
   ];
   
-  // useEffect(() => {
-  //   fetchData();
-  //   fetchDataUser();
-  // }, []);
-  // console.log(listUsers);
-//   const fetchDataUser = async () => {  
-//     let responseUser = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/users');   
-//     let dataUser = await responseUser.json();   
-//     setListUsers(dataUser); 
-    
-// };
-//   const fetchData = async () => {  
-//       let response = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/Chats');
-//       let data = await response.json();
-//       let userChat = data.filter((item) => item.users.find(i => i === user.sdt));
-//       setListChat(userChat); 
-//       console.log(userChat);
-//   };
-
   const handleSearch = async () => {
     try {
       const response = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/users');
@@ -68,7 +49,10 @@ export default function MenuChat({navigation}){
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.header_item} onPress={()=>navigation.navigate("TimKiem")}>
+          <TouchableOpacity
+            style={styles.header_item}
+            onPress={() => navigation.navigate("TimKiem")}
+          >
             <SimpleLineIcons name="magnifier" size={20} color="white" />
           </TouchableOpacity>
           <TextInput
@@ -134,7 +118,9 @@ export default function MenuChat({navigation}){
                     size={20}
                     color="gray"
                   />
-                  <Text>Thêm bạn</Text>
+                  <TouchableOpacity onPress={()=>navigation.navigate("AddFriend")}>
+                    <Text>Thêm bạn</Text>
+                  </TouchableOpacity>
                 </View>
                 <View
                   style={{

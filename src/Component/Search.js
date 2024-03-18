@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 
-export default function TimKiem  ({navigation}){  
+export default function Search  ({navigation}){  
     const textInputRef = useRef(null);  
     useEffect(()=> {textInputRef.current.focus()},[]);
     return (
