@@ -21,9 +21,9 @@ export default function App() {
         </View>
       </View>
 
-      <View style={styles.Body}>
+      <View style={styles.user}>
         <TouchableOpacity>
-          <View style={styles.Body}>
+          <View style={styles.user}>
           <Image style={styles.avt} source={avt}/>
           <View style={styles.columnText}>
             <Text style={styles.bold}>Tom Anexander</Text>
@@ -37,6 +37,13 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
+
+      <View
+                style={{
+                    borderBottomColor: '#e3e3e3',
+                    borderBottomWidth: 7, // Độ dày của đường gạch ngang
+                    width: '100%', // Chiều rộng của gạch ngang
+                }} />
 
       <TouchableOpacity>
         <View style={styles.Body}>
@@ -59,30 +66,44 @@ export default function App() {
       </TouchableOpacity>
 
       <TouchableOpacity>
-        <View style={styles.Body}>
+        <View style={styles.Body_notBrick}>
           <Entypo name='icloud' style={styles.icon} size={30}/>
           <View style={styles.columnText}>
             <Text style={styles.bold}>Cloud của tôi</Text>
             <Text style={styles.nor}>Lưu trữ các tin nhắn quan trọng</Text>
           </View>
           <View style={styles.flexEndContainer}>
-              <AntDesign name='right' size={20} color='gray' />
+              <AntDesign name='right' size={16} color='gray' />
           </View>
         </View>
       </TouchableOpacity>
 
+      <View
+                style={{
+                    borderBottomColor: '#e3e3e3',
+                    borderBottomWidth: 7, // Độ dày của đường gạch ngang
+                    width: '100%', // Chiều rộng của gạch ngang
+                }} />
+
       <TouchableOpacity>
-      <View style={styles.Body}>
+      <View style={styles.Body_notBrick}>
         <Feather name='clock' style={styles.icon} size={30}/>
         <View style={styles.columnText}>
           <Text style={styles.bold}>Dung lượng và dữ liệu</Text>
           <Text style={styles.nor}>Quản lý dữ liệu Zalo của bạn</Text>
         </View>
         <View style={styles.flexEndContainer}>
-          <AntDesign name='right' size={20} color='gray' />
+          <AntDesign name='right' size={16} color='gray' />
         </View>
       </View>
       </TouchableOpacity>
+
+      <View
+                style={{
+                    borderBottomColor: '#e3e3e3',
+                    borderBottomWidth: 7, // Độ dày của đường gạch ngang
+                    width: '100%', // Chiều rộng của gạch ngang
+                }} />
 
       <TouchableOpacity>
       <View style={styles.Body}>
@@ -90,7 +111,7 @@ export default function App() {
         <View style={styles.columnText}>
           <Text style={styles.bold}>Tài khoản và bảo mật</Text>
           <View style={[styles.flexEndContainer, styles.iconRightContainer]}>
-            <AntDesign name='right' size={20} color='gray' />
+            <AntDesign name='right' size={16} color='gray' />
           </View>
         </View>
       </View>
@@ -102,7 +123,7 @@ export default function App() {
         <View style={styles.columnText}>
           <Text style={styles.bold}>Quyền riêng tư</Text>
           <View style={[styles.flexEndContainer, styles.iconRightContainer]}>
-           <AntDesign name='right' size={20} color='gray' />
+           <AntDesign name='right' size={16} color='gray' />
           </View>
         </View>
       </View>
@@ -120,7 +141,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#006AF5',
+    backgroundColor: '#15A0EE',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
@@ -152,22 +173,32 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
-  Body: {
+  user: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  }, 
+  Body_notBrick: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10
+  },
+  Body:{
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+    margin: 10
   },
   avt: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     margin: 10,
   },
   bold: {
     fontSize: 16,
-    margin: 10,
     fontWeight: 'bold',
+    paddingLeft: 10
   },
   columnText: {
     flexDirection: 'column',
@@ -175,7 +206,7 @@ const styles = StyleSheet.create({
   },
   nor: {
     fontSize: 14,
-    margin: 10,
+    paddingLeft: 10
   },
   iconRightContainer: {
     position: 'absolute',

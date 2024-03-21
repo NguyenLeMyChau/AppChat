@@ -22,7 +22,7 @@ export default function App() {
         </View>
       </View>
 
-      <View style={styles.body}>
+      <View style={styles.avt_stt}>
         <TouchableOpacity>
           <Image style={styles.avt} source={avt}/>
         </TouchableOpacity>
@@ -32,28 +32,28 @@ export default function App() {
       <View style={styles.body}>
         <TouchableOpacity >
           <View style={styles.group}>
-            <FontAwesome name='picture-o' color = 'green'  size={25}/>
+            <FontAwesome name='picture-o' color = 'green'  size={20}/>
             <Text style={styles.nor}> Ảnh </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity >
           <View style={styles.group}>
-            <AntDesign name='videocamera' color = 'purple' size={25}/>
+            <AntDesign name='videocamera' color = 'purple' size={20}/>
             <Text style={styles.nor}> Video </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style={styles.group}>
-            <MaterialIcons name='photo-album' color= '#15A0EE' size={25}/>
+            <MaterialIcons name='photo-album' color= '#15A0EE' size={20}/>
             <Text style={styles.nor}> Album </Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style={styles.group}>
-            <FontAwesome6 name='clock-rotate-left' color='orange' size={25}/>
+            <FontAwesome6 name='clock-rotate-left' color='orange' size={20}/>
             <Text style={styles.nor}> Kỷ niệm </Text>
           </View>
         </TouchableOpacity>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#006AF5',
+    backgroundColor: '#15A0EE',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
@@ -103,12 +103,15 @@ const styles = StyleSheet.create({
     margin: 10,
     color: 'white',
     width: '60%'
-  }, 
+  },
+  avt_stt: {
+    flexDirection: 'row'
+  },
   body: {
     flexDirection: 'row',
-    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+    justifyContent:"space-around"
   },
   avt: {
     width: 80,
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     margin: 10,
     width: '100%',
-    height: '100%'
+    height: '80%'
   },
   nor: {
     fontSize: 14,
@@ -129,11 +132,9 @@ const styles = StyleSheet.create({
   group: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRightWidth: 1,
-    flex: 1,
     borderRadius: 15,
-    margin: 3,
-    backgroundColor: '#b0c4de'
+    backgroundColor: '#efefef',
+    paddingLeft: 10
   },
   bold:{
     fontSize: 16,
