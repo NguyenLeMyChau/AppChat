@@ -1,7 +1,7 @@
 # Zalo_App
 New UI
 User
-![image](https://github.com/NguyenLeMyChau/Zalo_App/assets/144768405/d986f7f9-a71f-42fb-ac01-4dac45b10ab0)
+![image](https://github.com/NguyenLeMyChau/Zalo_App/assets/144768405/c1cbe958-33ee-422a-b9c9-7210ff300615)
 
 Memory
-![image](https://github.com/NguyenLeMyChau/Zalo_App/assets/144768405/b0473b29-f474-49af-9081-f21ccf6024e8)
+![image](https://github.com/NguyenLeMyChau/Zalo_App/assets/144768405/51bc0a14-fed9-475a-a58d-3012626cdbfc)
