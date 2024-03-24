@@ -1,9 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 
 import { StyleSheet, View ,Text, TouchableOpacity} from 'react-native';
-export default function Signin() {
-  navigation = useNavigation()
+export default function HomeLoginZalo() {
   const [language,setLanguage] = useState('VN');
   const handleLanguage = (lan) => { 
     setLanguage(lan); 
@@ -12,7 +10,7 @@ export default function Signin() {
     <View style={styles.container}>
       <Text style={styles.title}>Zalo</Text>
       <View>
-        <TouchableOpacity style={styles.btnLogin} onPress={()=> navigation.navigate('Login')}>
+        <TouchableOpacity style={styles.btnLogin}>
           <Text style={{fontSize:20,fontWeight:'bold',color:'white'}}>
             {language === 'VN' ? 'Đăng nhập' : 'Login'}
           </Text>

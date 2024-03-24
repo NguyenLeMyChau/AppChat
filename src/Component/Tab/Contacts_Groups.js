@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { FontAwesome, Entypo, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function PhonebookScreen02() {
+export default function Contacts_Groups() {
     return (
         <View style={styles.container}>
 
@@ -25,7 +25,7 @@ export default function PhonebookScreen02() {
 
             <View style={{ width: "100%", height: "auto", padding: 10}}>
 
-                <Text style={{ ...styles.textFeature, fontWeight: 550 }}>Tính năng nổi bật</Text>
+                <Text style={{ ...styles.textFeature, fontWeight: 550, top: -8 }}>Tính năng nổi bật</Text>
 
                 <View style={{ ...styles.header}}>
                     <View style={{ ...styles.header, marginTop: 10, flexDirection: "row", justifyContent:"space-around"}}>

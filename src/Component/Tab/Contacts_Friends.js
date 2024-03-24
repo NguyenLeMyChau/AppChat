@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { FontAwesome, Entypo, FontAwesome5 } from "@expo/vector-icons";
 
-export default function PhonebookScreen01() {
+export default function Contacts_Friends() {
   return (
     <View style={styles.container}>
 
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     marginRight: 20,
-    borderWidth: 1,
+    borderWidth: "1px",
     borderColor:"#C4C4C4"
   },
 

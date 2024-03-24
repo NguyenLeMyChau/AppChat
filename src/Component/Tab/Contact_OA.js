@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign, MaterialCommunityIcons  } from "@expo/vector-icons";
 
-export default function PhonebookScreen03() {
+export default function Contact_OA() {
     return (
         <View style={styles.container}>
 

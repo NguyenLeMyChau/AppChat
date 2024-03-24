@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import Header from '../header/Header';
+import Header from '../Head/Header';
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 
 // import search from '../assets/search.png';

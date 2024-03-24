@@ -4,14 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 
-import Header from '../header/Header';
-import PhonebookScreen01 from '../Tab/Phonebook_1';
-import PhonebookScreen02 from '../Tab/Phonebook_2';
-import PhonebookScreen03 from '../Tab/Phonebook_3';
+import Header from '../Head/Header';
+
+import Contacts_Friends from '../Tab/Contacts_Friends';
+import Contacts_Groups from '../Tab/Contacts_Groups';
+import Contact_OA from '../Tab/Contact_OA';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function PhonebookTopTab() {
+export default function ContactTopTab() {
     return (
         <View style={styles.container}>
             <NavigationContainer>
@@ -39,9 +40,9 @@ export default function PhonebookTopTab() {
                     })}
 
                 >
-                    <Tab.Screen name="Bạn bè " component={PhonebookScreen01} />
-                    <Tab.Screen name="Nhóm" component={PhonebookScreen02} />
-                    <Tab.Screen name="OA" component={PhonebookScreen03} />
+                    <Tab.Screen name="Bạn bè " component={Contacts_Friends} />
+                    <Tab.Screen name="Nhóm" component={Contacts_Groups} />
+                    <Tab.Screen name="OA" component={Contact_OA} />
                 </Tab.Navigator>
             </NavigationContainer>
         </View>

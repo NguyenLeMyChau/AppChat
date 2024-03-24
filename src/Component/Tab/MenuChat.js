@@ -3,7 +3,7 @@ import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpac
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { AuthContext } from "../Login/AuthProvider";
-import Header from "../header/Header";
+import Header from "../Head/Header";
 
 export default function MenuChat({ navigation }) {
 
