@@ -1,27 +1,38 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import search from '../assets/search.png';
-import QR from '../assets/QR.png';
-import menu from '../assets/Menu.png';
-import zalovideo from '../assets/zalovideo.png';
-import fiza from '../assets/fiza.png';
-import zalopay from '../assets/zalopay.png';
-import service from '../assets/service.png';
-import mp3 from '../assets/mp3.png';
-import work from '../assets/work.png';
-import phone from '../assets/phone.png';
-import xemthem from '../assets/XemThem.png';
-import AI from '../assets/AI.png';
-import TienLen from '../assets/TienLen.png';
-import tulokho from '../assets/tulokho.png';
-import poker from '../assets/poker.png';
-import right from '../assets/right.png';
+import Header from '../Head/Header';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
+
+// import search from '../assets/search.png';
+// import QR from '../assets/QR.png';
+// import menu from '../assets/Menu.png';
+// import zalovideo from '../assets/zalovideo.png';
+// import fiza from '../assets/fiza.png';
+// import zalopay from '../assets/zalopay.png';
+// import service from '../assets/service.png';
+// import mp3 from '../assets/mp3.png';
+// import work from '../assets/work.png';
+// import phone from '../assets/phone.png';
+// import xemthem from '../assets/XemThem.png';
+// import AI from '../assets/AI.png';
+// import TienLen from '../assets/TienLen.png';
+// import tulokho from '../assets/tulokho.png';
+// import poker from '../assets/poker.png';
+// import right from '../assets/right.png';
 
 export default function App() {
   return (
     <View style={styles.container}>
+      <View style={{
+        flexDirection: "row", alignItems: 'center', width: "100%"
+      }}>
+        <Header />
+          <TouchableOpacity style={{marginLeft: -45}}>
+            <MaterialCommunityIcons name="qrcode-scan" size={25} color="white" />
+          </TouchableOpacity>
+      </View>
 
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity>
           <Image style={styles.icon} source={search} />
         </TouchableOpacity>
@@ -155,7 +166,7 @@ export default function App() {
             <Image source={right} style={styles.img25} />
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
 
 
     </View>
@@ -206,7 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: 'left',
     margin: 20,
   },
-  text300:{
+  text300: {
     fontSize: 16,
     margin: 20,
     fontWeight: '200',
@@ -220,18 +231,18 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginLeft: 10,
-  }, 
+  },
   text30010: {
     fontSize: 16,
     marginLeft: 10,
     fontWeight: '300',
-  }, 
+  },
   textblue: {
     fontSize: 16,
     margin: 10,
     color: '#15A0EE',
     fontWeight: 'bold',
-  }, 
+  },
   body: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -258,18 +269,18 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     flex: 1,
   },
-  bold:{
+  bold: {
     fontSize: 16,
     margin: 10,
     fontWeight: 'bold',
   },
-  nobold:{
+  nobold: {
     fontSize: 16,
     margin: 10,
     fontWeight: '500',
   },
-  column:{
-    flexDirection:'column',
+  column: {
+    flexDirection: 'column',
     flex: 1,
   }
 });
