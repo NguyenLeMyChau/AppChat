@@ -124,9 +124,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      height:'8%',
+      paddingHorizontal: 8,
+      height:50,
       width:'100%'
     },
   messageContainerMe: {
