@@ -1,120 +1,136 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import search from '../assets/search.png';
-import setting from '../assets/setting.png';
-import avt from '../assets/AnexanderTom.jpg';
-import change from '../assets/change.png';
-import wallet from '../assets/wallet.png';
-import music from '../assets/music.png';
-import right from '../assets/right.png';
-import cloud from '../assets/cloud.png';
-import data from '../assets/data.png';
-import security from '../assets/security.png';
-import padlock from '../assets/padlock.png';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons,Entypo,Feather } from "@expo/vector-icons";
+import avt from './assets/AnexanderTom.jpg';
+import { ScrollView } from 'react-native-web';
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
 
       <View style={styles.header}>
         <TouchableOpacity>
-          <Image style={styles.icon} source={search} />
+          <SimpleLineIcons name='magnifier' style={styles.header_icon} size={25}></SimpleLineIcons>
         </TouchableOpacity>
-        <TextInput style={styles.text} placeholder='Tìm kiếm' />
+
+        <TextInput style={styles.textInput} placeholder='Tìm kiếm'   />
         <View style={styles.flexEndContainer}>
           <TouchableOpacity>
-            <Image source={setting} style={styles.img} />
-          </TouchableOpacity>
+          <AntDesign name='setting' size={25} color='white' ></AntDesign>
+        </TouchableOpacity>
         </View>
       </View>
 
-      <View style={styles.Body}>
-        <Image style={styles.avt} source={avt}/>
-        <View style={styles.columnText}>
-          <Text style={styles.bold}>Tom Anexander</Text>
+      <View style={styles.user}>
+        <TouchableOpacity>
+          <View style={styles.user}>
+          <Image style={styles.avt} source={avt}/>
+          <View style={styles.columnText}>
+            <Text style={styles.bold}>Tom Anexander</Text>
           <Text style={styles.nor}>Xem trang cá nhân</Text>
-        </View>
-        <View style={styles.flexEndContainer}>
+          </View>
+          </View>
+        </TouchableOpacity>
+        <View style={[styles.flexEndContainer, styles.iconRightContainer]}>
           <TouchableOpacity>
-            <Image source={change} style={styles.img} />
+            <MaterialCommunityIcons name='account-sync-outline' size={30} style={styles.icon}></MaterialCommunityIcons>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View style={styles.Body}>
-        <Image source={wallet} style={styles.icon}/>
-        <View style={styles.columnText}>
-          <Text style={styles.bold}>Ví QR</Text>
-          <Text style={styles.nor}>Lưu trữ và xuất trình các mã QR quan trọng</Text>
-        </View>
-        <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={right} style={styles.img} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <View
+                style={{
+                    borderBottomColor: '#e3e3e3',
+                    borderBottomWidth: 7, // Độ dày của đường gạch ngang
+                    width: '100%', // Chiều rộng của gạch ngang
+                }} />
 
-      <View style={styles.Body}>
-        <Image source={music} style={styles.icon}/>
-        <View style={styles.columnText}>
-          <Text style={styles.bold}>Nhạc chờ Zalo</Text>
-          <Text style={styles.nor}>Đăng ký nhạc chờ, thể hiện cá tính</Text>
+      <TouchableOpacity>
+        <View style={styles.Body}>
+          <Feather name='music' style={styles.icon} size={30}/>
+          <View style={styles.columnText}>
+            <Text style={styles.bold}>Nhạc chờ Zalo</Text>
+            <Text style={styles.nor}>Đăng ký nhạc chờ, thể hiện cá tính</Text>
+          </View>
         </View>
-        <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={right} style={styles.img} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.Body}>
-        <Image source={cloud} style={styles.icon}/>
-        <View style={styles.columnText}>
-          <Text style={styles.bold}>Cloud của tôi</Text>
-          <Text style={styles.nor}>Lưu trữ các tin nhắn quan trọng</Text>
+      <TouchableOpacity>
+        <View style={styles.Body}>
+          <Entypo name='wallet' style={styles.icon} size={30}></Entypo>
+          <View style={styles.columnText}>
+            <Text style={styles.bold}>Ví QR</Text>
+            <Text style={styles.nor}>Lưu trữ và xuất trình các mã QR quan trọng</Text>
+          </View>
         </View>
-        <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={right} style={styles.img} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.Body}>
-        <Image source={data} style={styles.icon}/>
+      <TouchableOpacity>
+        <View style={styles.Body_notBrick}>
+          <Entypo name='icloud' style={styles.icon} size={30}/>
+          <View style={styles.columnText}>
+            <Text style={styles.bold}>Cloud của tôi</Text>
+            <Text style={styles.nor}>Lưu trữ các tin nhắn quan trọng</Text>
+          </View>
+          <View style={styles.flexEndContainer}>
+              <AntDesign name='right' size={16} color='gray' />
+          </View>
+        </View>
+      </TouchableOpacity>
+
+      <View
+                style={{
+                    borderBottomColor: '#e3e3e3',
+                    borderBottomWidth: 7, // Độ dày của đường gạch ngang
+                    width: '100%', // Chiều rộng của gạch ngang
+                }} />
+
+      <TouchableOpacity>
+      <View style={styles.Body_notBrick}>
+        <Feather name='clock' style={styles.icon} size={30}/>
         <View style={styles.columnText}>
           <Text style={styles.bold}>Dung lượng và dữ liệu</Text>
           <Text style={styles.nor}>Quản lý dữ liệu Zalo của bạn</Text>
         </View>
         <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={right} style={styles.img} />
-          </TouchableOpacity>
+          <AntDesign name='right' size={16} color='gray' />
         </View>
       </View>
+      </TouchableOpacity>
 
+      <View
+                style={{
+                    borderBottomColor: '#e3e3e3',
+                    borderBottomWidth: 7, // Độ dày của đường gạch ngang
+                    width: '100%', // Chiều rộng của gạch ngang
+                }} />
+
+      <TouchableOpacity>
       <View style={styles.Body}>
-        <Image source={security} style={styles.icon}/>
-        <Text style={styles.bold}>Tài khoản và bảo mật</Text>
-        <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={right} style={styles.img} />
-          </TouchableOpacity>
+        <Entypo name='shield' style={styles.icon} size={30}/>
+        <View style={styles.columnText}>
+          <Text style={styles.bold}>Tài khoản và bảo mật</Text>
+          <View style={[styles.flexEndContainer, styles.iconRightContainer]}>
+            <AntDesign name='right' size={16} color='gray' />
+          </View>
         </View>
       </View>
+      </TouchableOpacity>
 
+      <TouchableOpacity>
       <View style={styles.Body}>
-        <Image source={padlock} style={styles.icon}/>
-        <Text style={styles.bold}>Quyền riêng tư</Text>
-        <View style={styles.flexEndContainer}>
-          <TouchableOpacity>
-            <Image source={right} style={styles.img} />
-          </TouchableOpacity>
+        <AntDesign name='lock' style={styles.icon} size={30}/>
+        <View style={styles.columnText}>
+          <Text style={styles.bold}>Quyền riêng tư</Text>
+          <View style={[styles.flexEndContainer, styles.iconRightContainer]}>
+           <AntDesign name='right' size={16} color='gray' />
+          </View>
         </View>
       </View>
+      </TouchableOpacity>
 
 
-    </View>
+    </ScrollView>
   );
 }
 
@@ -126,52 +142,78 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     backgroundColor: '#15A0EE',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingTop: 10,
   },
-  icon: {
-    width: 25,
-    height: 25,
-    alignItems: 'left',
-    justifyContent: 'left',
-    margin: 10,
-  },
-  flexEndContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-    marginRight: 10,
-    justifyContent: 'center',
-  },
-  img: {
-    width: 25,
-    height: 25,
-  },
-  text: {
-    fontSize: 16,
-    margin: 10,
+  header_icon: {
     color: 'white',
   },
-  Body: {
+  flexEndContainer: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    marginRight: 10
+  },
+  flexEnd: {
+    alignItems: 'flex-end',
+  },
+  icon: {
+    color: '#15A0EE',
+  },
+  textInputContainer: {
+    flex: 1,
+    backgroundColor: 'blue',
+    borderRadius: 5, 
+    marginLeft: 10,
+  },
+  textInput: {
+    fontSize: 18,
+    color: 'white',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  user: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  }, 
+  Body_notBrick: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10
+  },
+  Body:{
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+    margin: 10
   },
   avt: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     margin: 10,
   },
   bold: {
     fontSize: 16,
-    margin: 10,
     fontWeight: 'bold',
+    paddingLeft: 10
   },
   columnText: {
     flexDirection: 'column',
-    flex: 1, // Đảm bảo text chiếm phần còn lại của row
+    flex: 1,
   },
   nor: {
     fontSize: 14,
-    margin: 10,
+    paddingLeft: 10
+  },
+  iconRightContainer: {
+    position: 'absolute',
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    marginRight: 10
   },
 });
