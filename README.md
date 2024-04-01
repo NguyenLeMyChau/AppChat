@@ -1,5 +1,7 @@
 # Zalo_App
 New UI
+
+source Login + Register https://github.com/Pandeee12/Login-Register.git
 Login
 ![image](https://github.com/NguyenLeMyChau/Zalo_App/assets/144768405/40040ef5-ab65-4b58-8d1d-d739c249db0e)
 
