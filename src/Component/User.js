@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons,Entypo,Feather } from "@expo/vector-icons";
-import avt from './assets/AnexanderTom.jpg';
+import avt from '/assets/AnexanderTom.jpg';
 import { ScrollView } from 'react-native-web';
 
-export default function App() {
+export default function User() {
   return (
     <ScrollView style={styles.container}>
 

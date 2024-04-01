@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import { AntDesign,FontAwesome6,MaterialIcons, SimpleLineIcons,Feather, FontAwesome } from "@expo/vector-icons";
-import avt from './assets/AnexanderTom.jpg';
+import { AntDesign,MaterialIcons, SimpleLineIcons,Feather, FontAwesome } from "@expo/vector-icons";
+import avt from '/assets/AnexanderTom.jpg';
 
-export default function App() {
+export default function Memory() {
   return (
     <View style={styles.container}>
 
@@ -51,12 +51,7 @@ export default function App() {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <View style={styles.group}>
-            <FontAwesome6 name='clock-rotate-left' color='orange' size={20}/>
-            <Text style={styles.nor}> Kỷ niệm </Text>
-          </View>
-        </TouchableOpacity>
+       
 
       </View>
 

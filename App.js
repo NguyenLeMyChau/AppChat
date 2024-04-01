@@ -7,6 +7,8 @@ import ContactTopTab from './src/Component/Navigation/ContactTopTab';
 import LoginNavigation from './src/Component/Navigation/LoginNavigation';
 import Timeline from './src/Component/Tab/Timeline';
 import ImageWithShadow from './src/Component/Tab/ImageWithShadow';
+import Memory from './src/Component/Memory';
+import User from './src/Component/User';
 
 export default function App() {
   return (
