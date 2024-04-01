@@ -11,7 +11,7 @@ export default function Navbar() {
                 <View style={styles.left}>
                     <View style={styles.logo}>
                         <Image
-                            source={require('../assets/logo.png')}
+                            source={require('../../assets/logo.png')}
                             style={styles.logoImage}
                         />
                     </View>

@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, Animated } from 'react-native';
 import Header from '../Head/Header';
-import avatar from "../../assets/AnexanderTom.jpg";
-import zalo from "../../assets/zalo.jpg";
 import { AntDesign, MaterialIcons, FontAwesome, MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
-
+import avatar from '../../../assets/AnexanderTom.jpg';
 
 export default function Timeline() {
   const icons = [

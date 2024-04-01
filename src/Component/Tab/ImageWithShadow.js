@@ -13,13 +13,13 @@ const ImageWithShadow = () => {
       />
       <View style={styles.imageContainer}>
         <Image
-          source={require('../../assets/AnexanderTom.jpg')}
+          source={require("../../../assets/AnexanderTom.jpg")}
           style={styles.image}
         />
       </View>
     </View>
   );
-};
+  };
 
 const styles = StyleSheet.create({
   container: {

@@ -1,18 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import {StyleSheet } from 'react-native';
-import Login from './HomeLoginZalo';
+import Login from './Login/HomeLoginZalo';
 
 export default function HomeChat() {
   return (
     <View style={styles.container}>
-      {/* <Navbar/>
-      <ScrollView >
-      <Image source={require('../assets/logo.png')} style={styles.logoImage}/> 
-      <Body/>
-      </ScrollView> */}
       <Login/>
-      
     </View>
   );
 }

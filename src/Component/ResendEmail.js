@@ -12,7 +12,7 @@ export default function ResendEmail() {
     <View style={styles.container}>
        <View style={{width:'100%',height:200,alignItems:'center',justifyContent:'center'}}>
         <Image
-        source={require('../assets/logo.png')}
+        source={require('../../assets/logo.png')}
         style={styles.logoImage}
         />
       </View>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import xichtamtuanthienpic from '../assets/xichtamtuanthien_dot1.png';
+import xichtamtuanthienpic from '../../assets/xichtamtuanthien_dot1.png';
 import { useNavigation } from "@react-navigation/native";
 
 export default function Body(){

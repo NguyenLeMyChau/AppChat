@@ -34,7 +34,7 @@ export default function Register({navigation}) {
       <a href='#' >X</a>
       <View style={{width:'100%',height:200,alignItems:'center',justifyContent:'center'}}>
         <Image
-        source={require('../assets/logo.png')}
+        source={require('../../../assets/logo.png')}
         style={styles.logoImage}
         />
       </View>

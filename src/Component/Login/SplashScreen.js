@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import zalo from '../../assets/zalo.jpg';
+import zalo from '../../../assets/zalo.jpg';
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.navigate('HomeLoginZalo');
-    }, 3000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);

@@ -1,177 +1,141 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState } from 'react';
+import { AntDesign } from '@expo/vector-icons';
+import { useContext, useState } from 'react';
 import { TextInput, TouchableOpacity } from 'react-native';
-import { Alert } from 'react-native';
 import { StyleSheet, View ,Text} from 'react-native';
-import { Image } from 'react-native';
-export default function Signin({navigation}) {
-  const [email,setEmail] = useState('');
-  const [pass,setPass]=useState('');
-  const handleLogin = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/User'); // URL của JSON Server
-      const users = await response.json();
-      const user = users.find(
-        (user) => user.email === email && user.password === pass
-      );
+import { AuthContext } from './Login/AuthProvider';
 
-      if (user) {
-        await AsyncStorage.setItem('email',email);
-        navigation.navigate('HomeStack');
-      } else {
-        alert('Lỗi', 'Sai email hoặc mật khẩu');
-      }
-    } catch (error) {
-      console.error('Error handling login:', error);
-      alert('Lỗi Sai email hoặc mật khẩu');
-    }
-  };
+export default function Signin({navigation}) {
+  const [sdt,setSDT] = useState('');
+  const [password,setPassword]=useState('');
+  const [isFocus,setIsfocus]  =useState(false);
+  const {login} = useContext(AuthContext);
+  const handleFocus = () => {
+    setIsfocus(true);
+  }
+  const handleBlur = () => {
+    setIsfocus(false);
+  }
+  const [passwordFocus,setpasswordfocus]  =useState(false);
+  const handlePasswordFocus = () => {
+    setpasswordfocus(true);
+  }
+  const handlePasswordBlur = () => {
+    setpasswordfocus(false);
+  }
+   const handleLogin = async () => {
+  //   try {
+      
+  //     const response = await fetch('http://localhost:4000/login', {
+  //         method: 'POST',
+  //         headers: {
+  //             'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify({ Phone: sdt, Password: password })
+  //     });
+
+  //     const data = await response.json();
+  //     if (data.success) {
+  //         login(data.user);
+  //         navigation.navigate('BottomTab');
+  //     } else {  
+  //         alert(data.message);
+  //     }
+  // } catch (error) {
+  //     console.error('Error handling login:', error);
+  //     alert('Đã xảy ra lỗi khi đăng nhập');
+  // }
+   };
  
   return (
     <View style={styles.container}>
-      <View  style={styles.title}>
-        <View style={{ flexDirection: 'row',alignItems: 'center',}}>
-          <TouchableOpacity style={styles.back}
-            onPress={()=> navigation.navigate('HomeStack')} >
-            <Image style={{width:'40px',height:'40px',marginLeft:10, justifyContent:'center'}} source={require("../assets/Icon Button 11.png")}/>
-            </TouchableOpacity>
-        </View> 
-        </View>
-      <View style={{width:'100%',height:150,alignItems:'center',justifyContent:'center'}}>
-        <Image
-        source={require('../assets/logo.png')}
-        style={styles.logoImage}
-        />
-      </View>
-      <View style={styles.Area}>
-      <View style={styles.TextInput}>
-        <MaterialCommunityIcons name='email' size={24} color="black"/>
+     <Text style={styles.title}>Vui lòng nhập số điện thoại và mật khẩu để đăng nhập</Text>
+     <View style={{width:'90%'}}>
         <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-        /> 
-      </View>
-      <View style={styles.TextInput}>
-        <MaterialCommunityIcons name='lock' size={24} color="black"/>
-        <TextInput
-           style={styles.input}
-           placeholder="Mật khẩu"
-           secureTextEntry
-           onChangeText={(text) => setPass(text)}
+            style={[styles.txtSDT,isFocus? styles.txtSDTfocus:null]}
+            placeholder="Số điện thoại"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            maxLength={10}
+            keyboardType='phone-pad'
+            onChangeText={(text) => setSDT(text)}
+            underlineColorAndroid="transparent"
         />
-      </View>
-    </View>
-      <View style={styles.Button}>
-      <TouchableOpacity style={styles.dangNhap} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Đăng nhập</Text>
-      </TouchableOpacity>  
-      <TouchableOpacity style={styles.dangKy} onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.buttonText}>Đăng ký</Text>
-      </TouchableOpacity>   
-      <View style={styles.btnQuenMK}>
-      <TouchableOpacity onPress={() => navigation.navigate('ResendEmail')}>
-        <Text style={styles.link}>Gửi lại email kích hoạt</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-        <Text style={styles.link}>Quên mật khẩu</Text>
-      </TouchableOpacity>  
-      </View>
-      
-      </View>
-      
-      <View style={styles.Text}>
-        <Text>
-          Khi bạn nhấn đăng nhập mặc nhiên được coi là đồng ý với <br/><a href='#'>Chính sách bảo mật </a>
-          cùng <a href='#'>Điều khoản và điều kiện</a>    
+
+        <TextInput
+            style={[styles.txtSDT,passwordFocus? styles.txtSDTfocus:null]}
+            placeholder="Mật khẩu"
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+            onChangeText={(text) => setPassword(text)}
+            underlineColorAndroid="transparent"
+            secureTextEntry={true}
+        />  
+     </View>
+     <TouchableOpacity style={styles.btnForgetPass} onPress={()=>navigation.navigate('BottomTab')}>
+        Lấy lại mật khẩu
+     </TouchableOpacity>
+     <View style={styles.confirm}>
+      <TouchableOpacity style={styles.btnQuestion} onPress={()=>navigation.navigate('HomeLogin')}>
+        <Text style={{color:'gray',fontSize:16}}>Câu hỏi thường gặp
+        <AntDesign name="right" size={15} color="black"/>
         </Text>
-      </View>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btnconfirm} onPress={handleLogin}>
+      <AntDesign name="arrowright" size={25} color="white"/>
+      </TouchableOpacity>
+     </View>
+     
     </View>
   );
+  
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoImage: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
-},
-title:{
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  paddingHorizontal: 16,
-  paddingVertical: 8,
-  height:70,
-  width:'100%',
-  flexDirection:'row'
-},
-Area:{
-  width:'90%',
-},
-  TextInput: {
-    width:'90%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    borderColor: 'black',
-    padding: 15,
-    borderBottomWidth:1
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderColor: 'gray',
-    paddingLeft: 10,
-  },
-  Button:{
     
-    justifyContent:'space-evenly',
-    alignItems:'center',
-    width:'90%',
-    height:150
   },
-  dangNhap:{
-    backgroundColor: '#6DB9EF',
-    padding:5,
-    borderRadius: 10,
-    width: '100%',
-    alignItems: 'center',
+  title:{
+    width: '90%',
+    alignItems:'flex-start',
+    fontSize:16,
   },
-  dangKy:{
-    backgroundColor: 'black',
-    padding:5,
-    borderRadius: 10,
-    width: '100%',
-    alignItems: 'center',
+  txtSDT:{
+    borderBottomWidth:1,
+    fontSize:20,
+    color:'gray',
+    padding:10
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
+  txtSDTfocus:{
+    borderBottomColor:'blue',
+    color:'blue',
   },
-  Text: {
-    flex: 1,
-    width:'90%',
-    alignItems: 'center',
-    justifyContent: 'center',
+  btnForgetPass:{
+    marginTop:5,
+    width:"90%",
+    height:40,
+    color:'blue',
+    fontSize:18,
+    fontWeight:'bold'
   },
-  error: {
-    color: 'red',
-    marginTop: 10,
+  btnQuestion:{
+    color:'gray',
+    fontSize:18,
   },
-  btnQuenMK:{
-    width:'100%',
+  confirm:{
+    width:"90%",
+    justifyContent:'space-between',
     flexDirection:'row',
-    justifyContent:'space-between'
+    alignItems:'center'
   },
-  link: {
-    color: 'white',
-    textDecorationLine: 'underline',
+  btnconfirm:{
+    backgroundColor:'gray',
+    borderRadius:'50%',
+    width:50,
+    height:50,
+    alignItems:'center',
+    justifyContent:'center'
   },
 });
