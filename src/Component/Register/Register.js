@@ -1,79 +1,73 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { TextInput, TouchableOpacity } from 'react-native';
 import { StyleSheet, View ,Button,Text} from 'react-native';
 import { Image } from 'react-native';
 export default function Register({navigation}) {
-  const [email,setEmail] = useState('');
-  const [pass,setPass]=useState('');
+  const [name,setName] = useState('');
   const [error, setError] = useState('');
   const handleLogin = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/User'); // URL của JSON Server
-      const users = await response.json();
+    // try {
+    //   const response = await fetch('http://localhost:3000/User'); // URL của JSON Server
+    //   const users = await response.json();
 
-      const user = users.find(
-        (user) => user.email === email && user.password === pass
-      );
+    //   const user = users.find(
+    //     (user) => user.email === email && user.password === pass
+    //   );
 
-      if (user) {
-        Alert.alert('Lỗi', 'Đã tồn tại');
+    //   if (user) {
+    //     Alert.alert('Lỗi', 'Đã tồn tại');
         
-      } else {
-        navigation.navigate('HomeStack');
-      }
-    } catch (error) {
-      console.error('Error handling login:', error);
-      Alert.alert('Lỗi', 'Đã xảy ra lỗi khi xử lý đăng nhập');
-    }
+    //   } else {
+    //     navigation.navigate('HomeStack');
+    //   }
+    // } catch (error) {
+    //   console.error('Error handling login:', error);
+    //   Alert.alert('Lỗi', 'Đã xảy ra lỗi khi xử lý đăng nhập');
+    // }
   };
  
   return (
     <View style={styles.container}>
-      <a href='#' >X</a>
-      <View style={{width:'100%',height:200,alignItems:'center',justifyContent:'center'}}>
-        <Image
-        source={require('../../../assets/logo.png')}
-        style={styles.logoImage}
-        />
+      <View style={{
+        flexDirection: "row", alignItems: 'center', width: "100%",backgroundImage: 'linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+      }}>
+           <MaterialIcons
+            onPress={() => navigation.goBack()}
+            name="keyboard-backspace"
+            size={20}
+            color="white"
+          />
+          <Text style={{ fontSize: 20,color:'white', padding: 10 ,marginLeft:10}}>
+            Tạo tài khoản
+          </Text>
       </View>
-      
-      <View style={styles.Area}>
-      <View style={styles.TextInput}>
-        <MaterialCommunityIcons name='email' size={24} color="black"/>
+      <View style={{padding:10}}>
+        <Text style={{fontSize:16,color:'black',padding:15,fontWeight:'bold'}}>Tên Zalo</Text>
         <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-        /> 
+           placeholder="Gồm 2-40 kí tự"
+          onChangeText={(text)=>setName(text)}
+          value={name}
+          maxLength={40}
+          autoCapitalize='none'
+          style={{padding:10,borderBottomWidth:2, color:'gray', width:'100%',height:50,fontSize:14}}
+          />      
       </View>
-      <View style={styles.TextInput}>
-        <MaterialCommunityIcons name='lock' size={24} color="black"/>
-        <TextInput
-           style={styles.input}
-           placeholder="Mật khẩu"
-           secureTextEntry
-           onChangeText={(text) => setPass(text)}
-        />
+      <View style={{padding:10}}>
+        <Text style={{fontSize:14}}>Sử dụng tên thật giúp bạn bè dễ dàng nhận ra bạn</Text>
       </View>
-      <View style={styles.TextInput}>
-        <MaterialCommunityIcons name='lock' size={24} color="black"/>
-        <TextInput
-           style={styles.input}
-           placeholder="Xác nhận mật khẩu"
-           secureTextEntry
-           onChangeText={(text) => setPass(text)}
-        />
-      </View>
-    </View>
-      <View style={styles.Button}>
-      <TouchableOpacity style={styles.dangKy} onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.buttonText}>Đăng ký</Text>
-      </TouchableOpacity>   
-      <View style={styles.btnQuenMK}>
-      </View>      
-      </View>
+
+      <TouchableOpacity style={{borderRadius:'50%',backgroundColor:'#C7C7C7',width:50,height:50,alignItems:'center',justifyContent: 'center',right:20,bottom:20,position:'absolute'}} 
+      onPress={()=>navigation.navigate('Register_SDT',{name})}>
+          <AntDesign
+            name="arrowright"
+            size={25}
+            color="white"
+          />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -82,8 +76,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   logoImage: {
     width: 100,
@@ -92,6 +84,8 @@ const styles = StyleSheet.create({
 },
 Area:{
   width:'90%',
+  alignItems:'center',
+  justifyContent: 'center',
 },
   TextInput: {
     width:'90%',

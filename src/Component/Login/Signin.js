@@ -2,10 +2,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { useContext, useState } from 'react';
 import { TextInput, TouchableOpacity } from 'react-native';
 import { StyleSheet, View ,Text} from 'react-native';
-import { AuthContext } from './Login/AuthProvider';
+import { AuthContext } from './AuthProvider';
 
 export default function Signin({navigation}) {
-  const [sdt,setSDT] = useState('');
+  const [phone,setphone] = useState('');
   const [password,setPassword]=useState('');
   const [isFocus,setIsfocus]  =useState(false);
   const {login} = useContext(AuthContext);
@@ -23,27 +23,27 @@ export default function Signin({navigation}) {
     setpasswordfocus(false);
   }
    const handleLogin = async () => {
-  //   try {
+     try {
       
-  //     const response = await fetch('http://localhost:4000/login', {
-  //         method: 'POST',
-  //         headers: {
-  //             'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify({ Phone: sdt, Password: password })
-  //     });
+       const response = await fetch('http://localhost:4000/login', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+         },
+           body: JSON.stringify({  phone, password })
+       });
 
-  //     const data = await response.json();
-  //     if (data.success) {
-  //         login(data.user);
-  //         navigation.navigate('BottomTab');
-  //     } else {  
-  //         alert(data.message);
-  //     }
-  // } catch (error) {
-  //     console.error('Error handling login:', error);
-  //     alert('Đã xảy ra lỗi khi đăng nhập');
-  // }
+       const data = await response.json();
+       if (data.success) {
+           login(data.user);
+           navigation.navigate('BottomTab');
+       } else {  
+           alert(data.message);
+       }
+   } catch (error) {
+       console.error('Error handling login:', error);
+       alert('Đã xảy ra lỗi khi đăng nhập');
+   }
    };
  
   return (
@@ -51,18 +51,18 @@ export default function Signin({navigation}) {
      <Text style={styles.title}>Vui lòng nhập số điện thoại và mật khẩu để đăng nhập</Text>
      <View style={{width:'90%'}}>
         <TextInput
-            style={[styles.txtSDT,isFocus? styles.txtSDTfocus:null]}
+            style={[styles.txtphone,isFocus? styles.txtphonefocus:null]}
             placeholder="Số điện thoại"
             onFocus={handleFocus}
             onBlur={handleBlur}
             maxLength={10}
             keyboardType='phone-pad'
-            onChangeText={(text) => setSDT(text)}
+            onChangeText={(text) => setphone(text)}
             underlineColorAndroid="transparent"
         />
 
         <TextInput
-            style={[styles.txtSDT,passwordFocus? styles.txtSDTfocus:null]}
+            style={[styles.txtphone,passwordFocus? styles.txtphonefocus:null]}
             placeholder="Mật khẩu"
             onFocus={handlePasswordFocus}
             onBlur={handlePasswordBlur}
@@ -102,13 +102,13 @@ const styles = StyleSheet.create({
     alignItems:'flex-start',
     fontSize:16,
   },
-  txtSDT:{
+  txtphone:{
     borderBottomWidth:1,
     fontSize:20,
     color:'gray',
     padding:10
   },
-  txtSDTfocus:{
+  txtphonefocus:{
     borderBottomColor:'blue',
     color:'blue',
   },

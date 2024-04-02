@@ -16,7 +16,7 @@ export default function HomeLoginZalo({navigation}) {
             {language === 'VN' ? 'Đăng nhập' : 'Login'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnRegister}>
+        <TouchableOpacity style={styles.btnRegister} onPress={()=>navigation.navigate('Register')}>
           <Text style={{fontSize:20,fontWeight:'bold',color:'black'}}> 
             {language === 'VN' ? 'Đăng ký' : 'Register'}
           </Text>
