@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#15A0EE',
+    backgroundImage: 'linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
