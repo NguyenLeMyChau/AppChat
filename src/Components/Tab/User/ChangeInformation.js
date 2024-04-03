@@ -1,34 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ImageBackground, TextInput, Animated } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ImageBackground, TextInput, Animated, Alert } from 'react-native';
 import { Octicons, AntDesign } from "@expo/vector-icons";
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-export default function ChangeInformation({navigation}) {
+export default function ChangeInformation({ navigation }) {
     const [userData, setUserData] = useState({});
+    const [name, setName] = useState('');
+    const [gender, setGender] = useState(true);
 
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');
-            console.log(JSON.parse(foundUser));
-            setUserData(JSON.parse(foundUser));
-            //JSON.parse(foundUser) chuyển chuỗi JSON thành object
+        console.log(JSON.parse(foundUser));
+        setUserData(JSON.parse(foundUser));
+        //JSON.parse(foundUser) chuyển chuỗi JSON thành object
     }
 
     useEffect(() => {
         getData();
     }, []);
 
+    const handleChange = async () => {
+        
+        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, {name, gender});
+        const { data } = response;
 
-    const [chosenOption, setChosenOption] = useState(null);
-    
+        if (data.success) {
+            Alert.alert(data.message);
+        } else {
+            Alert.alert(data.message);
+        }
+
+    }
+
+
     useEffect(() => {
-        setChosenOption(userData.gender);
+        setGender(userData.gender);
     }, [userData.gender]);
 
     const options = [
-        { label: 'Nữ', value: true},
-        { label: 'Nam', value: false},
+        { label: 'Nữ', value: true },
+        { label: 'Nam', value: false },
     ];
 
     const scale = useRef(new Animated.Value(1)).current;
@@ -54,7 +68,7 @@ export default function ChangeInformation({navigation}) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity>
-                    <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
+                    <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()} />
                 </TouchableOpacity>
 
                 <Text style={styles.name}>Chỉnh sửa thông tin</Text>
@@ -71,7 +85,7 @@ export default function ChangeInformation({navigation}) {
                             <LinearGradient
                                 colors={['#fff', '#fff']}
                                 style={styles.avatarStory}>
-                                <Animated.View style={{ transform: [{ scale }]}}>
+                                <Animated.View style={{ transform: [{ scale }] }}>
                                     <AntDesign name="camera" size={13} color="#C4C4C4" />
                                 </Animated.View>
                             </LinearGradient>
@@ -84,12 +98,18 @@ export default function ChangeInformation({navigation}) {
 
                     <View style={styles.infor}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                            <TextInput style={styles.option} placeholder={userData.name} />
+                            <TextInput
+                                style={styles.option}
+                                onChangeText={(text) => setName(text)}
+                                placeholder={userData.name} />
                             <Octicons name="pencil" size={18} color="black" style={{ right: 25 }} />
                         </View>
 
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                            <TextInput style={styles.option} placeholder={userData.email} />
+                            <TextInput
+                                style={styles.option}
+                                placeholder={userData.email}
+                                editable={false} />
                             <Octicons name="pencil" size={18} color="black" style={{ right: 25 }} />
                         </View>
 
@@ -104,11 +124,11 @@ export default function ChangeInformation({navigation}) {
                                     <RadioButtonInput
                                         obj={option}
                                         index={i}
-                                        isSelected={chosenOption === option.value}
+                                        isSelected={gender === option.value}
                                         onPress={(value) => {
-                                            setChosenOption(value);
+                                            setGender(value);
                                         }}
-                                        
+
                                         borderWidth={1}
                                         buttonSize={15}
 
@@ -119,7 +139,7 @@ export default function ChangeInformation({navigation}) {
                                         index={i}
                                         labelHorizontal={true}
                                         onPress={(value) => {
-                                            setChosenOption(value);
+                                            setGender(value);
                                         }}
                                         labelStyle={{ fontSize: 14 }}
                                     />
@@ -129,7 +149,7 @@ export default function ChangeInformation({navigation}) {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.uploadStatus}>
+                <TouchableOpacity style={styles.uploadStatus} onPress={() => handleChange()}>
                     <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
                         Lưu
                     </Text>
