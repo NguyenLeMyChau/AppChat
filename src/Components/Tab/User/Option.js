@@ -49,7 +49,7 @@ export default function Option({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity>
-                    <Text style={styles.option}>Ví của tôi</Text>
+                    <Text style={styles.option}>Đổi mật khẩu</Text>
                 </TouchableOpacity>
             </View>
 
