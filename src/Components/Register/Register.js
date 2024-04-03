@@ -17,6 +17,7 @@ export default function Register({ navigation }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
   const [gender, setGender] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [otp, setOtp] = useState('');
@@ -69,6 +70,68 @@ export default function Register({ navigation }) {
 
   }
 
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPassValid, setIsPassValid,] = useState(true);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+
+
+  const handleCheckName = (text) => {
+    setName(text);
+    if (text.length >= 2 && text.length <= 40) {
+      setIsNameValid(true);
+    } else {
+      setIsNameValid(false);
+    }
+  };
+
+
+  const handleCheckEmail = (text) => {
+    setEmail(text);
+    if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)){
+      setIsEmailValid(true);
+    }
+    else {
+      setIsEmailValid(false);
+    }
+  };
+
+  const handleCheckPass = (text) => {
+    setPassword(text);
+    if (text.length >= 6 && /^[A-Z]/.test(text)) {
+      setIsPassValid(true);
+    } else {
+      setIsPassValid(false);
+    }
+  };
+  
+  const handleCheckConfirmPass = (text) => {
+    setConfirmPass(text);
+    if (password === text) {
+      // Kiểm tra từng ký tự của hai mật khẩu để đảm bảo chính xác về cả chữ hoa và chữ thường
+      let isMatch = true;
+      for (let i = 0; i < password.length; i++) {
+        if (password[i] !== text[i]) {
+          isMatch = false;
+          break;
+        }
+      }
+      if (isMatch && password.length === text.length) {
+        setIsConfirmPasswordValid(true);
+      } else {
+        setIsConfirmPasswordValid(false);
+      }
+    } else {
+      setIsConfirmPasswordValid(false);
+    }
+  };
+  
+  
+
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={{
@@ -91,44 +154,50 @@ export default function Register({ navigation }) {
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Tên Zalo</Text>
         <TextInput
           placeholder="Gồm 2-40 kí tự"
-          onChangeText={(text) => setName(text)}
+          // onChangeText={(text) => setName(text)}
+          onChangeText={handleCheckName}
           value={name}
-          maxLength={40}
           autoCapitalize='none'
-          style={styles.txtSDT}
+          style={[styles.txtSDT,{  borderBottomColor: isNameValid ? 'black' : 'red' }]}
         />
+        {!isNameValid && <Text style={{color: 'red'}}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>}    
+
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Email</Text>
         <TextInput
           placeholder="email@gmail.com"
-          onChangeText={(text) => setEmail(text)}
+          // onChangeText={(text) => setEmail(text)}
+          onChangeText={handleCheckEmail}
           value={email}
-          maxLength={40}
           autoCapitalize='none'
-          style={styles.txtSDT}
+          style={[styles.txtSDT,{  borderBottomColor: isEmailValid ? 'black' : 'red' }]}
         />
+        {!isEmailValid && <Text style={{color: 'red'}}>Địa chỉ email không hợp lệ!</Text>}    
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Mật khẩu</Text>
         <TextInput
           placeholder="Nhập password"
-          onChangeText={(text) => setPassword(text)}
+          // onChangeText={(text) => setPassword(text)}
+          onChangeText={handleCheckPass}
           secureTextEntry={true}
           value={password}
-          maxLength={40}
           autoCapitalize='none'
-          style={styles.txtSDT}
+          style={[styles.txtSDT,{  borderBottomColor: isPassValid ? 'black' : 'red' }]}
         />
+        {!isPassValid && <Text style={{color: 'red'}}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>}    
 
-        {/* <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Nhập lại mật khẩu</Text>
+        <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Nhập lại mật khẩu</Text>
         <TextInput
           placeholder="Nhập lại password"
-          onChangeText={(text) => setPassword(text)}
+          // onChangeText={(text) => setConfirmPass(text)}
+          onChangeText={handleCheckConfirmPass}
           secureTextEntry={true}
-          value={name}
-          maxLength={40}
+          value={confirmPass}
           autoCapitalize='none'
-          style={styles.txtSDT}
-        /> */}
+          style={[styles.txtSDT,{  borderBottomColor: isConfirmPasswordValid ? 'black' : 'red' }]}
+        />
+        {!isConfirmPasswordValid && <Text style={{color: 'red'}}>Xác nhận mật khẩu không chính xác!</Text>}    
+
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Giới tính</Text>
 
@@ -146,7 +215,6 @@ export default function Register({ navigation }) {
                 onPress={(value) => {
                   setGender(value);
                 }}
-
                 borderWidth={1}
                 buttonSize={15}
 
