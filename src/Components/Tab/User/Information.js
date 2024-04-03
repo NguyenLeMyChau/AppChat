@@ -24,7 +24,7 @@ export default function Information({ navigation}) {
                 <View style={styles.coverImage}>
                     <ImageBackground source={require('/assets/coverimage.jpg')} style={{ width: '100%', height: '100%', justifyContent: "space-between" }}>
                         <View style={styles.tab}>
-                            <Octicons name="arrow-left" size={25} color="white" />
+                            <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
                         </View>
 
 
@@ -37,22 +37,17 @@ export default function Information({ navigation}) {
             </View>
 
             <View style={{ backgroundColor: "white" }}>
-                <Text style={{ ...styles.option, fontWeight: 600, margin: 10, marginLeft: 20}}>Thông tin cá nhân</Text>
+                <Text style={{ ...styles.option, fontWeight: 600, margin: 10, marginLeft: 20, width:"75%"}}>Thông tin cá nhân</Text>
 
                 <View>
                     <View style={styles.infor}>
                         <Text style={styles.option}>Giới tính</Text>
-                        <Text style={styles.option}>{userData.gender ? "Nam" : "Nữ"}</Text>
+                        <Text style={{...styles.option, width:"75%"}}>{userData.gender ? "Nữ" : "Nam"}</Text>
                     </View>
 
                     <View style={styles.infor}>
                         <Text style={styles.option}>Email</Text>
-                        <Text style={{...styles.option, width:"60%"}}>{userData.email}</Text>
-                    </View>
-
-                    <View style={styles.infor}>
-                        <Text style={styles.option}>Điện thoại</Text>
-                        <Text style={{ fontSize: 18, fontWeight: 400 }}>0972654725</Text>
+                        <Text style={{...styles.option, width:"75%"}}>{userData.email}</Text>
                     </View>
 
                     <TouchableOpacity style={styles.uploadStatus} onPress={() => navigation.navigate("ChangeInformation")}>
@@ -113,9 +108,9 @@ const styles = StyleSheet.create({
     },
 
     option: {
-        fontSize: 15,
+        fontSize: 16,
         fontWeight: 400,
-        width: "40%"
+        width: "25%"
     },
 
     infor: {

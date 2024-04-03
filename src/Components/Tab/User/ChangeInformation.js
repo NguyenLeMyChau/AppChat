@@ -27,8 +27,8 @@ export default function ChangeInformation({navigation}) {
     }, [userData.gender]);
 
     const options = [
-        { label: 'Nam', value: true},
-        { label: 'Nữ', value: false},
+        { label: 'Nữ', value: true},
+        { label: 'Nam', value: false},
     ];
 
     const scale = useRef(new Animated.Value(1)).current;
@@ -54,7 +54,7 @@ export default function ChangeInformation({navigation}) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity>
-                    <Octicons name="arrow-left" size={25} color="white" />
+                    <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
                 </TouchableOpacity>
 
                 <Text style={styles.name}>Chỉnh sửa thông tin</Text>

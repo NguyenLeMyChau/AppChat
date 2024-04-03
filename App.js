@@ -7,7 +7,7 @@ import Resign from '/src/Components/Register/Register'
 
 export default function App() {
   return (
-    <Resign/>
+    <LoginNavigation/>
   );
 
 }

@@ -8,7 +8,7 @@ import Option from '../Tab/User/Option';
 import InformationUser from '../Tab/User/InformationUser';
 import Information from '../Tab/User/Information';
 import ChangeInformation from '../Tab/User/ChangeInformation';
-
+import Register from '../Register/Register';
 const Stack = createStackNavigator();
 
 const LoginNavigation = () => {
@@ -22,6 +22,7 @@ const LoginNavigation = () => {
         <Stack.Screen name="Information" component={Information} />
         <Stack.Screen name="Option" component={Option} />
         <Stack.Screen name="ChangeInformation" component={ChangeInformation} />
+        <Stack.Screen name="Register" component={Register} />
 
       </Stack.Navigator>
     </NavigationContainer>

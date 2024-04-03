@@ -57,7 +57,7 @@ export default function Signin({ navigation }) {
 
       <View style={styles.header}>
         <TouchableOpacity>
-          <Octicons name="arrow-left" size={25} color="white" />
+          <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
         </TouchableOpacity>
 
         <Text style={styles.name}>Đăng nhập</Text>
