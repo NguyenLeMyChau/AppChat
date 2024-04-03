@@ -9,6 +9,7 @@ export default function ChangePassword({ navigation }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rePassword, setRePassword] = useState('');
 
 
     // const {login} = useContext(AuthContext);
@@ -20,6 +21,10 @@ export default function ChangePassword({ navigation }) {
     const [passwordFocus, setpasswordfocus] = useState(false);
     const handlePasswordFocus = () => { setpasswordfocus(true); }
     const handlePasswordBlur = () => { setpasswordfocus(false); }
+
+    const [rePasswordFocus, setrepasswordfocus] = useState(false);
+    const handleRePasswordFocus = () => { setrepasswordfocus(true); }
+    const handleRePasswordBlur = () => { setrepasswordfocus(false); }
 
     const handleLogin = async () => {
 
@@ -45,45 +50,37 @@ export default function ChangePassword({ navigation }) {
                 <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Mật khẩu hiện tại:</Text>
 
                 <TextInput
-                    style={isFocus ? styles.txtSDTfocus : styles.txtSDT}
-                    placeholder="Email"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
+                    style={styles.txtSDT}
+                    placeholder="Nhập mật khẩu hiện tại"
                     keyboardType='phone-pad'
                     onChangeText={(text) => setEmail(text)}
                     underlineColorAndroid="transparent"
                 />
 
-                <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Mật khẩu mới</Text>
+                <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold', marginTop: 20 }}>Mật khẩu mới</Text>
 
                 <TextInput
-                    style={[styles.txtSDT, passwordFocus ? styles.txtSDTfocus : null]}
-                    placeholder="Mật khẩu"
-                    onFocus={handlePasswordFocus}
-                    onBlur={handlePasswordBlur}
+                    style={styles.txtSDT}
+                    placeholder="Nhập mật khẩu mới"
                     onChangeText={(text) => setPassword(text)}
+                    underlineColorAndroid="transparent"
+                    secureTextEntry={true}
+                />
+
+                <TextInput
+                    style={styles.txtSDT}
+                    placeholder="Nhập lại mật khẩu mới"
+                    onChangeText={(text) => setRePassword(text)}
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
                 />
             </View>
 
-            <TouchableOpacity style={styles.btnForgetPass}>
-                Lấy lại mật khẩu
-            </TouchableOpacity>
-
-            <View style={styles.confirm}>
-
-                <TouchableOpacity style={styles.btnQuestion}>
-                    <Text style={{ color: 'gray', fontSize: 16 }}>
-                        Câu hỏi thường gặp
-                        <AntDesign name="right" size={15} color="black" />
+            <TouchableOpacity style={styles.uploadStatus} onPress={() => handleChange()}>
+                    <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
+                        Cập nhật
                     </Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity style={styles.btnconfirm} >
-                    <AntDesign name="arrowright" size={25} color="white" />
-                </TouchableOpacity>
-            </View>
 
 
         </View>
@@ -130,15 +127,6 @@ const styles = StyleSheet.create({
         padding: 10,
     },
 
-    txtSDTfocus: {
-        fontSize: 16,
-        padding: 10,
-        borderBottomWidth: 3,
-        borderBottomColor: '#74d3f7',
-        color: 'gray',
-        outlineStyle: 'none',
-    },
-
     btnForgetPass: {
         marginTop: 5,
         width: "90%",
@@ -170,5 +158,15 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    uploadStatus: {
+        width: "90%",
+        height: 40,
+        backgroundColor: '#006AF5',
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 20,
+        marginLeft: 20
     },
 });
