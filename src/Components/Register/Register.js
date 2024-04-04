@@ -64,7 +64,7 @@ export default function Register({ navigation }) {
     if (data.success) {
       Alert.alert(data.message);
       setModalVisible(false);
-      navigation.navigate('BottomTab');
+      navigation.navigate('Signin');
     } else {
       Alert.alert(data.message);
     }
