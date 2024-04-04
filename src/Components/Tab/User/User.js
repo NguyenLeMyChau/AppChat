@@ -4,11 +4,7 @@ import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } f
 import avt from '/assets/AnexanderTom.jpg';
 import Header from '../../Head/Header';
 
-<<<<<<< HEAD
-export default function User() {
-=======
 export default function User({navigation}) {
->>>>>>> Hoang
   return (
     <ScrollView style={styles.container}>
 
@@ -16,22 +12,14 @@ export default function User({navigation}) {
         flexDirection: "row", alignItems: 'center', width: "100%"
       }}>
         <Header />
-<<<<<<< HEAD
-        <TouchableOpacity style={{ marginLeft: -45 }}>
-=======
         <TouchableOpacity style={{ marginLeft: -45 }} onPress={()=> navigation.navigate('Setting')} >
->>>>>>> Hoang
           <AntDesign name='setting' size={25} color='white' ></AntDesign>
         </TouchableOpacity>
 
       </View>
 
       <View style={styles.user}>
-<<<<<<< HEAD
-        <TouchableOpacity>
-=======
         <TouchableOpacity onPress={()=>navigation.navigate('InformationUser')}>
->>>>>>> Hoang
           <View style={styles.user}>
             <Image style={styles.avt} source={avt} />
             <View style={styles.columnText}>

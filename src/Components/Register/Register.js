@@ -58,19 +58,13 @@ export default function Register({ navigation }) {
     };
 
     const response = await axios.post('http://localhost:4000/user/signup', userData);
-<<<<<<< HEAD
-=======
     console.log("dâta :",response);  
->>>>>>> Hoang
     const { data } = response;
 
     if (data.success) {
       Alert.alert(data.message);
       setModalVisible(false);
-<<<<<<< HEAD
-=======
       navigation.navigate('BottomTab');
->>>>>>> Hoang
     } else {
       Alert.alert(data.message);
     }
@@ -95,11 +89,7 @@ export default function Register({ navigation }) {
 
   const handleCheckEmail = (text) => {
     setEmail(text);
-<<<<<<< HEAD
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
-=======
     if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)){
->>>>>>> Hoang
       setIsEmailValid(true);
     }
     else {
@@ -115,11 +105,7 @@ export default function Register({ navigation }) {
       setIsPassValid(false);
     }
   };
-<<<<<<< HEAD
-
-=======
   
->>>>>>> Hoang
   const handleCheckConfirmPass = (text) => {
     setConfirmPass(text);
     if (password === text) {
@@ -140,14 +126,11 @@ export default function Register({ navigation }) {
       setIsConfirmPasswordValid(false);
     }
   };
-<<<<<<< HEAD
-=======
   
   
 
 
 
->>>>>>> Hoang
 
 
   return (
@@ -172,14 +155,6 @@ export default function Register({ navigation }) {
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Tên Zalo</Text>
         <TextInput
           placeholder="Gồm 2-40 kí tự"
-<<<<<<< HEAD
-          onChangeText={(text) => { setName(text); handleCheckName(text) }}
-          value={name}
-          autoCapitalize='none'
-          style={[styles.txtSDT, { borderBottomColor: isNameValid ? 'black' : 'red' }]}
-        />
-        {!isNameValid && <Text style={{ color: 'red' }}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>}
-=======
           // onChangeText={(text) => setName(text)}
           onChangeText={handleCheckName}
           value={name}
@@ -187,20 +162,11 @@ export default function Register({ navigation }) {
           style={[styles.txtSDT,{  borderBottomColor: isNameValid ? 'black' : 'red' }]}
         />
         {!isNameValid && <Text style={{color: 'red'}}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>}    
->>>>>>> Hoang
 
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Email</Text>
         <TextInput
           placeholder="email@gmail.com"
-<<<<<<< HEAD
-          onChangeText={(text) => { setEmail(text), handleCheckEmail(text) }}
-          value={email}
-          autoCapitalize='none'
-          style={[styles.txtSDT, { borderBottomColor: isEmailValid ? 'black' : 'red' }]}
-        />
-        {!isEmailValid && <Text style={{ color: 'red' }}>Địa chỉ email không hợp lệ!</Text>}
-=======
           // onChangeText={(text) => setEmail(text)}
           onChangeText={handleCheckEmail}
           value={email}
@@ -208,20 +174,10 @@ export default function Register({ navigation }) {
           style={[styles.txtSDT,{  borderBottomColor: isEmailValid ? 'black' : 'red' }]}
         />
         {!isEmailValid && <Text style={{color: 'red'}}>Địa chỉ email không hợp lệ!</Text>}    
->>>>>>> Hoang
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Mật khẩu</Text>
         <TextInput
           placeholder="Nhập password"
-<<<<<<< HEAD
-          onChangeText={(text) => {setPassword(text), handleCheckPass(text)}}
-          secureTextEntry={true}
-          value={password}
-          autoCapitalize='none'
-          style={[styles.txtSDT, { borderBottomColor: isPassValid ? 'black' : 'red' }]}
-        />
-        {!isPassValid && <Text style={{ color: 'red' }}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>}
-=======
           // onChangeText={(text) => setPassword(text)}
           onChangeText={handleCheckPass}
           secureTextEntry={true}
@@ -230,20 +186,10 @@ export default function Register({ navigation }) {
           style={[styles.txtSDT,{  borderBottomColor: isPassValid ? 'black' : 'red' }]}
         />
         {!isPassValid && <Text style={{color: 'red'}}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>}    
->>>>>>> Hoang
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Nhập lại mật khẩu</Text>
         <TextInput
           placeholder="Nhập lại password"
-<<<<<<< HEAD
-          onChangeText={(text) => {setConfirmPass(text), handleCheckConfirmPass(text)}}
-          secureTextEntry={true}
-          value={confirmPass}
-          autoCapitalize='none'
-          style={[styles.txtSDT, { borderBottomColor: isConfirmPasswordValid ? 'black' : 'red' }]}
-        />
-        {!isConfirmPasswordValid && <Text style={{ color: 'red' }}>Xác nhận mật khẩu không chính xác!</Text>}
-=======
           // onChangeText={(text) => setConfirmPass(text)}
           onChangeText={handleCheckConfirmPass}
           secureTextEntry={true}
@@ -252,7 +198,6 @@ export default function Register({ navigation }) {
           style={[styles.txtSDT,{  borderBottomColor: isConfirmPasswordValid ? 'black' : 'red' }]}
         />
         {!isConfirmPasswordValid && <Text style={{color: 'red'}}>Xác nhận mật khẩu không chính xác!</Text>}    
->>>>>>> Hoang
 
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Giới tính</Text>

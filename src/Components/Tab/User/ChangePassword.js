@@ -4,13 +4,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Octicons, AntDesign, Entypo, SimpleLineIcons } from "@expo/vector-icons";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-<<<<<<< HEAD
-
-export default function ChangePassword({ navigation }) {
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-=======
 import { useRef } from 'react';
 import { useEffect } from 'react';
 
@@ -19,7 +12,6 @@ export default function ChangePassword({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordNew, setPasswordNew] = useState('');
->>>>>>> Hoang
     const [rePassword, setRePassword] = useState('');
 
 
@@ -34,13 +26,6 @@ export default function ChangePassword({ navigation }) {
     const handlePasswordBlur = () => { setpasswordfocus(false); }
 
     const [rePasswordFocus, setrepasswordfocus] = useState(false);
-<<<<<<< HEAD
-    const handleRePasswordFocus = () => { setrepasswordfocus(true); }
-    const handleRePasswordBlur = () => { setrepasswordfocus(false); }
-
-    const handleLogin = async () => {
-
-=======
     const [confirmRepassword,setconfirmRePassword] = useState(true);
     const handleRePasswordFocus = () => { setrepasswordfocus(true); }
     const handleRePasswordBlur = () => { setrepasswordfocus(false); 
@@ -72,7 +57,6 @@ export default function ChangePassword({ navigation }) {
         } else {
             Alert.alert(data.message);
         }
->>>>>>> Hoang
     }
 
 
@@ -98,12 +82,8 @@ export default function ChangePassword({ navigation }) {
                     style={styles.txtSDT}
                     placeholder="Nhập mật khẩu hiện tại"
                     keyboardType='phone-pad'
-<<<<<<< HEAD
-                    onChangeText={(text) => setEmail(text)}
-=======
                     value={password}
                     onChangeText={(text) => setPassword(text)}
->>>>>>> Hoang
                     underlineColorAndroid="transparent"
                 />
 
@@ -112,12 +92,8 @@ export default function ChangePassword({ navigation }) {
                 <TextInput
                     style={styles.txtSDT}
                     placeholder="Nhập mật khẩu mới"
-<<<<<<< HEAD
-                    onChangeText={(text) => setPassword(text)}
-=======
                     value={passwordNew}
                     onChangeText={(text) => setPasswordNew(text)}
->>>>>>> Hoang
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
                 />
@@ -125,12 +101,6 @@ export default function ChangePassword({ navigation }) {
                 <TextInput
                     style={styles.txtSDT}
                     placeholder="Nhập lại mật khẩu mới"
-<<<<<<< HEAD
-                    onChangeText={(text) => setRePassword(text)}
-                    underlineColorAndroid="transparent"
-                    secureTextEntry={true}
-                />
-=======
                     value={rePassword}
                     onChangeText={(text) => setRePassword(text)}
                     underlineColorAndroid="transparent"
@@ -140,7 +110,6 @@ export default function ChangePassword({ navigation }) {
                 />
                 {confirmRepassword?null:<Text style={{color:'red'}}>Nhập lại mật khẩu không chính xác</Text>}
                
->>>>>>> Hoang
             </View>
 
             <TouchableOpacity style={styles.uploadStatus} onPress={() => handleChange()}>
