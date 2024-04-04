@@ -1,14 +1,12 @@
 
 
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import LoginNavigation from '/src/Components/Navigation/LoginNavigation';
-import Resign from '/src/Components/Register/Register'
-import ChangePassword from './src/Components/Tab/User/ChangePassword';
+import Navigation from './src/Components/Navigation/Navigation';
+import Setting from './src/Components/Tab/User/Setting';
 
 export default function App() {
   return (
-    <LoginNavigation/>
+    <Navigation/>
   );
 
 }

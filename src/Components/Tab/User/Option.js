@@ -48,7 +48,11 @@ export default function Option({ navigation }) {
                     <Text style={styles.option}>Cập nhật giới thiệu bản thân</Text>
                 </TouchableOpacity>
 
+<<<<<<< HEAD
                 <TouchableOpacity>
+=======
+                <TouchableOpacity onPress={()=>navigation.navigate('ChangePassword')}> 
+>>>>>>> Hoang
                     <Text style={styles.option}>Đổi mật khẩu</Text>
                 </TouchableOpacity>
             </View>

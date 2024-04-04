@@ -17,7 +17,11 @@ export default function ChangeInformation({ navigation }) {
         setUserData(JSON.parse(foundUser));
         //JSON.parse(foundUser) chuyển chuỗi JSON thành object
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> Hoang
     useEffect(() => {
         getData();
     }, []);
@@ -28,7 +32,10 @@ export default function ChangeInformation({ navigation }) {
         const { data } = response;
 
         if (data.success) {
+<<<<<<< HEAD
             alert("Cập nhật thông tin thành công");
+=======
+>>>>>>> Hoang
             Alert.alert(data.message);
         } else {
             Alert.alert(data.message);
