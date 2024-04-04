@@ -25,7 +25,7 @@ export default function InformationUser({ navigation }) {
                 <View style={styles.coverImage}>
                     <ImageBackground source={require('/assets/coverimage.jpg')} style={{ width: '100%', height: '100%' }}>
                         <View style={styles.tab}>
-                            <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goback()} />
+                        <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
 
                             <AntDesign name="eyeo" size={25} color="white" style={{ marginLeft: "70%" }} />
 

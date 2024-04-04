@@ -9,6 +9,7 @@ import { Image } from 'react-native';
 import OTPTextView from 'react-native-otp-textinput';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { OtpInput } from "react-native-otp-entry";
+import AnexanderTom from "../../../assets/AnexanderTom.jpg"
 import axios from 'axios';
 
 
@@ -18,9 +19,11 @@ export default function Register({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
-  const [gender, setGender] = useState(true);
+  const [gender, setGender] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [otp, setOtp] = useState('');
+  const avatar = AnexanderTom;
+  
 
   const options = [
     { label: 'Nam', value: false },
@@ -37,14 +40,17 @@ export default function Register({ navigation }) {
       if (data.success) {
         console.log(data.otp);
         Alert.alert(data.message);
+       
       } else {
         Alert.alert(data.message);
+        setModalVisible(false);
+        alert(data.message);
       }
     } catch (error) {
       console.error('Error send OTP:', error);
-
+      setModalVisible(false);
+      alert("Tài khoản đã tồn tại");
     }
-
   };
 
   const handleRegister = async () => {
@@ -54,14 +60,14 @@ export default function Register({ navigation }) {
       email,
       password,
       gender,
-      otp
+      otp,avatar
     };
 
     const response = await axios.post('http://localhost:4000/user/signup', userData);
     const { data } = response;
 
     if (data.success) {
-      Alert.alert(data.message);
+      alert(data.message);
       setModalVisible(false);
       navigation.navigate('Signin');
     } else {
@@ -70,10 +76,10 @@ export default function Register({ navigation }) {
 
   }
 
-  const [isNameValid, setIsNameValid] = useState(true);
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPassValid, setIsPassValid,] = useState(true);
-  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  const [isNameValid, setIsNameValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPassValid, setIsPassValid,] = useState(false);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
 
 
   const handleCheckName = (text) => {
@@ -160,7 +166,7 @@ export default function Register({ navigation }) {
           autoCapitalize='none'
           style={[styles.txtSDT, { borderBottomColor: isNameValid ? 'black' : 'red' }]}
         />
-        {!isNameValid && <Text style={{ color: 'red' }}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>}
+        {!isNameValid && name.length>0? <Text style={{ color: 'red' }}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>:null}
 
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Email</Text>
@@ -172,7 +178,7 @@ export default function Register({ navigation }) {
           autoCapitalize='none'
           style={[styles.txtSDT, { borderBottomColor: isEmailValid ? 'black' : 'red' }]}
         />
-        {!isEmailValid && <Text style={{ color: 'red' }}>Địa chỉ email không hợp lệ!</Text>}
+        {!isEmailValid && email.length>0 ?<Text style={{ color: 'red' }}>Địa chỉ email không hợp lệ!</Text>:null}
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Mật khẩu</Text>
         <TextInput
@@ -184,7 +190,7 @@ export default function Register({ navigation }) {
           autoCapitalize='none'
           style={[styles.txtSDT, { borderBottomColor: isPassValid ? 'black' : 'red' }]}
         />
-        {!isPassValid && <Text style={{ color: 'red' }}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>}
+        {!isPassValid && password.length>0 ?<Text style={{ color: 'red' }}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>:null}
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Nhập lại mật khẩu</Text>
         <TextInput
@@ -196,7 +202,7 @@ export default function Register({ navigation }) {
           autoCapitalize='none'
           style={[styles.txtSDT, { borderBottomColor: isConfirmPasswordValid ? 'black' : 'red' }]}
         />
-        {!isConfirmPasswordValid && <Text style={{ color: 'red' }}>Xác nhận mật khẩu không chính xác!</Text>}
+        {!isConfirmPasswordValid && confirmPass.length>0 ?<Text style={{ color: 'red' }}>Xác nhận mật khẩu không chính xác!</Text>:null}
 
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Giới tính</Text>
@@ -240,6 +246,8 @@ export default function Register({ navigation }) {
           setModalVisible(true);
           handleSendOTP();
         }}
+        
+        disabled={!(isEmailValid && isNameValid && isPassValid)}
       >
         <AntDesign
           name="arrowright"
@@ -271,7 +279,7 @@ export default function Register({ navigation }) {
             }}
           />
 
-          <Button title="Verify OTP" onPress={() => handleRegister()} />
+          <Button title="Verify OTP" onPress={() => handleRegister()}/>
 
 
         </View>

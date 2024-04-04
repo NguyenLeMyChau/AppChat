@@ -45,20 +45,24 @@ export default function Signin({ navigation }) {
       const { data } = response; // data = response.data
 
       if (data.success) {
-        console.log(data.token);
+        
         console.log(data.foundUser);
         AsyncStorage.setItem("foundUser", JSON.stringify(data.foundUser));
         // Lưu thông tin user vào AsyncStorage để sử dụng ở các màn hình khác
         //JSON.stringify(data.foundUser) chuyển object thành chuỗi JSON
         Alert.alert("Logged In Successfully");
+        alert("Logged In Successfully");
         navigation.navigate("BottomTab");
-      } else {
-        Alert.alert("Login Failed", data.message);
+      } else if(data.status === 400) {
+        alert("Login Failed for email and pas empty");
       }
     } catch (error) {
-      console.error("Error logging in:", error);
+      console.error( error);
       Alert.alert(
         "Login Failed",
+        "An error occurred while logging in. Please try again later."
+      );
+      alert(
         "An error occurred while logging in. Please try again later."
       );
     }

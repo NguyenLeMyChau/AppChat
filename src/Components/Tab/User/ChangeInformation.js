@@ -12,6 +12,7 @@ export default function ChangeInformation({ navigation }) {
     const [name, setName] = useState('');
     const [gender, setGender] = useState(true);
     const [avatar, setAvatar] = useState(null);
+    const [change,setChange] = useState(false);
 
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');
@@ -35,25 +36,19 @@ export default function ChangeInformation({ navigation }) {
     }
 
     const handleChange = async (file) => {
+        var avatarCurrent = userData.avatar;
         const formData = new FormData();
         formData.append('avatar', file);
-
-        const responseAvatar = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userData._id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-
-        const dataAvatar = responseAvatar;
-
-        if (dataAvatar.success) {
-            Alert.alert(dataAvatar.message);
-        } else {
-            Alert.alert(dataAvatar.message);
+        if(file!==null){
+            const responseAvatar = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userData._id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            avatarCurrent = responseAvatar.data.avatar;           
         }
-
-
-        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, { name, gender, avatar: dataAvatar.data.avatar });
+        
+        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, { name, gender, avatar: avatarCurrent });
 
         const { data } = response;
 
@@ -64,14 +59,14 @@ export default function ChangeInformation({ navigation }) {
                     name: userData.name,
                     email: userData.email,
                     gender: gender,
-                    avatar: dataAvatar.data.avatar
+                    avatar: avatarCurrent
                 };
             } else {
                 updatedUser = {
                     name: name,
                     email: userData.email,
                     gender: gender,
-                    avatar: dataAvatar.data.avatar
+                    avatar: avatarCurrent
                 };
             }
 
@@ -84,6 +79,7 @@ export default function ChangeInformation({ navigation }) {
 
         } else {
             Alert.alert(data.message);
+           alert(data.message);
         }
     };
 
@@ -128,7 +124,7 @@ export default function ChangeInformation({ navigation }) {
             <View style={{ backgroundColor: "white" }}>
                 <View style={{ flexDirection: "row", paddingTop: 20 }}>
                     <View style={styles.head}>
-                        <TouchableOpacity onPress={() => selectFile()}>
+                        <TouchableOpacity onPress={() => {selectFile(),setChange(true)}}>
                             <ImageBackground
                                 source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
                                 style={styles.avatar}
@@ -150,7 +146,7 @@ export default function ChangeInformation({ navigation }) {
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                             <TextInput
                                 style={styles.option}
-                                onChangeText={(text) => setName(text)}
+                                onChangeText={(text) => {setName(text),setChange(true)}}
                                 placeholder={userData.name} />
                             <Octicons name="pencil" size={18} color="black" style={{ right: 25 }} />
                         </View>
@@ -198,7 +194,7 @@ export default function ChangeInformation({ navigation }) {
                         </RadioForm>
                     </View>
                 </View>
-
+                {change?
                 <TouchableOpacity style={styles.uploadStatus} onPress={async () => {
                     await handleChange(avatar);
                 }}>
@@ -206,7 +202,7 @@ export default function ChangeInformation({ navigation }) {
                         Lưu
                     </Text>
                 </TouchableOpacity>
-
+                :null}
             </View>
 
 

@@ -12,13 +12,16 @@ const ForgotPassword = ({navigation}) => {
       const response = await axios.post("http://localhost:4000/user/resetPassword", { email: email });
       if (response.data.success) {
         Alert.alert("Success", "An email with instructions to reset your password has been sent to your email address.");
+        alert("Success", "An email with instructions to reset your password has been sent to your email address.");
         console.log(response.data.message);
       } else {
         Alert.alert("Error", response.data.message);
+        alert("Error" + response.data.message);
       }
     } catch (error) {
       console.error("Error resetting password:", error);
       Alert.alert("Error", "An error occurred while resetting your password. Please try again later.");
+      alert("Error", "An error occurred while resetting your password. Please try again later.");
     }
   };
 
