@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from "@expo/vector-icons";
 import avt from '/assets/AnexanderTom.jpg';
 import Header from '../../Head/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function User({navigation}) {
+export default function User({ navigation }) {
+  const [userData, setUserData] = useState({});
+
+  async function getData() {
+    const foundUser = await AsyncStorage.getItem('foundUser');
+    console.log(JSON.parse(foundUser));
+    setUserData(JSON.parse(foundUser));
+    //JSON.parse(foundUser) chuyển chuỗi JSON thành object
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
 
@@ -12,18 +26,21 @@ export default function User({navigation}) {
         flexDirection: "row", alignItems: 'center', width: "100%"
       }}>
         <Header />
-        <TouchableOpacity style={{ marginLeft: -45 }} onPress={()=> navigation.navigate('Setting')} >
+        <TouchableOpacity style={{ marginLeft: -45 }} onPress={() => navigation.navigate('Setting')} >
           <AntDesign name='setting' size={25} color='white' ></AntDesign>
         </TouchableOpacity>
 
       </View>
 
       <View style={styles.user}>
-        <TouchableOpacity onPress={()=>navigation.navigate('InformationUser')}>
+        <TouchableOpacity onPress={() => navigation.navigate('InformationUser')}>
           <View style={styles.user}>
-            <Image style={styles.avt} source={avt} />
+            <Image
+              style={styles.avt}
+              source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+            />
             <View style={styles.columnText}>
-              <Text style={styles.bold}>Tom Anexander</Text>
+              <Text style={styles.bold}>{userData.name}</Text>
               <Text style={styles.nor}>Xem trang cá nhân</Text>
             </View>
           </View>
@@ -115,7 +132,7 @@ export default function User({navigation}) {
       </TouchableOpacity>
 
       <TouchableOpacity>
-      <View style={{...styles.Body, borderBottomWidth: 0}}>
+        <View style={{ ...styles.Body, borderBottomWidth: 0 }}>
           <AntDesign name='lock' style={styles.icon} size={30} />
           <View style={styles.columnText}>
             <Text style={styles.bold}>Quyền riêng tư</Text>

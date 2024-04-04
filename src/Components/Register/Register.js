@@ -31,9 +31,9 @@ export default function Register({ navigation }) {
   const handleSendOTP = async () => {
 
     try {
-      const response = await axios.post('http://localhost:4000/user/sendOTP', { email: email });
+      const response = await axios.post('http://localhost:4000/user/sendOTP', { email: email, checkGetPassEmail: false }, {
+      });
       const { data } = response; // data = response.data
-
       if (data.success) {
         console.log(data.otp);
         Alert.alert(data.message);
@@ -58,7 +58,6 @@ export default function Register({ navigation }) {
     };
 
     const response = await axios.post('http://localhost:4000/user/signup', userData);
-    console.log("dâta :",response);  
     const { data } = response;
 
     if (data.success) {
@@ -89,7 +88,7 @@ export default function Register({ navigation }) {
 
   const handleCheckEmail = (text) => {
     setEmail(text);
-    if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)){
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
       setIsEmailValid(true);
     }
     else {
@@ -105,7 +104,7 @@ export default function Register({ navigation }) {
       setIsPassValid(false);
     }
   };
-  
+
   const handleCheckConfirmPass = (text) => {
     setConfirmPass(text);
     if (password === text) {
@@ -126,8 +125,8 @@ export default function Register({ navigation }) {
       setIsConfirmPasswordValid(false);
     }
   };
-  
-  
+
+
 
 
 
@@ -159,9 +158,9 @@ export default function Register({ navigation }) {
           onChangeText={handleCheckName}
           value={name}
           autoCapitalize='none'
-          style={[styles.txtSDT,{  borderBottomColor: isNameValid ? 'black' : 'red' }]}
+          style={[styles.txtSDT, { borderBottomColor: isNameValid ? 'black' : 'red' }]}
         />
-        {!isNameValid && <Text style={{color: 'red'}}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>}    
+        {!isNameValid && <Text style={{ color: 'red' }}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>}
 
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Email</Text>
@@ -171,9 +170,9 @@ export default function Register({ navigation }) {
           onChangeText={handleCheckEmail}
           value={email}
           autoCapitalize='none'
-          style={[styles.txtSDT,{  borderBottomColor: isEmailValid ? 'black' : 'red' }]}
+          style={[styles.txtSDT, { borderBottomColor: isEmailValid ? 'black' : 'red' }]}
         />
-        {!isEmailValid && <Text style={{color: 'red'}}>Địa chỉ email không hợp lệ!</Text>}    
+        {!isEmailValid && <Text style={{ color: 'red' }}>Địa chỉ email không hợp lệ!</Text>}
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Mật khẩu</Text>
         <TextInput
@@ -183,9 +182,9 @@ export default function Register({ navigation }) {
           secureTextEntry={true}
           value={password}
           autoCapitalize='none'
-          style={[styles.txtSDT,{  borderBottomColor: isPassValid ? 'black' : 'red' }]}
+          style={[styles.txtSDT, { borderBottomColor: isPassValid ? 'black' : 'red' }]}
         />
-        {!isPassValid && <Text style={{color: 'red'}}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>}    
+        {!isPassValid && <Text style={{ color: 'red' }}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>}
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Nhập lại mật khẩu</Text>
         <TextInput
@@ -195,9 +194,9 @@ export default function Register({ navigation }) {
           secureTextEntry={true}
           value={confirmPass}
           autoCapitalize='none'
-          style={[styles.txtSDT,{  borderBottomColor: isConfirmPasswordValid ? 'black' : 'red' }]}
+          style={[styles.txtSDT, { borderBottomColor: isConfirmPasswordValid ? 'black' : 'red' }]}
         />
-        {!isConfirmPasswordValid && <Text style={{color: 'red'}}>Xác nhận mật khẩu không chính xác!</Text>}    
+        {!isConfirmPasswordValid && <Text style={{ color: 'red' }}>Xác nhận mật khẩu không chính xác!</Text>}
 
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Giới tính</Text>

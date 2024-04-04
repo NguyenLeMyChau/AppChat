@@ -5,9 +5,23 @@ import avatar from "/assets/AnexanderTom.jpg";
 import zalo from "/assets/zalo.jpg";
 import { AntDesign, MaterialIcons, FontAwesome, MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Timeline() {
+  const [userData, setUserData] = useState({});
+
+  async function getData() {
+    const foundUser = await AsyncStorage.getItem('foundUser');
+    console.log(JSON.parse(foundUser));
+    setUserData(JSON.parse(foundUser));
+    //JSON.parse(foundUser) chuyển chuỗi JSON thành object
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const icons = [
     { name: 'camera', component: AntDesign, size: 18, color: 'white' },
     { name: 'video-camera', component: FontAwesome, size: 16, color: 'white' },
@@ -58,7 +72,9 @@ export default function Timeline() {
 
       <View style={styles.header}>
         <View style={styles.headerWrite}>
-          <Image source={avatar} style={styles.avatar} />
+          <Image
+            source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+            style={styles.avatar} />
           <TextInput
             placeholder="Hôm nay bạn thế nào?"
             style={{ fontSize: 20, marginLeft: 10, width: "100%", padding: 20 }}
@@ -110,7 +126,9 @@ export default function Timeline() {
 
         <View>
 
-          <ImageBackground source={avatar} style={styles.story}>
+          <ImageBackground
+            source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+            style={styles.story}>
             <LinearGradient
               colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.7)']}
               style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 150 }}
@@ -136,7 +154,7 @@ export default function Timeline() {
                   size={icons[(iconIndex + 1) % icons.length].size}
                   color={icons[(iconIndex + 1) % icons.length].color} />
               </Animated.View>
-              
+
             </LinearGradient>
 
             <Text style={{ color: 'white', top: -10 }}>Tạo mới</Text>
