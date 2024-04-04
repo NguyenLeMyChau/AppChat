@@ -6,16 +6,16 @@ import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector
 
 import Header from '../Head/Header';
 
-import Contacts_Friends from '../Tab/Contacts_Friends';
-import Contacts_Groups from '../Tab/Contacts_Groups';
-import Contact_OA from '../Tab/Contact_OA';
+import Contacts_Friends from '../Tab/Contact/Contacts_Friends';
+import Contacts_Groups from '../Tab/Contact/Contacts_Groups';
+import Contact_OA from '../Tab/Contact/Contact_OA';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function ContactTopTab() {
     return (
         <View style={styles.container}>
-            <NavigationContainer>
+            <NavigationContainer independent={true}>
                 <View style={{
                     flexDirection: "row", alignItems: 'center', width: "100%"
                 }}>

@@ -4,7 +4,7 @@ import MenuChat from '../Tab/MenuChat/MenuChat';
 import Contacts_Friends from '../Tab/Contact/Contacts_Friends';
 import Timeline from '../Tab/Timeline/Timeline';
 import User from '../Tab/User/User';
-
+import ContactTopTab from '../Navigation/ContactTopTab'
 import { FontAwesome, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -21,7 +21,7 @@ function BottomTab () {
           ),
           tabBarStyle: { backgroundColor: 'white' },
         }}/>
-        <Tab.Screen name="DanhBa" component={Contacts_Friends}  options={{
+        <Tab.Screen name="DanhBa" component={ContactTopTab}  options={{
           headerShown: false,
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (
