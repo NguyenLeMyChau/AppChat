@@ -59,6 +59,28 @@ export default function ChangePassword({ navigation }) {
         }
     }
 
+    const [isNewPasswordValid, setIsNewPasswordValid] = useState();
+      
+      const handleCheckNewPass = (text) => {
+        setPasswordNew(text);
+        if (password === text ) {
+          let isMatch = true;
+          for (let i = 0; i < password.length; i++) {
+            if (password[i] !== text[i]) {
+              isMatch = false;
+              break;
+            }
+          }
+          if (isMatch && password.length === text.length) {
+            setIsNewPasswordValid(false);
+          } else if(text.length >= 6 && /^[A-Z]/.test(text)){
+            setIsNewPasswordValid(true);
+          }
+        } else {
+          setIsNewPasswordValid(true);
+        }
+      };
+
 
     return (
         <View style={styles.container}>
@@ -90,13 +112,15 @@ export default function ChangePassword({ navigation }) {
                 <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold', marginTop: 20 }}>Mật khẩu mới</Text>
 
                 <TextInput
-                    style={styles.txtSDT}
+                    style={[styles.txtSDT,{  borderBottomColor: isNewPasswordValid ? 'black' : 'red' }]}
                     placeholder="Nhập mật khẩu mới"
                     value={passwordNew}
-                    onChangeText={(text) => setPasswordNew(text)}
+                    onChangeText={handleCheckNewPass}
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
                 />
+                {!isNewPasswordValid && <Text style={{color: 'red'}}>Mật khẩu mới phải lớn hơn 6 kí tự và ký tự đầu là ký tự in hoa. Mật khẩu mới không được giống mật khẩu cũ!</Text>}    
+
 
                 <TextInput
                     style={styles.txtSDT}
