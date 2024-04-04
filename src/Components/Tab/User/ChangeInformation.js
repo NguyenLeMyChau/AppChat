@@ -28,6 +28,7 @@ export default function ChangeInformation({ navigation }) {
         const { data } = response;
 
         if (data.success) {
+            alert("Cập nhật thông tin thành công");
             Alert.alert(data.message);
         } else {
             Alert.alert(data.message);

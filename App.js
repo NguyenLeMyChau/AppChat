@@ -8,7 +8,7 @@ import ChangePassword from './src/Components/Tab/User/ChangePassword';
 
 export default function App() {
   return (
-    <ChangePassword/>
+    <LoginNavigation/>
   );
 
 }
