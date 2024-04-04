@@ -4,15 +4,15 @@ import { Octicons, AntDesign, Entypo } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-export default function InformationUser({navigation}) {
+export default function InformationUser({ navigation }) {
 
     const [userData, setUserData] = useState({});
 
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');
-            console.log(JSON.parse(foundUser));
-            setUserData(JSON.parse(foundUser));
-            //JSON.parse(foundUser) chuyển chuỗi JSON thành object
+        console.log(JSON.parse(foundUser));
+        setUserData(JSON.parse(foundUser));
+        //JSON.parse(foundUser) chuyển chuỗi JSON thành object
     }
 
     useEffect(() => {
@@ -25,18 +25,20 @@ export default function InformationUser({navigation}) {
                 <View style={styles.coverImage}>
                     <ImageBackground source={require('/assets/coverimage.jpg')} style={{ width: '100%', height: '100%' }}>
                         <View style={styles.tab}>
-                            <Octicons name="arrow-left" size={25} color="white" />
+                            <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goback()} />
 
                             <AntDesign name="eyeo" size={25} color="white" style={{ marginLeft: "70%" }} />
 
-                            <Entypo name="dots-three-horizontal" 
-                            size={25} color="white" 
-                            style={{ marginLeft: 20 }} 
-                            onPress={() => navigation.navigate("Option")}/>
+                            <Entypo name="dots-three-horizontal"
+                                size={25} color="white"
+                                style={{ marginLeft: 20 }}
+                                onPress={() => navigation.navigate("Option")} />
                         </View>
                     </ImageBackground>
                 </View>
-                <Image source={require('/assets/AnexanderTom.jpg')} style={styles.avatar} />
+                <Image
+                    source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+                    style={styles.avatar} />
             </View>
 
             <View style={{ marginTop: 70 }}>

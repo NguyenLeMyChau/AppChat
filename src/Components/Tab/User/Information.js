@@ -3,14 +3,14 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, ImageBackground, TextI
 import { Octicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Information({ navigation}) {
+export default function Information({ navigation }) {
     const [userData, setUserData] = useState({});
 
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');
-            console.log(JSON.parse(foundUser));
-            setUserData(JSON.parse(foundUser));
-            //JSON.parse(foundUser) chuyển chuỗi JSON thành object
+        console.log(JSON.parse(foundUser));
+        setUserData(JSON.parse(foundUser));
+        //JSON.parse(foundUser) chuyển chuỗi JSON thành object
     }
 
     useEffect(() => {
@@ -24,12 +24,14 @@ export default function Information({ navigation}) {
                 <View style={styles.coverImage}>
                     <ImageBackground source={require('/assets/coverimage.jpg')} style={{ width: '100%', height: '100%', justifyContent: "space-between" }}>
                         <View style={styles.tab}>
-                            <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
+                            <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.navigate.goBack()} />
                         </View>
 
 
                         <View style={styles.tabEnd}>
-                            <Image source={require('/assets/AnexanderTom.jpg')} style={styles.avatar} />
+                            <Image
+                                source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+                                style={styles.avatar} />
                             <Text style={styles.name}>{userData.name}</Text>
                         </View>
                     </ImageBackground>
@@ -37,17 +39,17 @@ export default function Information({ navigation}) {
             </View>
 
             <View style={{ backgroundColor: "white" }}>
-                <Text style={{ ...styles.option, fontWeight: 600, margin: 10, marginLeft: 20, width:"75%"}}>Thông tin cá nhân</Text>
+                <Text style={{ ...styles.option, fontWeight: 600, margin: 10, marginLeft: 20, width: "75%" }}>Thông tin cá nhân</Text>
 
                 <View>
                     <View style={styles.infor}>
                         <Text style={styles.option}>Giới tính</Text>
-                        <Text style={{...styles.option, width:"75%"}}>{userData.gender ? "Nữ" : "Nam"}</Text>
+                        <Text style={{ ...styles.option, width: "75%" }}>{userData.gender ? "Nữ" : "Nam"}</Text>
                     </View>
 
                     <View style={styles.infor}>
                         <Text style={styles.option}>Email</Text>
-                        <Text style={{...styles.option, width:"75%"}}>{userData.email}</Text>
+                        <Text style={{ ...styles.option, width: "75%" }}>{userData.email}</Text>
                     </View>
 
                     <TouchableOpacity style={styles.uploadStatus} onPress={() => navigation.navigate("ChangeInformation")}>

@@ -5,36 +5,87 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { Platform } from 'react-native';
 
 export default function ChangeInformation({ navigation }) {
     const [userData, setUserData] = useState({});
     const [name, setName] = useState('');
     const [gender, setGender] = useState(true);
+    const [avatar, setAvatar] = useState(null);
 
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');
-        console.log(JSON.parse(foundUser));
         setUserData(JSON.parse(foundUser));
-        //JSON.parse(foundUser) chuyển chuỗi JSON thành object
     }
-    
+
     useEffect(() => {
         getData();
     }, []);
 
-    const handleChange = async () => {
-        
-        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, {name, gender});
+
+    const selectFile = async () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = e => {
+            const file = e.target.files[0];
+            console.log(file);
+            setAvatar(file);
+        }
+        input.click();
+    }
+
+    const handleChange = async (file) => {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        const responseAvatar = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userData._id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        const dataAvatar = responseAvatar;
+
+        if (dataAvatar.success) {
+            Alert.alert(dataAvatar.message);
+        } else {
+            Alert.alert(dataAvatar.message);
+        }
+
+
+        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, { name, gender, avatar: dataAvatar.data.avatar });
+
         const { data } = response;
 
         if (data.success) {
+            let updatedUser;
+            if (name === '') {
+                updatedUser = {
+                    name: userData.name,
+                    email: userData.email,
+                    gender: gender,
+                    avatar: dataAvatar.data.avatar
+                };
+            } else {
+                updatedUser = {
+                    name: name,
+                    email: userData.email,
+                    gender: gender,
+                    avatar: dataAvatar.data.avatar
+                };
+            }
+
+            alert("Cập nhật thông tin thành công");
             Alert.alert(data.message);
+            console.log(updatedUser);
+            await AsyncStorage.setItem('foundUser', JSON.stringify(updatedUser));
+            setUserData(updatedUser);
+
+
         } else {
             Alert.alert(data.message);
         }
-
-    }
-
+    };
 
     useEffect(() => {
         setGender(userData.gender);
@@ -77,23 +128,22 @@ export default function ChangeInformation({ navigation }) {
             <View style={{ backgroundColor: "white" }}>
                 <View style={{ flexDirection: "row", paddingTop: 20 }}>
                     <View style={styles.head}>
-                        <ImageBackground
-                            source={require('/assets/AnexanderTom.jpg')}
-                            style={styles.avatar}
-                            imageStyle={{ borderRadius: 75 }}>
+                        <TouchableOpacity onPress={() => selectFile()}>
+                            <ImageBackground
+                                source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+                                style={styles.avatar}
+                                imageStyle={{ borderRadius: 75 }}
+                            >
 
-                            <LinearGradient
-                                colors={['#fff', '#fff']}
-                                style={styles.avatarStory}>
-                                <Animated.View style={{ transform: [{ scale }] }}>
-                                    <AntDesign name="camera" size={13} color="#C4C4C4" />
-                                </Animated.View>
-                            </LinearGradient>
-
-
-
-                        </ImageBackground>
-
+                                <LinearGradient
+                                    colors={['#fff', '#fff']}
+                                    style={styles.avatarStory}>
+                                    <Animated.View style={{ transform: [{ scale }] }}>
+                                        <AntDesign name="camera" size={13} color="#C4C4C4" />
+                                    </Animated.View>
+                                </LinearGradient>
+                            </ImageBackground>
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.infor}>
@@ -149,7 +199,9 @@ export default function ChangeInformation({ navigation }) {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.uploadStatus} onPress={() => handleChange()}>
+                <TouchableOpacity style={styles.uploadStatus} onPress={async () => {
+                    await handleChange(avatar);
+                }}>
                     <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
                         Lưu
                     </Text>
