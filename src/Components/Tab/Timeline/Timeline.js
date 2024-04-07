@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, Animated } from 'react-native';
 import Header from '../../Head/Header';
-import avatar from "/assets/AnexanderTom.jpg";
-import zalo from "/assets/zalo.jpg";
+import avatar from "../../../../assets/AnexanderTom.jpg";
 import { AntDesign, MaterialIcons, FontAwesome, MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -73,7 +72,7 @@ export default function Timeline() {
       <View style={styles.header}>
         <View style={styles.headerWrite}>
           <Image
-            source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+            source={userData.avatar ? { uri: userData.avatar } : avatar}
             style={styles.avatar} />
           <TextInput
             placeholder="Hôm nay bạn thế nào?"
@@ -127,7 +126,7 @@ export default function Timeline() {
         <View>
 
           <ImageBackground
-            source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+            source={userData.avatar ? { uri: userData.avatar } : avatar}
             style={styles.story}>
             <LinearGradient
               colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.7)']}

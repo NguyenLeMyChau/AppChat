@@ -50,12 +50,14 @@ export default function ChangePassword({ navigation }) {
 
         if (data.success) {
             Alert.alert(data.message);
+            alert(data.message);
             console.log(data.message);
             setPassword('');
             setPasswordNew('');
             setRePassword('');
         } else {
             Alert.alert(data.message);
+            alert(data.message);
         }
     }
 

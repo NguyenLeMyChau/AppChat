@@ -247,7 +247,7 @@ export default function Register({ navigation }) {
           handleSendOTP();
         }}
         
-        disabled={!(isEmailValid && isNameValid && isPassValid)}
+        disabled={!(isEmailValid && isNameValid && isPassValid &&isConfirmPasswordValid)}
       >
         <AntDesign
           name="arrowright"
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
   },
 
   register: {
-    borderRadius: '50%',
+    borderRadius: 50,
     backgroundColor: '#C7C7C7',
     width: 50, height: 50,
     alignItems: 'center',

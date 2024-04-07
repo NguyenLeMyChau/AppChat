@@ -93,7 +93,6 @@ export default function Signin({ navigation }) {
           placeholder="Email"
           onFocus={handleFocus}
           onBlur={handleBlur}
-          keyboardType="phone-pad"
           onChangeText={(text) => setEmail(text)}
           underlineColorAndroid="transparent"
         />
@@ -181,7 +180,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderBottomColor: "#74d3f7",
     color: "gray",
-    outlineStyle: "none",
     marginTop: 10,
   },
 
@@ -208,7 +206,7 @@ const styles = StyleSheet.create({
 
   btnconfirm: {
     backgroundColor: "gray",
-    borderRadius: "50%",
+    borderRadius: 50,
     width: 50,
     height: 50,
     alignItems: "center",
