@@ -92,7 +92,7 @@ export default function Chat({ navigation }) {
                     <>
                         <TextInput
                             placeholder="Tin nhắn"
-                            style={styles.txtSDT}
+                            style={styles.txtSDTFocus}
                             value={mess}
                             onChangeText={(text) => setMess(text)}
                             keyboardType="phone-pad"
@@ -101,26 +101,13 @@ export default function Chat({ navigation }) {
                         <MaterialCommunityIcons
                             name="send"
                             size={30}
-                            color="#006AF5" style={{ marginLeft: 85 }}
+                            color="#006AF5" style={{ marginLeft: 20 }}
                         />
 
                     </>
 
                 )}
-
-
-
-
-
-
-
             </View>
-
-
-
-
-
-
 
         </View>
 
@@ -149,6 +136,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black',
         padding: 10,
+    },
+
+    txtSDTFocus: {
+        fontSize: 16,
+        color: 'black',
+        padding: 10,
+        width: 270
     },
 
     chatText: {
