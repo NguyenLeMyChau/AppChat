@@ -126,7 +126,7 @@ export default function ChangeInformation({ navigation }) {
                     <View style={styles.head}>
                         <TouchableOpacity onPress={() => {selectFile(),setChange(true)}}>
                             <ImageBackground
-                                source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+                                source={userData.avatar ? { uri: userData.avatar } : require('../../../../assets/AnexanderTom.jpg')}
                                 style={styles.avatar}
                                 imageStyle={{ borderRadius: 75 }}
                             >

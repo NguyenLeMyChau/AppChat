@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native';
 import { Octicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AnexanderTom from '../../../../assets/AnexanderTom.jpg'
 
 export default function Information({ navigation }) {
     const [userData, setUserData] = useState({});
@@ -22,7 +23,7 @@ export default function Information({ navigation }) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.coverImage}>
-                    <ImageBackground source={require('/assets/coverimage.jpg')} style={{ width: '100%', height: '100%', justifyContent: "space-between" }}>
+                    <ImageBackground source={require('../../../../assets/coverimage.jpg')} style={{ width: '100%', height: '100%', justifyContent: "space-between" }}>
                         <View style={styles.tab}>
                             <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()} />
                         </View>
@@ -30,7 +31,7 @@ export default function Information({ navigation }) {
 
                         <View style={styles.tabEnd}>
                             <Image
-                                source={userData.avatar ? { uri: userData.avatar } : require('/assets/AnexanderTom.jpg')}
+                                source={userData.avatar ? { uri: userData.avatar } : AnexanderTom}
                                 style={styles.avatar} />
                             <Text style={styles.name}>{userData.name}</Text>
                         </View>

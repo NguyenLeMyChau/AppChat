@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import zalo from '/assets/loginzalo1.jpg';
+import zalo from '../../../assets/loginzalo1.jpg';
 
 
 export default function HomeLoginZalo({navigation}) {
