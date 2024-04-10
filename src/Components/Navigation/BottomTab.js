@@ -21,7 +21,7 @@ function BottomTab () {
           ),
           tabBarStyle: { backgroundColor: 'white' },
         }}/>
-        <Tab.Screen name="DanhBa" component={ContactTopTab}  options={{
+        <Tab.Screen name="Contact" component={ContactTopTab}  options={{
           headerShown: false,
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (

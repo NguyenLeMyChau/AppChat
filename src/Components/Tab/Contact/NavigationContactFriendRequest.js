@@ -2,29 +2,27 @@ import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Octicons } from "@expo/vector-icons";
 
-import Header from '../Head/Header';
-
-import Contacts_Friends from '../Tab/Contact/Contacts_Friends';
-import Contacts_Groups from '../Tab/Contact/Contacts_Groups';
-import Contact_OA from '../Tab/Contact/Contact_OA';
+import Contact_SendFriendRequest from './Contact_SendFriendRequest';
+import Contact_AcceptFriendRequest from './Contact_AcceptFriendRequest';
 
 const Tab = createMaterialTopTabNavigator();
-const Stack = createNativeStackNavigator();
 
-export default function ContactTopTab() {
+export default function NavigationContactFriendRequest() {
     return (
         <View style={styles.container}>
             <NavigationContainer independent={true}>
-                <View style={{
-                    flexDirection: "row", alignItems: 'center', width: "100%"
-                }}>
-                    <Header />
-                    <TouchableOpacity style={{ marginLeft: -45 }}>
-                        <AntDesign name="adduser" size={25} color="white" />
+                <View style={styles.header}>
+                    <TouchableOpacity>
+                        <Octicons
+                            name="arrow-left"
+                            size={25}
+                            color="white"
+                        />
                     </TouchableOpacity>
+
+                    <Text style={styles.name}>Lời mời kết bạn</Text>
                 </View>
                 <Tab.Navigator
                     screenOptions={({ route }) => ({
@@ -42,12 +40,10 @@ export default function ContactTopTab() {
                     })}
 
                 >
-                    <Tab.Screen name="Bạn bè " component={Contacts_Friends} />
-                    <Tab.Screen name="Nhóm" component={Contacts_Groups} />
-                    <Tab.Screen name="OA" component={Contact_OA} />
+                    <Tab.Screen name="Đã nhận" component={Contact_SendFriendRequest} />
+                    <Tab.Screen name="Đã gửi" component={Contact_AcceptFriendRequest} />
                 </Tab.Navigator>
             </NavigationContainer>
-
         </View>
     );
 }
@@ -61,8 +57,24 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: 100
     },
     tabBarLabel: {
         fontSize: 16,
     },
+    header: {
+        backgroundImage: "linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)",
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        height: "8%",
+        width: "100%",
+    },
+    name: {
+        color: "white",
+        marginLeft: 20,
+        fontSize: 18,
+        fontWeight: "400",
+      },
 })

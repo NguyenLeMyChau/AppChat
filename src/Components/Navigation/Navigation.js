@@ -17,6 +17,8 @@ import User from "../Tab/User/User";
 import ChangePassword from "../Tab/User/ChangePassword";
 import Setting from "../Tab/User/Setting";
 import ForgotPassword from "../Login/ForgotPassword";
+import ContactTopTab from "./ContactTopTab";
+import NavigationContactFriendRequest from "../Tab/Contact/NavigationContactFriendRequest";
 
 const Stack = createNativeStackNavigator();
 function Navigation() {
@@ -38,8 +40,9 @@ function Navigation() {
           <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }}/>
           <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }}/>
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }}/>
-          <Stack.Screen name="ChangeInformation" component={ChangeInformation}  options={{ headerShown: false }}
-          />
+          <Stack.Screen name="ChangeInformation" component={ChangeInformation}  options={{ headerShown: false }}/>
+          <Stack.Screen name="NavigationContactFriendRequest" component={NavigationContactFriendRequest}  options={{ headerShown: false }}/>
+          <Stack.Screen name="ContactTopTab" component={ContactTopTab}  options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
