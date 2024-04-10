@@ -2,29 +2,33 @@ import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import { Octicons } from "@expo/vector-icons";
+import { Octicons, AntDesign } from "@expo/vector-icons";
 
 import Contact_SendFriendRequest from '../Tab/Contact/Contact_SendFriendRequest';
 import Contact_AcceptFriendRequest from '../Tab/Contact/Contact_AcceptFriendRequest';
+import Header from '../Head/Header';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function NavigationContactFriendRequest() {
     return (
         <View style={styles.container}>
-            
-            <NavigationContainer independent={true}>
-                <View style={styles.header}>
-                    <TouchableOpacity>
-                        <Octicons
-                            name="arrow-left"
-                            size={25}
-                            color="white"
-                        />
-                    </TouchableOpacity>
 
-                    <Text style={styles.name}>Lời mời kết bạn</Text>
+            <NavigationContainer independent={true}>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        width: "100%",
+                    }}
+                >
+
+                    <Header />
+                    <TouchableOpacity style={{ marginLeft: -45 }}>
+                        <AntDesign name="adduser" size={25} color="white" />
+                    </TouchableOpacity>
                 </View>
+
                 <Tab.Navigator
                     screenOptions={({ route }) => ({
                         tabBarLabel: ({ focused }) => {

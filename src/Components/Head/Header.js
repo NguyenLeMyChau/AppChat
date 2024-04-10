@@ -6,6 +6,9 @@ import Modal from 'react-native-modal';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Header() {
+    const [listFriend, setListFriend] = useState([]);
+    const [listFriendRequest, setListFriendRequest] = useState([]);
+
     const [userData, setUserData] = useState({});
     const [userDataFind, setUserDataFind] = useState({});
     const [email, setEmail] = useState('');
@@ -13,13 +16,21 @@ export default function Header() {
 
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');
-        setUserData(JSON.parse(foundUser));
-        console.log("userData in getData:", userData);
+        const userData = JSON.parse(foundUser);
+        setUserData(userData);
+        return userData;
     }
 
     useEffect(() => {
-        getData();
+        async function fetchData() {
+            const userData = await getData();
+            await getFriendList(userData._id);
+            await getFriendRequestsSentToUser(userData._id)
+        }
+        fetchData();
+
     }, []);
+
 
     const findUserByEmail = async () => {
 
@@ -37,9 +48,6 @@ export default function Header() {
     }
 
     const sendFriendRequest = async () => {
-        console.log("userData:", userData)
-        console.log("userData._id:", userData._id)
-        console.log("userDataFind._id:", userDataFind._id)
 
         const response = await axios.post(`http://localhost:4000/user/sendFriendRequest`, { senderId: userData._id, receiverId: userDataFind._id });
         const { data } = response;
@@ -52,6 +60,42 @@ export default function Header() {
         }
 
     }
+
+    const getFriendList = async (userId) => {
+        console.log(userId)
+
+        const response = await axios.get(`http://localhost:4000/user/getFriendList/${userId}`);
+        const { data } = response;
+
+        if (data.success) {
+            Alert.alert(data.friendList);
+            console.log(data.friendList);
+            setListFriend(data.friendList);
+        } else {
+            Alert.alert(data.message);
+        }
+
+    }
+
+    const getFriendRequestsSentToUser = async (userId) => {
+        console.log(userId)
+
+        const response = await axios.get(`http://localhost:4000/user/getFriendRequestsSentToUser/${userId}`);
+        const { data } = response;
+
+        console.log("Contact:" + data.friendRequestsSent)
+
+        if (data.success) {
+            Alert.alert(data.friendRequestsSent);
+            setListFriendRequest(data.friendRequestsSent);
+        } else {
+            Alert.alert(data.message);
+        }
+
+    };
+
+    const isUserInFriendList = listFriend.some(friend => friend._id === userDataFind._id);
+    const isUserInFriendRequest = listFriendRequest.some(friend => friend._id === userDataFind._id);
 
 
     return (
@@ -83,10 +127,17 @@ export default function Header() {
                     />
 
                     <Text style={{ fontSize: 16 }}>{userDataFind.name}</Text>
-                    <Ionicons name="person-add" size={24} color="black"
-                        onPress={async () => {
-                            await sendFriendRequest()
-                        }} />
+
+                    {isUserInFriendList ? (
+                        <Text style={{ fontSize: 14 }}>Đã kết bạn</Text>
+                    ) : isUserInFriendRequest ? (
+                        <Text style={{ fontSize: 14 }}>Đã có yêu cầu</Text>
+                    ) : (
+                        <Ionicons name="person-add" size={24} color="black"
+                            onPress={async () => {
+                                await sendFriendRequest()
+                            }} />
+                    )}
                 </View>
 
 
