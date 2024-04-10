@@ -1,13 +1,25 @@
 import { StyleSheet, View, TouchableOpacity, TextInput, Alert, Pressable, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-native-modal';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Header() {
     const [userData, setUserData] = useState({});
+    const [userDataFind, setUserDataFind] = useState({});
     const [email, setEmail] = useState('');
     var [boolModal, setBoolModal] = useState(false);
+
+    async function getData() {
+        const foundUser = await AsyncStorage.getItem('foundUser');
+        setUserData(JSON.parse(foundUser));
+        console.log("userData in getData:", userData);
+    }
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const findUserByEmail = async () => {
 
@@ -17,12 +29,31 @@ export default function Header() {
         if (data.success) {
             Alert.alert(data.user);
             console.log(data.user);
-            setUserData(data.user);
+            setUserDataFind(data.user);
         } else {
             Alert.alert(data.message);
         }
 
     }
+
+    const sendFriendRequest = async () => {
+        console.log("userData:", userData)
+        console.log("userData._id:", userData._id)
+        console.log("userDataFind._id:", userDataFind._id)
+
+        const response = await axios.post(`http://localhost:4000/user/sendFriendRequest`, { senderId: userData._id, receiverId: userDataFind._id });
+        const { data } = response;
+
+        if (data.success) {
+            console.log(data.user);
+            alert("Lời mời kết bạn đã được gửi thành công");
+        } else {
+            Alert.alert(data.message);
+        }
+
+    }
+
+
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={() => {
@@ -47,12 +78,15 @@ export default function Header() {
 
                 <View style={{ width: '100%', height: 80, backgroundColor: '#C4C4C4', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around', top: -200 }}>
                     <Image
-                        source={userData.avatar ? { uri: userData.avatar } : require('../../../assets/AnexanderTom.jpg')}
+                        source={userDataFind.avatar ? { uri: userDataFind.avatar } : require('../../../assets/AnexanderTom.jpg')}
                         style={styles.avatar}
                     />
 
-                    <Text style={{ fontSize: 16 }}>{userData.name}</Text>
-                    <Ionicons name="person-add" size={24} color="black" />
+                    <Text style={{ fontSize: 16 }}>{userDataFind.name}</Text>
+                    <Ionicons name="person-add" size={24} color="black"
+                        onPress={async () => {
+                            await sendFriendRequest()
+                        }} />
                 </View>
 
 
@@ -77,6 +111,6 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 75
-        
+
     },
 });
