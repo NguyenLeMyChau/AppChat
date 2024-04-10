@@ -6,6 +6,7 @@ import Timeline from '../Tab/Timeline/Timeline';
 import User from '../Tab/User/User';
 import ContactTopTab from '../Navigation/ContactTopTab'
 import { FontAwesome, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import NavigationContactFriendRequest from './NavigationContactFriendRequest';
 
 const Tab = createBottomTabNavigator();
 function BottomTab () {
@@ -21,7 +22,7 @@ function BottomTab () {
           ),
           tabBarStyle: { backgroundColor: 'white' },
         }}/>
-        <Tab.Screen name="Contact" component={ContactTopTab}  options={{
+        <Tab.Screen name="Contact" component={NavigationContactFriendRequest}  options={{
           headerShown: false,
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (

@@ -4,17 +4,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { Octicons } from "@expo/vector-icons";
 
-import Contact_SendFriendRequest from './Contact_SendFriendRequest';
-import Contact_AcceptFriendRequest from './Contact_AcceptFriendRequest';
+import Contact_SendFriendRequest from '../Tab/Contact/Contact_SendFriendRequest';
+import Contact_AcceptFriendRequest from '../Tab/Contact/Contact_AcceptFriendRequest';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function NavigationContactFriendRequest({navigation}) {
+export default function NavigationContactFriendRequest() {
     return (
         <View style={styles.container}>
+            
             <NavigationContainer independent={true}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity>
                         <Octicons
                             name="arrow-left"
                             size={25}
@@ -76,5 +77,5 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         fontSize: 18,
         fontWeight: "400",
-      },
+    },
 })

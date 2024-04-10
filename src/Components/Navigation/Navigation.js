@@ -17,7 +17,7 @@ import User from "../Tab/User/User";
 import ChangePassword from "../Tab/User/ChangePassword";
 import Setting from "../Tab/User/Setting";
 import ForgotPassword from "../Login/ForgotPassword";
-import NavigationContactFriendRequest from "../Tab/Contact/NavigationContactFriendRequest";
+import NavigationContactFriendRequest from "../Navigation/NavigationContactFriendRequest";
 import Search from "../Tab/MenuChat/Search/Search"
 import ContactTopTab from "../Navigation/ContactTopTab";
 
