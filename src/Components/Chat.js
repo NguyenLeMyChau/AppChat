@@ -1,53 +1,87 @@
 
-import { AntDesign, MaterialCommunityIcons, MaterialIcons, Ionicons, SimpleLineIcons, Entypo } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
-import { useRef } from 'react';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo,Feather } from '@expo/vector-icons';
+import { useEffect } from 'react';
 import { useState } from 'react';
-import { StyleSheet, View, Button, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { GiftedChat, Bubble, Actions } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-export default function Chat({ navigation }) {
+export default function Chat({ navigation,route }) {
+    
+    const { friend } = route.params;
     const [mess, setMess] = useState('')
+    const [userData, setUserData] = useState({});
     const [currentMessage, setCurrentMessage] = useState('');
-    const [messages, setMessages] = useState([
-        {
-            _id: 1,
-            text: 'Hello developer',
-            createdAt: new Date(),
-            user: {
-                _id: 2,
-                name: 'React Native',
-                avatar: 'https://placeimg.com/140/140/any',
-            },
-        },
-        {
-            _id: 2,
-            text: 'Hello world',
-            createdAt: new Date(),
-            user: {
-                _id: 1,
-                name: 'Developer',
-                avatar: 'https://placeimg.com/140/140/any',
-            },
-        },
-    ]);
+    const [messages, setMessages] = useState([]);
 
-    function onSend() {
+    async function getData() {
+        try {
+            const foundUser = await AsyncStorage.getItem('foundUser');
+            if (foundUser !== null) {
+                const user = JSON.parse(foundUser);
+                setUserData(user);
+                fetchMessages(user); // Gọi hàm fetchConversations sau khi lấy dữ liệu thành công
+            }
+        } catch (error) {
+            console.error('Error getting data from AsyncStorage:', error);
+        }
+    }
+    
+    
+    useEffect(() => {
+        getData();
+    }, []);
+
+    
+        const fetchMessages = async (userData) => {
+          try {
+            const response = await axios.post('http://localhost:4000/user/getMessages', {
+              from: userData._id,
+              to: friend._id,
+            });
+            const formattedMessages = response.data.map(msg => ({
+                _id: msg.id, // ID của tin nhắn
+                text: msg.message, // Nội dung tin nhắn
+                createdAt: new Date(msg.createdAt), // Thời gian tạo tin nhắn (định dạng Date)
+                user: {
+                  _id: msg.fromSelf ? userData._id : friend._id, // ID của người gửi tin nhắn
+                  name: msg.fromSelf ? 'You' : friend.name, // Tên của người gửi tin nhắn
+                },
+                isHidden: !msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
+              }));
+              setMessages(formattedMessages);
+                console.log(formattedMessages);
+          } catch (error) {
+            console.error('Error fetching messages:', error);
+          }
+        };
+    
+
+    const onSend = async (messages = []) =>{
         if (currentMessage.length > 0) {
             setMessages(previousMessages => GiftedChat.append(previousMessages, {
                 _id: previousMessages.length + 1,
                 text: currentMessage,
                 createdAt: new Date(),
                 user: {
-                    _id: 1,
+                    _id: userData._id,
                 },
             }));
+            console.log(messages)
+            console.log(currentMessage)
+            if(messages){
+            const response = await axios.post('http://localhost:4000/user/addMessage', {
+                from: userData._id,
+                to: friend._id,
+                message: currentMessage
+              });
+              console.log(response.data)
+            }
             setCurrentMessage('');
         }
     }
-
     const renderBubble = (props) => {
         return (
             <Bubble
@@ -86,44 +120,29 @@ export default function Chat({ navigation }) {
                 paddingHorizontal: 16,
                 paddingVertical: 8,
             }}>
-                <MaterialIcons
-                    onPress={() => navigation.goBack()}
-                    name="keyboard-backspace"
-                    size={20}
-                    color="white"
-                />
-
-                <Text style={{ fontSize: 20, color: 'white', padding: 10, marginLeft: 10 }}>
-                    Name
-                </Text>
-
-                <Ionicons
-                    name="call-outline"
-                    size={24}
-                    color="white"
-                    style={{ marginLeft: 130 }}
-                />
-
-                <AntDesign
-                    name="videocamera"
-                    size={24}
-                    color="white"
-                    style={{ marginLeft: 30 }}
-                />
-
-                <Ionicons
-                    name="menu-outline"
-                    size={30}
-                    color="white"
-                    style={{ marginLeft: 25 }}
-                />
+                <TouchableOpacity style={{width:'10%'}}  onPress={()=>navigation.goBack()}>
+            <AntDesign name="arrowleft" size={20} color="white" />
+          </TouchableOpacity>   
+          <TouchableOpacity style={{width:'55%'}}>         
+                <Text style={{color:'white',fontWeight:'bold',fontSize:18}}>{friend.name}</Text>
+                <Text style={{color:'white',fontSize:13}}>Truy cập</Text>
+          </TouchableOpacity> 
+          <TouchableOpacity style={{width:'13%'}}>
+            <MaterialCommunityIcons name="phone" size={20} color="white" />
+          </TouchableOpacity>   
+          <TouchableOpacity style={{width:'13%'}}>
+            <Feather name="video" size={20} color="white" />
+          </TouchableOpacity>   
+          <TouchableOpacity style={{width:'13%'}}>
+            <SimpleLineIcons name="list" size={20} color="white" />
+          </TouchableOpacity>   
             </View>
 
             <GiftedChat
                 messages={messages}
                 onSend={newMessages => onSend(newMessages)}
                 user={{
-                    _id: 1,
+                    _id: userData._id,
                 }}
                 renderBubble={renderBubble}
                 listViewProps={{
@@ -187,7 +206,7 @@ export default function Chat({ navigation }) {
                             name="send"
                             size={30}
                             color="#006AF5" style={{ marginLeft: 20 }}
-                            onPress={onSend}
+                            onPress={()=>onSend()}
                         />
 
                     </>

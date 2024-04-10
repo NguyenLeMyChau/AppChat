@@ -8,7 +8,6 @@ import axios  from "axios";
 
 export default function MenuChat({navigation}){
   const [userData, setUserData] = useState({});
-  const [userDataLoaded, setUserDataLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [listChat,setListChat] = useState([]);

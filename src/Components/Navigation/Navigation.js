@@ -6,7 +6,7 @@ import Register from "../Register/Register";
 import Login from "./LoginNavigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import ChatScreen from "../Tab/MenuChat/Chat";
+import ChatScreen from "../Chat";
 import SplashScreen from "../Login/SplashScreen";
 import HomeLoginZalo from "../Login/HomeLoginZalo";
 import ChangeInformation from "../Tab/User/ChangeInformation";
