@@ -6,15 +6,19 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-nativ
 import axios from 'axios';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import io, { Socket } from "socket.io-client";
 
 export default function Chat({ navigation,route }) {
     
     const { friend } = route.params;
+    var userId;
     const [mess, setMess] = useState('')
     const [userData, setUserData] = useState({});
     const [currentMessage, setCurrentMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [socket, setSocket] = useState(null); 
+    
+    
 
     async function getData() {
         try {
@@ -22,6 +26,7 @@ export default function Chat({ navigation,route }) {
             if (foundUser !== null) {
                 const user = JSON.parse(foundUser);
                 setUserData(user);
+                userId = user._id;
                 fetchMessages(user); // Gọi hàm fetchConversations sau khi lấy dữ liệu thành công
             }
         } catch (error) {
@@ -32,12 +37,59 @@ export default function Chat({ navigation,route }) {
     
     useEffect(() => {
         getData();
+        
     }, []);
 
+    useEffect(() => {
+        getData();
+        const newSocket = io('http://localhost:4000');
+        newSocket.on('connect', () => {
+            console.log('Connected to Socket.IO server');
+        });
+        newSocket.on('sendDataServer', (message) => {
+            console.log(userId)
+            if(message.data.user._id===userId|| message.data.user._id===friend._id){
+                setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
+            }
+        });
+        setSocket(newSocket); // Lưu socket vào state
+        return () => {
+            newSocket.disconnect();
+        };
+    }, []);
+    const generateRandomId = (text) => {
+        const timestamp = Date.now().toString(); // Thời gian hiện tại dưới dạng chuỗi số
+        const randomText = Math.random().toString(36).substring(7); // Chuỗi ngẫu nhiên từ 7 ký tự
+        return `${timestamp}-${text}-${randomText}`; // Kết hợp thời gian, văn bản và chuỗi ngẫu nhiên
+    };
+    const onSend = async (messages = []) => {
+      if (currentMessage.length > 0 && socket) {
+        // Kiểm tra socket đã sẵn sàng
+        const newMessage = {
+          _id: generateRandomId(currentMessage),
+          text: currentMessage,
+          createdAt: new Date(),
+          user: {
+            _id: userData._id, // ID của người gửi tin nhắn
+            avatar:userData.avatar
+          },
+        };
+        socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+
+        const response = await axios.post("http://localhost:4000/addmsg", {
+          from: userData._id,
+          to: friend._id,
+          message: currentMessage,
+        });
+
+        console.log(response.data);
+        setCurrentMessage("");
+      }
+    };
     
         const fetchMessages = async (userData) => {
           try {
-            const response = await axios.post('http://localhost:4000/user/getMessages', {
+            const response = await axios.post('http://localhost:4000/getmsg', {
               from: userData._id,
               to: friend._id,
             });
@@ -59,29 +111,7 @@ export default function Chat({ navigation,route }) {
         };
     
 
-    const onSend = async (messages = []) =>{
-        if (currentMessage.length > 0) {
-            setMessages(previousMessages => GiftedChat.append(previousMessages, {
-                _id: previousMessages.length + 1,
-                text: currentMessage,
-                createdAt: new Date(),
-                user: {
-                    _id: userData._id,
-                },
-            }));
-            console.log(messages)
-            console.log(currentMessage)
-            if(messages){
-            const response = await axios.post('http://localhost:4000/user/addMessage', {
-                from: userData._id,
-                to: friend._id,
-                message: currentMessage
-              });
-              console.log(response.data)
-            }
-            setCurrentMessage('');
-        }
-    }
+    
     const renderBubble = (props) => {
         return (
             <Bubble

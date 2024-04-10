@@ -47,6 +47,7 @@
     "react-native-vector-icons": "^10.0.2",
     "react-native-web": "~0.19.6",
     "react-navigation": "^5.0.0",
+    "socket.io-client": "^4.7.5",
     "yet": "^0.1.0"
   },
   "devDependencies": {
