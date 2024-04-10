@@ -3,17 +3,56 @@ import { Button, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
 import { AuthContext } from "../../Login/AuthProvider";
+import axios  from "axios";
 
 
 export default function MenuChat({navigation}){
-   
-  const {user} = useContext(AuthContext);
+  const [userData, setUserData] = useState({});
+  const [userDataLoaded, setUserDataLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [listChat,setListChat] = useState([]);
   const [listUsers,setListUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+
+  async function getData() {
+    try {
+        const foundUser = await AsyncStorage.getItem('foundUser');
+        if (foundUser !== null) {
+            const user = JSON.parse(foundUser);
+            setUserData(user);
+            fetchConversations(user); // Gọi hàm fetchConversations sau khi lấy dữ liệu thành công
+        }
+    } catch (error) {
+        console.error('Error getting data from AsyncStorage:', error);
+    }
+}
+
+
+useEffect(() => {
+    getData();
+}, []);
+
+const fetchConversations = async (userData) => {
+  try {
+      if (!userData || !userData._id) {
+          console.log("userData is not loaded yet");
+          return;
+      }
+      console.log(userData._id);
+      const response = await axios.get(
+          `http://localhost:4000/user/getFriendList/${userData._id}`
+      );
+      const data = response.data; // Truy cập data từ response
+      setListChat(data.friendList);
+      console.log(data);
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error', 'An error occurred while fetching data');
+  }
+};
+
 
   const handleSearch = async () => {
     try {
@@ -34,7 +73,9 @@ export default function MenuChat({navigation}){
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.header_item}
-            onPress={() => navigation.navigate("Search")}
+            onPress={() =>
+              navigation.navigate("NavigationContactFriendRequest")
+            }
           >
             <SimpleLineIcons name="magnifier" size={20} color="white" />
           </TouchableOpacity>
@@ -101,7 +142,9 @@ export default function MenuChat({navigation}){
                     size={20}
                     color="gray"
                   />
-                  <TouchableOpacity onPress={()=>navigation.navigate("AddFriend")}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("AddFriend")}
+                  >
                     <Text>Thêm bạn</Text>
                   </TouchableOpacity>
                 </View>
@@ -191,25 +234,32 @@ export default function MenuChat({navigation}){
             </TouchableOpacity>
           </Modal>
         </View>
-        <ScrollView style={{ backgroundColor: "white", width: "100%" }}>
-          {/* <FlatList
+        <ScrollView style={{ backgroundColor: "while", width: "100%" }}>
+          <FlatList
             style={styles.items}
-            data={users}
+            data={listChat}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.item}
                 onPress={() =>
-                  navigation.navigate("ChatScreen", { users: item })
+                  navigation.navigate("ChatScreen", { friend: item })
                 }
               >
-                <Image source={item.img} style={styles.image} />
+                <Image
+                  style={styles.image}
+                  source={
+                    item.avatar
+                      ? { uri: item.avatar }
+                      : require("../../../../assets/AnexanderTom.jpg")
+                  }
+                />
 
                 <View style={{ width: "70%" }}>
                   <Text style={styles.name} numberOfLines={1}>
-                    {item.user}
+                    {item.name}
                   </Text>
                   <Text style={styles.name} numberOfLines={1}>
-                    {item.messages}
+                    ádasdassad
                   </Text>
                 </View>
                 <View>
@@ -219,7 +269,7 @@ export default function MenuChat({navigation}){
               </TouchableOpacity>
             )}
             numColumns={1}
-          /> */}
+          />
         </ScrollView>
       </View>
     );
@@ -235,6 +285,7 @@ const styles = StyleSheet.create({
         fontSize:20,
         color:'white',
     },
+
     items:{
       
       marginTop:5,
@@ -257,7 +308,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
     },
     image:{
-        borderRadius:'50%',
+        borderRadius:50,
+        borderWidth:1,
         width:50,
         height:50,
         justifyContent: 'center',

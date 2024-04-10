@@ -9,12 +9,12 @@ import Contact_AcceptFriendRequest from './Contact_AcceptFriendRequest';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function NavigationContactFriendRequest() {
+export default function NavigationContactFriendRequest({navigation}) {
     return (
         <View style={styles.container}>
             <NavigationContainer independent={true}>
                 <View style={styles.header}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Octicons
                             name="arrow-left"
                             size={25}

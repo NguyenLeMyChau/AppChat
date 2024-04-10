@@ -17,8 +17,9 @@ import User from "../Tab/User/User";
 import ChangePassword from "../Tab/User/ChangePassword";
 import Setting from "../Tab/User/Setting";
 import ForgotPassword from "../Login/ForgotPassword";
-import ContactTopTab from "./ContactTopTab";
 import NavigationContactFriendRequest from "../Tab/Contact/NavigationContactFriendRequest";
+import Search from "../Tab/MenuChat/Search/Search"
+import ContactTopTab from "../Navigation/ContactTopTab";
 
 const Stack = createNativeStackNavigator();
 function Navigation() {
@@ -30,6 +31,7 @@ function Navigation() {
           <Stack.Screen name="Signin" component={Signin} options={{ headerShown: false }} />
           <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+          <Stack.Screen name="Search" component={Search} options={{ headerShown: false }}/>
           <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="HomeLoginZalo" component={HomeLoginZalo} options={{ headerShown: false }}/>
@@ -41,8 +43,8 @@ function Navigation() {
           <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }}/>
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }}/>
           <Stack.Screen name="ChangeInformation" component={ChangeInformation}  options={{ headerShown: false }}/>
-          <Stack.Screen name="NavigationContactFriendRequest" component={NavigationContactFriendRequest}  options={{ headerShown: false }}/>
-          <Stack.Screen name="ContactTopTab" component={ContactTopTab}  options={{ headerShown: false }}/>
+          <Stack.Screen name="ContactTopTab" component={ContactTopTab}  options={{ headerShown: false }}/>        
+          <Stack.Screen name="NavigationContactFriendRequest" component={NavigationContactFriendRequest}  options={{ headerShown: false }}/>     
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

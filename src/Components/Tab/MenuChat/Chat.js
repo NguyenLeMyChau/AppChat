@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 
 const ChatScreen = ({ navigation, route }) => {
-  const { users } = route.params; // Retrieve the user ID from the navigation parameters
+  const { friend } = route.params; // Retrieve the user ID from the navigation parameters
 
   const [messages, setMessages] = useState([users]);
   const [inputText, setInputText] = useState('');
