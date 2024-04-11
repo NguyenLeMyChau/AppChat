@@ -169,7 +169,6 @@ export default function Chat({ navigation, route }) {
 
 
     const renderBubble = (props) => {
-        const isImageMessage = props.currentMessage.text.startsWith("http://") || props.currentMessage.text.startsWith("https://");
 
         return (
             <Bubble
@@ -184,45 +183,32 @@ export default function Chat({ navigation, route }) {
                     },
                 }}
 
-                renderMessageImage={isImageMessage ? () => (
-                    <Image
-                        source={{ uri: props.currentMessage.text }}
-                        style={{ width: 250, height: 250 }}
-                    />
-                ) : null}
+
 
             />
         );
     }
 
-    async function copyMessage(message) {
-        // Code to copy message
-        console.log('Copy Message', message);
-    }
 
-    async function retrieveMessage(message) {
+    async function deleteMessage(message) {
         const messageId = message._id; // Get the message ID from the message object
         console.log(messageId)
         const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
         alert(response.data.message);
 
-        // Then update the state to cause a re-render
-        getData();
-
     }
 
-    async function deleteMessage(message) {
+    async function retrieveMessage(message) {
         const messageId = message._id; // Get the message ID from the message object
+        const senderId = message.user._id; // Get the message ID from the message object
+
         console.log(messageId)
         console.log(message)
         console.log(message.user._id)
 
+        const response = await axios.put(`http://localhost:4000/retrievemsg/${messageId}/${senderId}`);
+        alert(response.data.message);
 
-        // const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
-        // alert(response.data.message);
-
-        // // Then update the state to cause a re-render
-        // getData();
     }
 
     function onLongPress(context, message) {
@@ -243,6 +229,8 @@ export default function Chat({ navigation, route }) {
                 case 2:
                     deleteMessage(message);
                     break;
+                default:
+                    console.log('No action taken');
             }
         });
     }
@@ -290,6 +278,7 @@ export default function Chat({ navigation, route }) {
             </View>
 
             {showEmojiPicker && <EmojiSelector onEmojiSelected={emoji => setCurrentMessage(currentMessage + emoji)} />}
+
 
 
             <View style={styles.chat}>
