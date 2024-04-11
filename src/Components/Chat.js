@@ -2,13 +2,14 @@
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Image } from 'react-native';
 import axios from 'axios';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io, { Socket } from "socket.io-client";
 import EmojiSelector from 'react-native-emoji-selector';
+import Modal from 'react-native-modal';
 
 
 export default function Chat({ navigation, route }) {
@@ -277,8 +278,25 @@ export default function Chat({ navigation, route }) {
 
             </View>
 
-            {showEmojiPicker && <EmojiSelector onEmojiSelected={emoji => setCurrentMessage(currentMessage + emoji)} />}
+            <Modal
+                visible={showEmojiPicker}
+                animationType="fade"
+                transparent={true}
+                onBackdropPress={() => setShowEmojiPicker(false)}
+            >
+                <View style={{
+                    bottom: 40, backgroundColor: "white", maxHeight: "40%", width: "100%", position: 'absolute'
+                }}>
+                    <ScrollView>
+                        <EmojiSelector
+                            onEmojiSelected={emoji => {
+                                setCurrentMessage(currentMessage + emoji);
+                            }}
+                        />
+                    </ScrollView>
 
+                </View>
+            </Modal>
 
 
             <View style={styles.chat}>
