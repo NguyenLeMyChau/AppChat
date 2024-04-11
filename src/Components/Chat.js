@@ -73,21 +73,23 @@ export default function Chat({ navigation, route }) {
             if (img !== null) {
                 uploadedImage = await handleUpImage(img); // Tải tệp lên máy chủ
                 // Tạo tin nhắn chứa URL của tệp
-                const newMessage = {
-                   
-                    text: uploadedImage, // URL của tệp
-                    createdAt: new Date(),
-                    user: {
-                        _id: userData._id,
-                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
-                    },
-                };
                 const response = await axios.post("http://localhost:4000/addmsg", {
                     from: userData._id,
                     to: friend._id,
                     message: uploadedImage,
                 });
-                newMessage._id = response.data._id;
+                console.log(response.data.data);
+                const newMessage = {     
+                    _id : response.data.data._id,         
+                    text: response.data.data.message.text,
+                    createdAt: new Date(response.data.data.createdAt),
+                    user: {
+                        _id: userData._id, // ID của người gửi tin nhắn
+                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
+                    },
+                    isHidden:response.data.data.isHidden,
+                };
+
                 socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
                 
                 console.log(response.data.message);
