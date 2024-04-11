@@ -12,6 +12,7 @@
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^19.0.0",
     "@react-native-async-storage/async-storage": "^1.18.2",
+
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/material-top-tabs": "^6.6.12",
     "@react-navigation/native": "^6.1.16",
@@ -47,6 +48,7 @@
     "react-native-vector-icons": "^10.0.2",
     "react-native-web": "~0.19.6",
     "react-navigation": "^5.0.0",
+    "react-player": "^2.16.0",
     "socket.io-client": "^4.7.5",
     "yet": "^0.1.0"
   },

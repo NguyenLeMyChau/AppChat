@@ -2,7 +2,7 @@
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Clipboard } from 'react-native';
 import { Image } from 'react-native';
 import axios from 'axios';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
@@ -10,7 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import io, { Socket } from "socket.io-client";
 import EmojiSelector from 'react-native-emoji-selector';
 import Modal from 'react-native-modal';
-
+import ReactPlayer from 'react-player';
 
 export default function Chat({ navigation, route }) {
     const { friend } = route.params;
@@ -74,7 +74,7 @@ export default function Chat({ navigation, route }) {
                 uploadedImage = await handleUpImage(img); // Tải tệp lên máy chủ
                 // Tạo tin nhắn chứa URL của tệp
                 const newMessage = {
-                    _id: generateRandomId(currentMessage),
+                   
                     text: uploadedImage, // URL của tệp
                     createdAt: new Date(),
                     user: {
@@ -82,33 +82,40 @@ export default function Chat({ navigation, route }) {
                         avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
                     },
                 };
-                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
                 const response = await axios.post("http://localhost:4000/addmsg", {
                     from: userData._id,
                     to: friend._id,
                     message: uploadedImage,
                 });
+                newMessage._id = response.data._id;
+                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+                
                 console.log(response.data.message);
                 setImg(null);
                 uploadedImage = null;
                 setCurrentMessage("");
             } else {
                 // Kiểm tra socket đã sẵn sàng
-                const newMessage = {
-                    _id: generateRandomId(currentMessage),
-                    text: currentMessage,
-                    createdAt: new Date(),
-                    user: {
-                        _id: userData._id, // ID của người gửi tin nhắn
-                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
-                    },
-                };
-                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+                
                 const response = await axios.post("http://localhost:4000/addmsg", {
                     from: userData._id,
                     to: friend._id,
                     message: currentMessage,
                 });
+                console.log(response.data.data);
+                const newMessage = {     
+                    _id : response.data.data._id,         
+                    text: response.data.data.message.text,
+                    createdAt: new Date(response.data.data.createdAt),
+                    user: {
+                        _id: userData._id, // ID của người gửi tin nhắn
+                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
+                    },
+                    isHidden:response.data.data.isHidden,
+                };
+                
+                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+                
                 console.log(response.data.msg);
                 setCurrentMessage("");
 
@@ -210,37 +217,33 @@ export default function Chat({ navigation, route }) {
                         maxWidth: "85%"
                     },
                 }}
+
+                // renderMessageText={isImageMessage ? () => (
+                //     <Image
+                //         source={{ uri: props.currentMessage.text }}
+                //         style={{ width: 200, height: 200 }}
+                //     />
+                // ) : null}
+
+
                 renderMessageText={isImageMessage ? () => (
                     <Image
                         source={{ uri: props.currentMessage.text }}
                         style={{ width: 200, height: 200 }}
                     />
-                ) : null}
-
-                // renderMessageImage={isFileMessage ? () => (
-                //     <AntDesign
-
-                //         source={{ uri: props.currentMessage.text }}
-                //         name='file1'
-                //         style={{ width: 200, height: 200 }}
-                //     />
-                // ) : null}
-                renderMessageVideo={isVideoMessage ? () => (
-                    <Image
-                        source={{ uri: props.currentMessage.text }}
-                        style={{ width: 200, height: 200 }}
+                ) : isVideoMessage ? () => (
+                    <ReactPlayer
+                        url={props.currentMessage.text}
+                        width={"100%"}
+                        height={"100%"}
                         controls={true}
                     />
                 ) : null}
 
-
             />
         );
     }
-
-
-
-
+    
 
     async function deleteMessage(message) {
         try {
@@ -272,7 +275,7 @@ export default function Chat({ navigation, route }) {
 
     function onLongPress(context, message) {
         console.log(context, message);
-        const options = ['Copy Message', 'Thu hồi tin nhắn', 'Xoá tin nhắn','Cancel'];
+        const options = ['Copy Message', 'Gỡ tin nhắn phía tôi', 'Xoá tin nhắn','Cancel'];
         const cancelButtonIndex = options.length - 1;
         context.actionSheet().showActionSheetWithOptions({
             options,
@@ -280,7 +283,8 @@ export default function Chat({ navigation, route }) {
         }, (buttonIndex) => {
             switch (buttonIndex) {
                 case 0:
-                    copyMessage(message);
+                    Clipboard.setString(message.text)
+                    alert('Copy to clipboard')
                     break;
                 case 1:
                     retrieveMessage(message);

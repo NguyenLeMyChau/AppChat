@@ -30,8 +30,12 @@ export default function MenuChat({navigation}){
 
 
 useEffect(() => {
+  const unsubscribe = navigation.addListener('focus', () => {
     getData();
-}, []);
+  });
+
+  return unsubscribe;
+}, [navigation]);
 
 const fetchConversations = async (userData) => {
   try {
