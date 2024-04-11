@@ -58,6 +58,7 @@ export default function Header() {
         } else {
             Alert.alert(data.message);
         }
+        alert(data.message);
 
     }
 
@@ -135,7 +136,8 @@ export default function Header() {
                     ) : (
                         <Ionicons name="person-add" size={24} color="black"
                             onPress={async () => {
-                                await sendFriendRequest()
+                                await sendFriendRequest();
+                                setBoolModal(false);
                             }} />
                     )}
                 </View>

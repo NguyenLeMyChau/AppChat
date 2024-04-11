@@ -85,9 +85,6 @@ export default function Chat({ navigation, route }) {
                     message: uploadedImage,
                 });
                 console.log(response.data.message);
-                setImg(null);
-                uploadedImage = null;
-                setCurrentMessage("");
             } else {
                 // Kiểm tra socket đã sẵn sàng
                 const newMessage = {
@@ -106,11 +103,11 @@ export default function Chat({ navigation, route }) {
                     message: currentMessage,
                 });
                 console.log(response.data.message);
-                setCurrentMessage("");
-
             }
 
-
+            setImg(null);
+            uploadedImage = null;
+            setCurrentMessage("");
 
         }
     };
@@ -131,7 +128,9 @@ export default function Chat({ navigation, route }) {
                 },
                 isHidden: !msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
             }));
-            setMessages(formattedMessages);
+
+            // Cập nhật state messages với các tin nhắn mới
+            setMessages(formattedMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
             console.log(formattedMessages);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -170,6 +169,9 @@ export default function Chat({ navigation, route }) {
 
 
     const renderBubble = (props) => {
+        if (currentMessage.fromSelf === userData._id && currentMessage.isHidden) {
+            return null;
+        }
 
         return (
             <Bubble
@@ -191,11 +193,15 @@ export default function Chat({ navigation, route }) {
     }
 
 
+
+
+
     async function deleteMessage(message) {
         const messageId = message._id; // Get the message ID from the message object
         console.log(messageId)
         const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
         alert(response.data.message);
+        getData();
 
     }
 
@@ -209,32 +215,43 @@ export default function Chat({ navigation, route }) {
 
         const response = await axios.put(`http://localhost:4000/retrievemsg/${messageId}/${senderId}`);
         alert(response.data.message);
+        getData();
 
     }
 
     function onLongPress(context, message) {
-        console.log(context, message);
-        const options = ['Copy Message', 'Thu hồi tin nhắn', 'Xoá tin nhắn'];
-        const cancelButtonIndex = options.length - 1;
-        context.actionSheet().showActionSheetWithOptions({
-            options,
-            cancelButtonIndex
-        }, (buttonIndex) => {
-            switch (buttonIndex) {
-                case 0:
-                    copyMessage(message);
-                    break;
-                case 1:
-                    retrieveMessage(message);
-                    break;
-                case 2:
-                    deleteMessage(message);
-                    break;
-                default:
-                    console.log('No action taken');
-            }
-        });
+        console.log(message.user._id)
+        console.log(userData._id)
+        if (message.user._id === userData._id) {
+            const options = ['Thu hồi tin nhắn', 'Xoá tin nhắn', 'Cancel'];
+            const cancelButtonIndex = options.length - 1;
+            context.actionSheet().showActionSheetWithOptions({
+                options,
+                cancelButtonIndex
+            }, (buttonIndex) => {
+                switch (buttonIndex) {
+                    case 0:
+                        retrieveMessage(message);
+                        break;
+                    case 1:
+                        deleteMessage(message);
+                        break;
+                    case 2:
+                        console.log('Cancel');
+                        break;
+                    default:
+                        console.log('No action taken');
+                }
+            });
+        }
     }
+
+    function isImageUrl(url) {
+        // Biểu thức chính quy để kiểm tra định dạng URL hình ảnh
+        const imageUrlRegex = /\.(jpeg|jpg|gif|png)$/;
+        return imageUrlRegex.test(url);
+    }
+
 
     return (
         <View style={styles.container}>
@@ -273,6 +290,7 @@ export default function Chat({ navigation, route }) {
                     }}
                     onPress={(context, message) => onLongPress(context, message)}
                     renderInputToolbar={() => null} // Thêm dòng này
+                    selectable={true}
 
                 />
 

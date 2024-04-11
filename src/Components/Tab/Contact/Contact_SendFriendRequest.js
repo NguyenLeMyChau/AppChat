@@ -66,15 +66,32 @@ export default function Contact_SendFriendRequest({ navigation }) {
       Alert.alert(data.message.text);
     }
 
-    setRefresh(!refresh); // Thay đổi giá trị của refresh
+    alert(data.message);
 
+  }
+
+  const rejectFriendRequest = async (friendId) => {
+    console.log(dataMain._id)
+    console.log(friendId)
+
+    const response = await axios.post(`http://localhost:4000/user/rejectFriendRequest`, { userId: dataMain._id, friendId: friendId });
+    const { data } = response;
+
+    if (data.success) {
+      Alert.alert(data.message.text);
+      console.log(data.message.text);
+    } else {
+      Alert.alert(data.message.text);
+    }
+
+    alert(data.message);
   }
 
 
   return (
     <View style={styles.container}>
       {
-        listUser.map((item) => {
+         listUser && listUser.map((item) => {
           return (
             <View style={{ width: "80%", marginTop: 20, alignItems: "center", borderWidth: 1, borderColor: "#C4C4C4", paddingTop: 10 }} key={item._id}>
               <View style={{ width: "100%", alignItems: 'center', flexDirection: 'row', justifyContent: "space-around", }}>
@@ -96,7 +113,7 @@ export default function Contact_SendFriendRequest({ navigation }) {
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ ...styles.uploadStatus, backgroundColor: "red" }}>
+                <TouchableOpacity style={{ ...styles.uploadStatus, backgroundColor: "red" }} onPress={() => rejectFriendRequest(item._id)}>
                   <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
                     Từ chối
                   </Text>
