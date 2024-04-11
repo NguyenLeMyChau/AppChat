@@ -51,6 +51,10 @@ export default function Chat({ navigation, route }) {
                 setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
             }
         });
+        newSocket.on('message_deleted', messageId => {
+            // Xóa tin nhắn khỏi danh sách nếu tin nhắn được xóa từ một client khác
+           getData()
+        });
         setSocket(newSocket); // Lưu socket vào state
         return () => {
             newSocket.disconnect();
@@ -75,7 +79,7 @@ export default function Chat({ navigation, route }) {
                     createdAt: new Date(),
                     user: {
                         _id: userData._id,
-                        avatar: userData.avatar
+                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
                     },
                 };
                 socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
@@ -85,6 +89,9 @@ export default function Chat({ navigation, route }) {
                     message: uploadedImage,
                 });
                 console.log(response.data.message);
+                setImg(null);
+                uploadedImage = null;
+                setCurrentMessage("");
             } else {
                 // Kiểm tra socket đã sẵn sàng
                 const newMessage = {
@@ -93,7 +100,7 @@ export default function Chat({ navigation, route }) {
                     createdAt: new Date(),
                     user: {
                         _id: userData._id, // ID của người gửi tin nhắn
-                        avatar: userData.avatar
+                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
                     },
                 };
                 socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
@@ -102,18 +109,20 @@ export default function Chat({ navigation, route }) {
                     to: friend._id,
                     message: currentMessage,
                 });
-                console.log(response.data.message);
+                console.log(response.data.msg);
+                setCurrentMessage("");
+
             }
 
-            setImg(null);
-            uploadedImage = null;
-            setCurrentMessage("");
+
 
         }
     };
 
     const fetchMessages = async (userData) => {
+        console.log(friend)
         try {
+            
             const response = await axios.post('http://localhost:4000/getmsg', {
                 from: userData._id,
                 to: friend._id,
@@ -125,12 +134,19 @@ export default function Chat({ navigation, route }) {
                 user: {
                     _id: msg.fromSelf ? userData._id : friend._id, // ID của người gửi tin nhắn
                     name: msg.fromSelf ? 'You' : friend.name, // Tên của người gửi tin nhắn
+                    avatar: msg.fromSelf ? null:friend.avatar?friend.avatar: require("../../assets/AnexanderTom.jpg"), 
                 },
-                isHidden: !msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
+                isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
             }));
 
-            // Cập nhật state messages với các tin nhắn mới
-            setMessages(formattedMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+            const visibleMessages = formattedMessages.filter(msg => {
+                if (!msg.isHidden || (msg.isHidden && msg.user._id !== userData._id)) {
+                    return true;
+                }
+                return false;
+            });
+            setMessages(visibleMessages.sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)));
+           
             console.log(formattedMessages);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -227,13 +243,18 @@ export default function Chat({ navigation, route }) {
 
 
     async function deleteMessage(message) {
-        const messageId = message._id; // Get the message ID from the message object
-        console.log(messageId)
-        const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
-        alert(response.data.message);
-        getData();
-
+        try {
+            const messageId = message._id; // Lấy ID của tin nhắn từ đối tượng tin nhắn
+            console.log(messageId);
+            const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
+            alert(response.data.message);
+            socket.emit('message_deletedClient', messageId);      
+        } catch (error) {
+            console.error("Error deleting message:", error);
+            alert("An error occurred while deleting the message.");
+        }
     }
+    
 
     async function retrieveMessage(message) {
         const messageId = message._id; // Get the message ID from the message object
@@ -245,35 +266,35 @@ export default function Chat({ navigation, route }) {
 
         const response = await axios.put(`http://localhost:4000/retrievemsg/${messageId}/${senderId}`);
         alert(response.data.message);
-        getData();
+        socket.emit('message_deletedClient', messageId);   
 
     }
 
     function onLongPress(context, message) {
-        console.log(message.user._id)
-        console.log(userData._id)
-        if (message.user._id === userData._id) {
-            const options = ['Thu hồi tin nhắn', 'Xoá tin nhắn', 'Cancel'];
-            const cancelButtonIndex = options.length - 1;
-            context.actionSheet().showActionSheetWithOptions({
-                options,
-                cancelButtonIndex
-            }, (buttonIndex) => {
-                switch (buttonIndex) {
-                    case 0:
-                        retrieveMessage(message);
-                        break;
-                    case 1:
-                        deleteMessage(message);
-                        break;
-                    case 2:
-                        console.log('Cancel');
-                        break;
-                    default:
-                        console.log('No action taken');
-                }
-            });
-        }
+        console.log(context, message);
+        const options = ['Copy Message', 'Thu hồi tin nhắn', 'Xoá tin nhắn','Cancel'];
+        const cancelButtonIndex = options.length - 1;
+        context.actionSheet().showActionSheetWithOptions({
+            options,
+            cancelButtonIndex
+        }, (buttonIndex) => {
+            switch (buttonIndex) {
+                case 0:
+                    copyMessage(message);
+                    break;
+                case 1:
+                    retrieveMessage(message);
+                    break;
+                case 2:
+                    deleteMessage(message);
+                    break;
+                    case 3:
+                    console.log('Cancel');
+                    break;
+                default:
+                    console.log('No action taken');
+            }
+        });
     }
 
     function isImageUrl(url) {
@@ -290,7 +311,7 @@ export default function Chat({ navigation, route }) {
                 paddingHorizontal: 16,
                 paddingVertical: 8,
             }}>
-                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.navigate('BottomTab')}>
                     <AntDesign name="arrowleft" size={20} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ width: '55%' }}>
