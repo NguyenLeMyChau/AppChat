@@ -86,6 +86,7 @@ export default function Chat({ navigation, route }) {
                 console.log(response.data.message);
                 setImg(null);
                 uploadedImage = null;
+                setCurrentMessage("");
             } else {
                 // Kiểm tra socket đã sẵn sàng
                 const newMessage = {
@@ -169,15 +170,18 @@ export default function Chat({ navigation, route }) {
 
     const renderBubble = (props) => {
         const isImageMessage = props.currentMessage.text.startsWith("http://") || props.currentMessage.text.startsWith("https://");
-        console.log('isImageMessage:', props.currentMessage);
 
         return (
             <Bubble
                 {...props}
                 wrapperStyle={{
                     left: {
-                        backgroundColor: 'white'
-                    }
+                        backgroundColor: 'white',
+                        maxWidth: "85%"
+                    },
+                    right: {
+                        maxWidth: "85%"
+                    },
                 }}
 
                 renderMessageImage={isImageMessage ? () => (
@@ -186,17 +190,44 @@ export default function Chat({ navigation, route }) {
                         style={{ width: 250, height: 250 }}
                     />
                 ) : null}
-                
+
             />
         );
     }
 
+    async function copyMessage(message) {
+        // Code to copy message
+        console.log('Copy Message', message);
+    }
+
+    async function retrieveMessage(message) {
+        const messageId = message._id; // Get the message ID from the message object
+        console.log(messageId)
+        const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
+        alert(response.data.message);
+
+        // Then update the state to cause a re-render
+        getData();
+
+    }
+
+    async function deleteMessage(message) {
+        const messageId = message._id; // Get the message ID from the message object
+        console.log(messageId)
+        console.log(message)
+        console.log(message.user._id)
 
 
+        // const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
+        // alert(response.data.message);
+
+        // // Then update the state to cause a re-render
+        // getData();
+    }
 
     function onLongPress(context, message) {
         console.log(context, message);
-        const options = ['Copy Message', 'Delete Message', 'Forward Message', 'Cancel'];
+        const options = ['Copy Message', 'Thu hồi tin nhắn', 'Xoá tin nhắn'];
         const cancelButtonIndex = options.length - 1;
         context.actionSheet().showActionSheetWithOptions({
             options,
@@ -204,9 +235,13 @@ export default function Chat({ navigation, route }) {
         }, (buttonIndex) => {
             switch (buttonIndex) {
                 case 0:
-                    // Your delete logic
+                    copyMessage(message);
                     break;
                 case 1:
+                    retrieveMessage(message);
+                    break;
+                case 2:
+                    deleteMessage(message);
                     break;
             }
         });
@@ -237,7 +272,7 @@ export default function Chat({ navigation, route }) {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ flex: 1 }}>
+            <View style={{ height: "85%" }}>
                 <GiftedChat
                     messages={messages}
                     onSend={newMessages => onSend(newMessages)}
@@ -246,17 +281,15 @@ export default function Chat({ navigation, route }) {
                     }}
                     renderBubble={renderBubble}
                     listViewProps={{
-                        style: { top: -50 }
                     }}
                     onPress={(context, message) => onLongPress(context, message)}
                     renderInputToolbar={() => null} // Thêm dòng này
 
                 />
 
-                {showEmojiPicker && <EmojiSelector onEmojiSelected={emoji => setCurrentMessage(currentMessage + emoji)} />}
-
             </View>
 
+            {showEmojiPicker && <EmojiSelector onEmojiSelected={emoji => setCurrentMessage(currentMessage + emoji)} />}
 
 
             <View style={styles.chat}>
