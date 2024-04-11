@@ -169,9 +169,18 @@ export default function Chat({ navigation, route }) {
 
 
     const renderBubble = (props) => {
-        if (currentMessage.fromSelf === userData._id && currentMessage.isHidden) {
-            return null;
-        }
+        const imageUrlRegex = /\.(jpeg|jpg|png|gif)$/i;
+        const isImageMessage = imageUrlRegex.test(props.currentMessage.text);
+
+        const fileUrlRegex = /\.(pdf|doc|txt|json|csv|xls|xlsx|docx)$/i;
+        const isFileMessage = fileUrlRegex.test(props.currentMessage.text);
+
+        const videoUrlRegex = /\.(mp4|mov|avi)$/i;
+        const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
+
+
+        console.log("prop" + props.currentMessage.text);
+        console.log("isImageMessage" + isImageMessage);
 
         return (
             <Bubble
@@ -185,7 +194,28 @@ export default function Chat({ navigation, route }) {
                         maxWidth: "85%"
                     },
                 }}
+                renderMessageText={isImageMessage ? () => (
+                    <Image
+                        source={{ uri: props.currentMessage.text }}
+                        style={{ width: 200, height: 200 }}
+                    />
+                ) : null}
 
+                // renderMessageImage={isFileMessage ? () => (
+                //     <AntDesign
+
+                //         source={{ uri: props.currentMessage.text }}
+                //         name='file1'
+                //         style={{ width: 200, height: 200 }}
+                //     />
+                // ) : null}
+                renderMessageVideo={isVideoMessage ? () => (
+                    <Image
+                        source={{ uri: props.currentMessage.text }}
+                        style={{ width: 200, height: 200 }}
+                        controls={true}
+                    />
+                ) : null}
 
 
             />
