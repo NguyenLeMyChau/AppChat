@@ -262,7 +262,7 @@ const fetchConversations = async (userData) => {
                     {item.name}
                   </Text>
                   <Text style={styles.name} numberOfLines={1}>
-                    ádasdassad
+                    Text chat
                   </Text>
                 </View>
                 <View>

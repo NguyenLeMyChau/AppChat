@@ -3,7 +3,7 @@ import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } f
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Clipboard } from 'react-native';
-import { Image } from 'react-native';
+import { Image,Linking } from 'react-native';
 import axios from 'axios';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -193,6 +193,12 @@ export default function Chat({ navigation, route }) {
     };
 
 
+    const openFileURL = (fileURL) => {
+        // Sử dụng Linking.openURL để mở đường dẫn tệp trong trình duyệt hoặc ứng dụng tương ứng.
+        Linking.openURL(fileURL);
+    };
+
+
     const renderBubble = (props) => {
         const imageUrlRegex = /\.(jpeg|jpg|png|gif)$/i;
         const isImageMessage = imageUrlRegex.test(props.currentMessage.text);
@@ -204,8 +210,8 @@ export default function Chat({ navigation, route }) {
         const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
 
 
-        console.log("prop" + props.currentMessage.text);
-        console.log("isImageMessage" + isImageMessage);
+        console.log("prop"+props.currentMessage.text);
+        console.log("isImageMessage"+isImageMessage);
 
         return (
             <Bubble
@@ -219,15 +225,6 @@ export default function Chat({ navigation, route }) {
                         maxWidth: "85%"
                     },
                 }}
-
-                // renderMessageText={isImageMessage ? () => (
-                //     <Image
-                //         source={{ uri: props.currentMessage.text }}
-                //         style={{ width: 200, height: 200 }}
-                //     />
-                // ) : null}
-
-
                 renderMessageText={isImageMessage ? () => (
                     <Image
                         source={{ uri: props.currentMessage.text }}
@@ -236,11 +233,20 @@ export default function Chat({ navigation, route }) {
                 ) : isVideoMessage ? () => (
                     <ReactPlayer
                         url={props.currentMessage.text}
-                        width={"100%"}
-                        height={"100%"}
+                        width={200}
+                        height={200}
                         controls={true}
                     />
                 ) : null}
+
+                renderCustomView={isFileMessage ? () => (
+                    <TouchableOpacity onPress={() => openFileURL(props.currentMessage.text)}>
+                        {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
+                        <AntDesign name='file1' size={100} style={{alignSelf: 'center'}}/>
+                    </TouchableOpacity>
+                ) : null}
+                
+               
 
             />
         );

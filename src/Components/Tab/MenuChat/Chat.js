@@ -1,172 +1,518 @@
-import { AntDesign, Feather, MaterialCommunityIcons, MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from '@expo/vector-icons';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Image,Linking } from 'react-native';
+import axios from 'axios';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import io, { Socket } from "socket.io-client";
+import EmojiSelector from 'react-native-emoji-selector';
+import Modal from 'react-native-modal';
+import ReactPlayer from 'react-player';
 
-const ChatScreen = ({ navigation, route }) => {
-  const { friend } = route.params; // Retrieve the user ID from the navigation parameters
 
-  const [messages, setMessages] = useState([users]);
-  const [inputText, setInputText] = useState('');
-  const [inputTextEnable, setButtonEnabled] = useState(false)
-  const sendMessage = () => {
-    const newMessage = {
-      id: new Date().getTime(),
-      messages: inputText,
-      createdAt: new Date(),
-      user: 'me',
-    };
-    setMessages([...messages, newMessage]);
-    setInputText('');
-    setButtonEnabled(false)
-  };
-  const handleInputChange = (text) => {
-    setInputText(text)
-    setButtonEnabled(text.trim() !== '')
-  }
-  const renderItem = ({ item }) => (
-    <View style={[styles.messageContainer, item.user === 'me' && styles.messageContainerMe, item.user === 'you' && styles.messageContainerYou]}>
-      <Text style={[styles.messageText,styles.messageTextMe]}>{item.messages}</Text>
-    </View>
-  );
+export default function Chat({ navigation, route }) {
+    const { friend } = route.params;
+    var userId;
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [userData, setUserData] = useState({});
+    const [currentMessage, setCurrentMessage] = useState('');
+    const [messages, setMessages] = useState([]);
+    const [socket, setSocket] = useState(null);
+    const [img, setImg] = useState(null)
+    var uploadedImage = null;
 
-  return (
-    <View style={styles.container}>
-        <View  style={styles.header}>
-        <TouchableOpacity style={{width:'15%'}}  onPress={()=>navigation.goBack()}>
-            <AntDesign name="arrowleft" size={20} color="white" />
-          </TouchableOpacity>   
-          <TouchableOpacity style={{width:'50%'}}>
-           
-                <Text style={{color:'white',fontWeight:'bold',fontSize:18}}>{users.user}</Text>
-                <Text style={{color:'gray'}}>Truy cập</Text>
-           
-          </TouchableOpacity> 
-          
-          <TouchableOpacity style={{width:'13%'}}>
-            <MaterialCommunityIcons name="phone" size={20} color="white" />
-          </TouchableOpacity>   
-          <TouchableOpacity style={{width:'13%'}}>
-            <Feather name="video" size={20} color="white" />
-          </TouchableOpacity>   
-          <TouchableOpacity style={{width:'13%'}}>
-            <SimpleLineIcons name="list" size={20} color="white" />
-          </TouchableOpacity>   
-         
-                
-    </View>
-    <FlatList
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.messages}
-        onLayout={() => scrollToEnd()}
-    />
-    
-      <View style={styles.inputContainer}>
-      
-     <TouchableOpacity style={{width:'10%'}} onPress={sendMessage}>
-        <MaterialCommunityIcons name="sticker-emoji" size={25} color="black" />
-        </TouchableOpacity>
-   
-        <TextInput
-          style={inputTextEnable===false? styles.input: styles.inputenable}
-          value={inputText}
-          onChangeText={handleInputChange}
-          placeholder="Tin nhắn"
-          
 
-        />
-        {inputTextEnable === false &&( <View style={{flexDirection:'row',width:'30%',justifyContent:'space-between'}}>
-       <TouchableOpacity  onPress={sendMessage}>
-        <SimpleLineIcons name="options" size={25} color="black" />
-        </TouchableOpacity>
-       <TouchableOpacity onPress={sendMessage}>
-        <SimpleLineIcons name="microphone" size={25} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity  onPress={sendMessage}>
-        <SimpleLineIcons name="picture" size={25} color="black" />
-        </TouchableOpacity>
-        </View>)}
-        {inputTextEnable === true &&( <View style={{flexDirection:'row',width:'15%',justifyContent:'flex-end'}}>
-        <TouchableOpacity onPress={sendMessage}>
-        <MaterialIcons name="send" size={25} color="black" />
-        </TouchableOpacity>
-        </View>)}       
-      </View>
-    </View>
-  );
-
-  function scrollToEnd() {
-    const flatList = React.createRef();
-    if (flatList) {
-      flatList.current.scrollToEnd();
+    async function getData() {
+        try {
+            const foundUser = await AsyncStorage.getItem('foundUser');
+            if (foundUser !== null) {
+                const user = JSON.parse(foundUser);
+                setUserData(user);
+                userId = user._id;
+                fetchMessages(user); // Gọi hàm fetchConversations sau khi lấy dữ liệu thành công
+            }
+        } catch (error) {
+            console.error('Error getting data from AsyncStorage:', error);
+        }
     }
-  }
-};
+
+
+    useEffect(() => {
+        getData();
+        const newSocket = io('http://localhost:4000');
+        newSocket.on('connect', () => {
+            console.log('Connected to Socket.IO server');
+        });
+        newSocket.on('sendDataServer', (message) => {
+            console.log(userId)
+            if (message.data.user._id === userId || message.data.user._id === friend._id) {
+                setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
+            }
+        });
+        setSocket(newSocket); // Lưu socket vào state
+        return () => {
+            newSocket.disconnect();
+        };
+    }, []);
+
+    const generateRandomId = (text) => {
+        const timestamp = Date.now().toString(); // Thời gian hiện tại dưới dạng chuỗi số
+        const randomText = Math.random().toString(36).substring(7); // Chuỗi ngẫu nhiên từ 7 ký tự
+        return `${timestamp}-${text}-${randomText}`; // Kết hợp thời gian, văn bản và chuỗi ngẫu nhiên
+    };
+
+    const onSend = async (messages = []) => {
+        if (currentMessage.length > 0 && socket) {
+
+            if (img !== null) {
+                uploadedImage = await handleUpImage(img); // Tải tệp lên máy chủ
+                // Tạo tin nhắn chứa URL của tệp
+                const newMessage = {
+                    _id: generateRandomId(currentMessage),
+                    text: uploadedImage, // URL của tệp
+                    createdAt: new Date(),
+                    user: {
+                        _id: userData._id,
+                        avatar: userData.avatar
+                    },
+                };
+                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+                const response = await axios.post("http://localhost:4000/addmsg", {
+                    from: userData._id,
+                    to: friend._id,
+                    message: uploadedImage,
+                });
+                console.log(response.data.message);
+            } else {
+                // Kiểm tra socket đã sẵn sàng
+                const newMessage = {
+                    _id: generateRandomId(currentMessage),
+                    text: currentMessage,
+                    createdAt: new Date(),
+                    user: {
+                        _id: userData._id, // ID của người gửi tin nhắn
+                        avatar: userData.avatar
+                    },
+                };
+                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+                const response = await axios.post("http://localhost:4000/addmsg", {
+                    from: userData._id,
+                    to: friend._id,
+                    message: currentMessage,
+                });
+                console.log(response.data.message);
+            }
+
+            setImg(null);
+            uploadedImage = null;
+            setCurrentMessage("");
+            setMessages(previousMessages => GiftedChat.append(previousMessages, {
+                _id: previousMessages.length + 1,
+                text: currentMessage,
+                createdAt: new Date(),
+                user: {
+                    _id: userData._id,
+                },
+            }));
+        }
+    };
+    const fetchMessages = async (userData) => {
+        try {
+            const response = await axios.post('http://localhost:4000/getmsg', {
+                from: userData._id,
+                to: friend._id,
+            });
+            const formattedMessages = response.data.map(msg => ({
+                _id: msg.id, // ID của tin nhắn
+                text: msg.message, // Nội dung tin nhắn
+                createdAt: new Date(msg.createdAt), // Thời gian tạo tin nhắn (định dạng Date)
+                user: {
+                    _id: msg.fromSelf ? userData._id : friend._id, // ID của người gửi tin nhắn
+                    name: msg.fromSelf ? 'You' : friend.name, // Tên của người gửi tin nhắn
+                },
+                isHidden: !msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
+            }));
+
+            // Cập nhật state messages với các tin nhắn mới
+            setMessages(formattedMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+            console.log(formattedMessages);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
+
+    const selectImg= async () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = async e => {
+            const file = e.target.files[0];
+            console.log(file);
+            const formData = new FormData();
+            formData.append('avatar', file);
+            const response1 = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const img = response1.data.avatar;
+            setCurrentMessage(img);
+            setIsValue(img);
+        }
+        input.click();
+    }
+
+    const selectVideo= async () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = async e => {
+            const file = e.target.files[0];
+            console.log(file);
+            const formData3 = new FormData();
+            formData3.append('avatar', file);
+            const response2 = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userId}`, formData3, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const videoUrl = response2.data.avatar;
+            setCurrentMessage(videoUrl);
+        }
+        input.click();
+    }
+
+    const selectFile = async () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = async e => {
+            const file = e.target.files[0];
+            console.log(file);
+            const formData2 = new FormData();
+            formData2.append('avatar', file);
+            const response = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userId}`, formData2, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const fileUrl = response.data.avatar;
+            setCurrentMessage(fileUrl);
+        }
+        input.click();
+    }
+
+    async function handleUpImage(file) {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        if (file !== null) {
+            const responseAvatar = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const image = responseAvatar.data.avatar;
+            console.log(image);
+            return image;
+        }
+
+    };
+
+    const openFileURL = (fileURL) => {
+        // Sử dụng Linking.openURL để mở đường dẫn tệp trong trình duyệt hoặc ứng dụng tương ứng.
+        Linking.openURL(fileURL);
+    };
+
+
+    const renderBubble = (props) => {
+        const imageUrlRegex = /\.(jpeg|jpg|png|gif)$/i;
+        const isImageMessage = imageUrlRegex.test(props.currentMessage.text);
+
+        const fileUrlRegex = /\.(pdf|doc|txt|json|csv|xls|xlsx|docx)$/i;
+        const isFileMessage = fileUrlRegex.test(props.currentMessage.text);
+
+        const videoUrlRegex = /\.(mp4|mov|avi)$/i;
+        const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
+
+
+        console.log("prop"+props.currentMessage.text);
+        console.log("isImageMessage"+isImageMessage);
+
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    left: {
+                        backgroundColor: 'white',
+                        maxWidth: "85%"
+                    },
+                    right: {
+                        maxWidth: "85%"
+                    },
+                }}
+                renderMessageText={isImageMessage ? () => (
+                    <Image
+                        source={{ uri: props.currentMessage.text }}
+                        style={{ width: 200, height: 200 }}
+                    />
+                ) : isVideoMessage ? () => (
+                    <ReactPlayer
+                        url={props.currentMessage.text}
+                        width={200}
+                        height={200}
+                        controls={true}
+                    />
+                ) : null}
+
+                renderCustomView={isFileMessage ? () => (
+                    <TouchableOpacity onPress={() => openFileURL(props.currentMessage.text)}>
+                        {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
+                        <AntDesign name='file1' size={100} style={{alignSelf: 'center'}}/>
+                    </TouchableOpacity>
+                ) : null}
+                
+               
+
+            />
+        );
+    }
+
+
+
+
+
+    async function deleteMessage(message) {
+        const messageId = message._id; // Get the message ID from the message object
+        console.log(messageId)
+        const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
+        alert(response.data.message);
+        getData();
+
+    }
+
+    async function retrieveMessage(message) {
+        const messageId = message._id; // Get the message ID from the message object
+        const senderId = message.user._id; // Get the message ID from the message object
+
+        console.log(messageId)
+        console.log(message)
+        console.log(message.user._id)
+
+        const response = await axios.put(`http://localhost:4000/retrievemsg/${messageId}/${senderId}`);
+        alert(response.data.message);
+        getData();
+
+    }
+
+    function onLongPress(context, message) {
+        console.log(message.user._id)
+        console.log(userData._id)
+        if (message.user._id === userData._id) {
+            const options = ['Thu hồi tin nhắn', 'Xoá tin nhắn', 'Cancel'];
+            const cancelButtonIndex = options.length - 1;
+            context.actionSheet().showActionSheetWithOptions({
+                options,
+                cancelButtonIndex
+            }, (buttonIndex) => {
+                switch (buttonIndex) {
+                    case 0:
+                        retrieveMessage(message);
+                        break;
+                    case 1:
+                        deleteMessage(message);
+                        break;
+                    case 2:
+                        console.log('Cancel');
+                        break;
+                    default:
+                        console.log('No action taken');
+                }
+            });
+        }
+    }
+
+    function isImageUrl(url) {
+        // Biểu thức chính quy để kiểm tra định dạng URL hình ảnh
+        const imageUrlRegex = /\.(jpeg|jpg|gif|png)$/;
+        return imageUrlRegex.test(url);
+    }
+
+
+    return (
+        <View style={styles.container}>
+            <View style={{
+                flexDirection: "row", alignItems: 'center', width: "100%", backgroundImage: 'linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+            }}>
+                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.goBack()}>
+                    <AntDesign name="arrowleft" size={20} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity style={{ width: '55%' }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>{friend.name}</Text>
+                    <Text style={{ color: 'white', fontSize: 13 }}>Truy cập</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ width: '13%' }}>
+                    <MaterialCommunityIcons name="phone" size={20} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity style={{ width: '13%' }}>
+                    <Feather name="video" size={20} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity style={{ width: '13%' }}>
+                    <SimpleLineIcons name="list" size={20} color="white" />
+                </TouchableOpacity>
+            </View>
+
+            <View style={{ height: "85%" }}>
+                <GiftedChat
+                    messages={messages}
+                    onSend={newMessages => onSend(newMessages)}
+                    user={{
+                        _id: userData._id,
+                    }}
+                    renderBubble={renderBubble}
+                    listViewProps={{
+                    }}
+                    onPress={(context, message) => onLongPress(context, message)}
+                    renderInputToolbar={() => null} // Thêm dòng này
+                    selectable={true}
+
+                />
+
+            </View>
+
+            <Modal
+                visible={showEmojiPicker}
+                animationType="fade"
+                transparent={true}
+                onBackdropPress={() => setShowEmojiPicker(false)}
+            >
+                <View style={{
+                    bottom: 40, backgroundColor: "white", maxHeight: "40%", width: "100%", position: 'absolute'
+                }}>
+                    <ScrollView>
+                        <EmojiSelector
+                            onEmojiSelected={emoji => {
+                                setCurrentMessage(currentMessage + emoji);
+                            }}
+                        />
+                    </ScrollView>
+
+                </View>
+            </Modal>
+
+
+            <View style={styles.chat}>
+
+                <MaterialCommunityIcons
+                    name="emoticon"
+                    size={24}
+                    color="black"
+                    onPress={() => setShowEmojiPicker(!showEmojiPicker)}
+                />
+
+                {currentMessage === '' ? (
+                    <>
+                        <TextInput
+                            placeholder="Tin nhắn"
+                            style={styles.txtSDT}
+                            value={currentMessage}
+                            onChangeText={(text) => setCurrentMessage(text)}
+                            keyboardType="phone-pad"
+                        />
+
+<AntDesign
+                                onPress={selectFile}
+                                value={currentMessage}
+                                onChangeText={(text)=>setCurrentMessage(text)}
+                                name="addfile"
+                                size={24}
+                                color="black"
+                                style={{ marginLeft: 5 }}
+                        />
+
+
+                        <Entypo
+                           onPress={selectVideo}
+                           value={currentMessage}
+                           onChangeText={(text)=>setCurrentMessage(text)}
+                           name="folder-video"
+                           size={24}
+                           color="black"
+                        style={{ marginLeft: 20 }}
+
+                        />
+
+                        <AntDesign
+                            name="picture"
+                            size={30}
+                            color="black"
+                            style={{ marginLeft: 20 }}
+                            onPress={selectImg}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <TextInput
+                            placeholder="Tin nhắn"
+                            style={styles.txtSDTFocus}
+                            value={currentMessage}
+                            onChangeText={(text) => setCurrentMessage(text)}
+                            keyboardType="phone-pad"
+                        />
+
+                        <MaterialCommunityIcons
+                            name="send"
+                            size={30}
+                            color="#006AF5" style={{ marginLeft: 20 }}
+                            onPress={() => onSend()}
+                        />
+
+                    </>
+
+                )}
+            </View>
+
+        </View>
+
+
+
+    );
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  messages: {
-    flexGrow: 1,
-
-  },
-  messageContainer: {
-    padding: 10,
-    marginBottom: 5,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 5,
-    maxWidth:'80%',
-  },
-  header:{
-    backgroundColor:'blue',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      paddingHorizontal: 8,
-      height:50,
-      width:'100%'
+    container: {
+        flex: 1,
+        backgroundColor: '#E9EBED',
     },
-  messageContainerMe: {
-    alignSelf: 'flex-end',
-  },
-  messageContainerYou: {
-    alignSelf: 'flex-start',
-  },
-  messageText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
- 
-  inputContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    backgroundColor: 'white',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height:'8%',
-    width:'100%'
-  },
-  input: {
-    width:'60%',
-    height:'100%',
-    borderWidth: 0,
-    borderColor: '#ccc',
-    borderRadius: 5,
-  },
-  inputenable: {
-    width:'75%',
-    height:'100%',
-    borderWidth: 0,
-    borderColor: '#ccc',
-    borderRadius: 5,
-  },
-  sendButtonText: {
-    color: 'black',
-    fontSize: 16,
-  },
-});
 
-export default ChatScreen;
+    chat: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: "100%",
+        padding: 10,
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: 0
+    },
+
+    txtSDT: {
+        fontSize: 16,
+        color: 'black',
+        padding: 10,
+    },
+
+    txtSDTFocus: {
+        fontSize: 16,
+        color: 'black',
+        padding: 10,
+        width: 270
+    },
+
+    chatText: {
+        backgroundColor: "yellow",
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
+
+});
