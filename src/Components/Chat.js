@@ -64,10 +64,12 @@ export default function Chat({ navigation, route }) {
             console.log('Connected to Socket.IO server');
         });
         newSocket.on('sendDataServer', (message) => {
-            console.log(userId)
-            if (message.data.user._id === userId || message.data.user._id === friend._id) {
-                setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
-            }
+            // console.log(userId)
+            // if (message.data.user._id === userId || message.data.user._id === friend._id) {
+            //     setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
+            // }
+            getData();
+
         });
         newSocket.on('message_deleted', messageId => {
             // Xóa tin nhắn khỏi danh sách nếu tin nhắn được xóa từ một client khác
@@ -348,7 +350,7 @@ export default function Chat({ navigation, route }) {
                         alert('Copy to clipboard')
                         break;
                     case 1:
-                        forwardMessage(message);
+                        openForwardMessage(message);
                         break;
                     case 2:
                         console.log('Cancel');
