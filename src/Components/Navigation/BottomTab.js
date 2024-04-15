@@ -12,15 +12,17 @@ const Tab = createBottomTabNavigator();
 function BottomTab () {
     return (
         <Tab.Navigator 
-        initialRouteName="MenuChat"             
+        initialRouteName="MenuChat"     
+
       >
-        <Tab.Screen name="MenuChat" component={MenuChat}   options={{
+        <Tab.Screen name="MenuChat" component={MenuChat}  
+       options={{
           headerShown: false,
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (
             <Ionicons name="chatbubble-ellipses" color={color} size={26} />
           ),
-          tabBarStyle: { backgroundColor: 'white' },
+          tabBarStyle: { backgroundColor: 'white' },unmountOnBlur: true
         }}/>
         <Tab.Screen name="Contact" component={NavigationContactFriendRequest}  options={{
           headerShown: false,
@@ -29,16 +31,17 @@ function BottomTab () {
             <FontAwesome name="address-book-o" color={color} size={26} />
           ),
           tabBarStyle: { backgroundColor: 'white' },
+          unmountOnBlur: true
         }}/>
-        <Tab.Screen name="NhatKy" component={Timeline}   options={{
+        <Tab.Screen name="NhatKy" component={Timeline}    options={{
           headerShown: false,
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (
             <SimpleLineIcons name="clock" color={color} size={26} />
           ),
-          tabBarStyle: { backgroundColor: 'white' },
+          tabBarStyle: { backgroundColor: 'white' },unmountOnBlur: true
         }}/>
-        <Tab.Screen name='User' component={User}    options={{
+        <Tab.Screen name='User' component={User}  options={{
           headerShown: false,
         headerTintColor: 'white', 
           tabBarLabel: '',

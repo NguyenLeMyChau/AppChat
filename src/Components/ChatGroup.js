@@ -5,15 +5,15 @@ import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Clipboard, CheckBox } from 'react-native';
 import { Image, Linking } from 'react-native';
 import axios from 'axios';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Message, Avatar } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io, { Socket } from "socket.io-client";
 import EmojiSelector from 'react-native-emoji-selector';
 import Modal from 'react-native-modal';
 import ReactPlayer from 'react-player';
 
-export default function Chat({ navigation, route }) {
-    const { friend } = route.params;
+export default function ChatGroup({ navigation, route }) {
+    const { group } = route.params;
     var userId;
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [userData, setUserData] = useState({});
@@ -49,7 +49,7 @@ export default function Chat({ navigation, route }) {
                 const user = JSON.parse(foundUser);
                 setUserData(user);
                 userId = user._id;
-                fetchMessages(user); // Gọi hàm fetchConversations sau khi lấy dữ liệu thành công
+                fetchMessages(user);
             }
         } catch (error) {
             console.error('Error getting data from AsyncStorage:', error);
@@ -64,12 +64,7 @@ export default function Chat({ navigation, route }) {
             console.log('Connected to Socket.IO server');
         });
         newSocket.on('sendDataServer', (message) => {
-            // console.log(userId)
-            // if (message.data.user._id === userId || message.data.user._id === friend._id) {
-            //     setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
-            // }
             getData();
-
         });
         newSocket.on('message_deleted', messageId => {
             // Xóa tin nhắn khỏi danh sách nếu tin nhắn được xóa từ một client khác
@@ -89,28 +84,29 @@ export default function Chat({ navigation, route }) {
 
     const onSend = async (messages = []) => {
         if (currentMessage.length > 0 && socket) {
-
-
-            const response = await axios.post("http://localhost:4000/addmsg", {
+            const response = await axios.post("http://localhost:4000/sendMessageToGroup", {
                 from: userData._id,
-                to: friend._id,
+                to: group._id,
                 message: currentMessage,
+                avatar:group.avatar,
             });
             console.log(response.data.data);
+            const data = response.data.data;
             const newMessage = {
-                _id: response.data.data._id,
-                text: response.data.data.message.text,
-                createdAt: new Date(response.data.data.createdAt),
+                _id: data._id,
+                text: data.message.text,
+                createdAt: new Date(data.createdAt),
                 user: {
                     _id: userData._id, // ID của người gửi tin nhắn
+                    name:  userData.name, // Tên của người gửi tin nhắn
                     avatar: userData.avatar ? userData.avatar : require("../../assets/AnexanderTom.jpg"),
                 },
-                isHidden: response.data.data.isHidden,
+                isHidden: data.isHidden,
             };
 
             socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
 
-            console.log(response.data.msg);
+            console.log(newMessage);
             setCurrentMessage("");
 
 
@@ -118,25 +114,25 @@ export default function Chat({ navigation, route }) {
     };
 
     const fetchMessages = async (userData) => {
-        console.log(friend)
         try {
 
-            const response = await axios.post('http://localhost:4000/getmsg', {
-                from: userData._id,
-                to: friend._id,
+            const response = await axios.post('http://localhost:4000/getGroupMessages', {
+                groupId:group._id,
+                from:  userData._id,
             });
-            const formattedMessages = response.data.map(msg => ({
+            const data = response.data;
+            console.log(data);
+            const formattedMessages = response.data.map(msg => ({   
                 _id: msg.id, // ID của tin nhắn
                 text: msg.message, // Nội dung tin nhắn
                 createdAt: new Date(msg.createdAt), // Thời gian tạo tin nhắn (định dạng Date)
                 user: {
-                    _id: msg.fromSelf ? userData._id : friend._id, // ID của người gửi tin nhắn
-                    name: msg.fromSelf ? 'You' : friend.name, // Tên của người gửi tin nhắn
-                    avatar: msg.fromSelf ? null : friend.avatar ? friend.avatar : require("../../assets/AnexanderTom.jpg"),
+                    _id: msg.fromSelf? userData._id:msg.name._id, // ID của người gửi tin nhắn
+                    name:  msg.name.name, // Tên của người gửi tin nhắn
+                    avatar:  require("../../assets/AnexanderTom.jpg"),
                 },
                 isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
             }));
-
             const visibleMessages = formattedMessages.filter(msg => {
                 if (!msg.isHidden || (msg.isHidden && msg.user._id !== userData._id)) {
                     return true;
@@ -165,7 +161,6 @@ export default function Chat({ navigation, route }) {
             alert('Error', 'An error occurred while fetching data');
         }
     };
-
     async function selectFile() {
         const input = document.createElement('input');
         input.type = 'file';
@@ -220,16 +215,16 @@ export default function Chat({ navigation, route }) {
         const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
 
 
-        console.log("prop" + props.currentMessage.text);
+        console.log("prop" + props.currentMessage.user.name);
         console.log("isImageMessage" + isImageMessage);
 
         return (
-            <Bubble
-                {...props}
+            <Bubble     
+            {...props}       
                 wrapperStyle={{
                     left: {
                         backgroundColor: 'white',
-                        maxWidth: "85%"
+                        maxWidth: "85%",
                     },
                     right: {
                         maxWidth: "85%"
@@ -261,6 +256,7 @@ export default function Chat({ navigation, route }) {
             />
         );
     }
+    
 
 
     async function deleteMessage(message) {
@@ -372,7 +368,7 @@ export default function Chat({ navigation, route }) {
                     <AntDesign name="arrowleft" size={20} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ width: '55%' }}>
-                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>{friend.name}</Text>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>{group.name}</Text>
                     <Text style={{ color: 'white', fontSize: 13 }}>Truy cập</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{ width: '13%' }}>
@@ -391,15 +387,24 @@ export default function Chat({ navigation, route }) {
                     messages={messages}
                     onSend={newMessages => onSend(newMessages)}
                     user={{
-                        _id: userData._id,
+                        _id: userData._id, 
+                        name: userData.name,
+                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
                     }}
+                    showUserAvatar
                     renderBubble={renderBubble}
                     listViewProps={{
                     }}
                     onPress={(context, message) => onLongPress(context, message)}
                     renderInputToolbar={() => null} // Thêm dòng này
                     selectable={true}
-
+                    renderUsernameOnMessage={true}
+                      renderAvatar={(props) => (
+                        <Avatar
+                          {...props}
+                          avatarStyle={{ borderRadius: 16 }}
+                        />
+                      )}
                 />
 
             </View>
@@ -440,8 +445,9 @@ export default function Chat({ navigation, route }) {
                             placeholder="Tin nhắn"
                             style={styles.txtSDT}
                             value={currentMessage}
+
                             onChangeText={(text) => setCurrentMessage(text)}
-                            keyboardType="phone-pad"
+
                         />
 
                         <AntDesign name="addfile" size={24} color="black" style={{ marginLeft: 5 }} />
@@ -470,7 +476,6 @@ export default function Chat({ navigation, route }) {
                             style={styles.txtSDTFocus}
                             value={currentMessage}
                             onChangeText={(text) => setCurrentMessage(text)}
-                            keyboardType="phone-pad"
                         />
 
                         <MaterialCommunityIcons
@@ -523,7 +528,6 @@ export default function Chat({ navigation, route }) {
                                     console.log(selectedIds);
                                     console.log(selectedMessage.text);
                                     forwardMessage(selectedIds, selectedMessage.text);
-                                    setModalForward(false)
                                 }}
                             >
                                 <Text style={{ fontSize: 18, color: "white" }}>Chuyển tiếp</Text>

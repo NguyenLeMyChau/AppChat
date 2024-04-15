@@ -20,6 +20,7 @@ import ForgotPassword from "../Login/ForgotPassword";
 import NavigationContactFriendRequest from "../Navigation/NavigationContactFriendRequest";
 import Search from "../Tab/MenuChat/Search/Search"
 import ContactTopTab from "../Navigation/ContactTopTab";
+import ChatGroup from "../ChatGroup";
 
 const Stack = createNativeStackNavigator();
 function Navigation() {
@@ -33,6 +34,7 @@ function Navigation() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
           <Stack.Screen name="Search" component={Search} options={{ headerShown: false }}/>
           <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }}/>
+          <Stack.Screen name="ChatGroup" component={ChatGroup} options={{ headerShown: false }}/>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="HomeLoginZalo" component={HomeLoginZalo} options={{ headerShown: false }}/>
           <Stack.Screen name="InformationUser" component={InformationUser} options={{ headerShown: false }}/>

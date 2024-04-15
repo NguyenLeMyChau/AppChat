@@ -5,6 +5,7 @@ import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons
 import { AuthContext } from "../../Login/AuthProvider";
 import axios from "axios";
 import Modal from 'react-native-modal';
+import Header from "../../Head/Header";
 
 
 export default function MenuChat({ navigation }) {
@@ -22,7 +23,7 @@ export default function MenuChat({ navigation }) {
 
   const [modalForward, setModalForward] = useState(false);
 
-  const [isSelected, setIsSelected] = useState(new Array(listChat.length).fill(false));
+  const [isSelected, setIsSelected] = useState([]);
 
   const setSelectionAt = (index, value) => {
     setIsSelected(prevState => {
@@ -70,10 +71,10 @@ export default function MenuChat({ navigation }) {
       }
       console.log(userData._id);
       const response = await axios.get(
-        `http://localhost:4000/user/getFriendList/${userData._id}`
+        `http://localhost:4000/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
-      setListChat(data.friendList);
+      setListChat([...data.userData.friendList, ...data.userData.groupList]);
       console.log(data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -140,35 +141,15 @@ export default function MenuChat({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.header_item}
-          onPress={() =>
-            navigation.navigate("NavigationContactFriendRequest")
-          }
-        >
-          <SimpleLineIcons name="magnifier" size={20} color="white" />
-        </TouchableOpacity>
-        <TextInput
-          style={{
-            height: 40,
-            borderColor: "blue",
-            borderWidth: "0",
-            paddingHorizontal: 10,
-            width: "70%",
-            color: "white",
-          }}
-          onChangeText={(query) => setSearchQuery(query)}
-          value={searchQuery}
-          placeholder="Tìm kiếm"
-        />
-        <TouchableOpacity style={styles.header_item} onPress={handleSearch}>
+        <Header/>
+        <TouchableOpacity style={{ marginLeft: -90 }} onPress={handleSearch}>
           <MaterialCommunityIcons
             name="qrcode-scan"
             size={20}
             color="white"
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.header_item} onPress={openModal}>
+        <TouchableOpacity style={{ marginLeft: 20 }} onPress={openModal}>
           <AntDesign name="plus" size={20} color="white" />
         </TouchableOpacity>
         <Modal
@@ -312,8 +293,8 @@ export default function MenuChat({ navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.item}
-              onPress={() =>
-                navigation.navigate("ChatScreen", { friend: item })
+              onPress={() =>(item.members && item.members.length)?
+                navigation.navigate("ChatGroup",{group:item}):navigation.navigate("ChatScreen", { friend: item })
               }
             >
               <Image
@@ -401,7 +382,6 @@ export default function MenuChat({ navigation }) {
                 <Text style={{ fontSize: 18, color: "white" }}>Tạo nhóm</Text>
               </TouchableOpacity>
             </ScrollView>
-
           </View>
         </Modal>
 
@@ -439,7 +419,6 @@ const styles = StyleSheet.create({
   header_item: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 30,
     justifyContent: 'center',
   },
   image: {
@@ -458,13 +437,7 @@ const styles = StyleSheet.create({
     width: 150,
   },
   header: {
-    backgroundColor: 'blue',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    height: 50,
-    width: '100%'
+    flexDirection: "row", alignItems: 'center', width: "100%"
   },
   time: {
     color: 'black',
