@@ -381,7 +381,7 @@ export default function Chat({ navigation, route }) {
                 <TouchableOpacity style={{ width: '13%' }}>
                     <Feather name="video" size={20} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ width: '13%' }}>
+                <TouchableOpacity style={{ width: '13%' }} onPress={()=>navigation.navigate("Profile_Friend",{user:userData,friend:friend})}>
                     <SimpleLineIcons name="list" size={20} color="white" />
                 </TouchableOpacity>
             </View>
