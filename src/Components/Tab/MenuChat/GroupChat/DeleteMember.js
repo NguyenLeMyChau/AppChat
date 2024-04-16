@@ -57,6 +57,16 @@ const DeleteMemberScreen = ({ navigation, route }) => {
         ));
     };
 
+    async function removeMembersFromGroup(memberIds) {
+        try {
+            const response = await axios.put(`http://localhost:4000/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
+            alert(response.data.message);
+        } catch (error) {
+            console.error("Error deleting message:", error);
+            alert("An error occurred while deleting the message.");
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View
@@ -99,6 +109,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
                 const selectedIds = selectedItems.map(item => item._id);
                 console.log(selectedItems);
                 console.log(selectedIds);
+                removeMembersFromGroup(selectedIds);
             }}>
                 <AntDesign
                     name="caretright"

@@ -99,13 +99,22 @@ export default function MenuChat({ navigation }) {
     // }
   };
 
-  const handleCreateGroup  = async()=>{
+  const handleCreateGroup = async () => {
     try {
+      var selectedId;
       console.log(isSelected)
+      console.log(userData._id)
+      setIsSelected(prevSelected => {
+        const updatedSelection = [...prevSelected, userData._id];
+        console.log(updatedSelection); // Đảm bảo isSelected đã được cập nhật
+        selectedId = updatedSelection;
+        return updatedSelection;
+      });
+      console.log(selectedId)
       const response = await axios.post(
-        `http://localhost:4000/group/newGroups`,{
-          name:nameGroup, creatorId:userData._id, avatar:imageGroup, members:isSelected
-        }
+        `http://localhost:4000/group/newGroups`, {
+        name: nameGroup, creatorId: userData._id, avatar: imageGroup, members: selectedId
+      }
       );
       const db = await response.data;
       console.log(db);
@@ -117,7 +126,7 @@ export default function MenuChat({ navigation }) {
       alert('Error', 'An error occurred while fetching data');
     }
   };
-  
+
 
   const openModal = () => {
     setModalVisible(true);
@@ -174,7 +183,7 @@ export default function MenuChat({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Header/>
+        <Header />
         <TouchableOpacity style={{ marginLeft: -90 }} onPress={handleSearch}>
           <MaterialCommunityIcons
             name="qrcode-scan"
@@ -326,8 +335,8 @@ export default function MenuChat({ navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.item}
-              onPress={() =>(item.members && item.members.length)?
-                navigation.navigate("ChatGroup",{group:item}):navigation.navigate("ChatScreen", { friend: item })
+              onPress={() => (item.members && item.members.length) ?
+                navigation.navigate("ChatGroup", { group: item }) : navigation.navigate("ChatScreen", { friend: item })
               }
             >
               <Image
@@ -397,17 +406,16 @@ export default function MenuChat({ navigation }) {
                     <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.name}</Text>
 
                     <CheckBox
-                    
-                    value={isSelected.includes(item._id)}
-                       onValueChange={() => toggleCheckbox(item._id)}
-   />
+
+                      value={isSelected.includes(item._id)}
+                      onValueChange={() => toggleCheckbox(item._id)}
+                    />
                   </View>
                 )
               })}
               <TouchableOpacity
                 style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center", padding: 10, backgroundColor: "#006AF5" }}
-                onPress={() => {      
-                  setIsSelected(prevSelected=>[...prevSelected,userData._id])        
+                onPress={() => {
                   handleCreateGroup()
                 }}
               >
