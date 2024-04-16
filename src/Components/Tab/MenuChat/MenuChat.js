@@ -13,6 +13,7 @@ export default function MenuChat({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [listChat, setListChat] = useState([]);
+  const [listFriend, setListFriend] = useState([]);
   const [listUsers, setListUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
@@ -25,22 +26,6 @@ export default function MenuChat({ navigation }) {
 
   const [isSelected, setIsSelected] = useState([]);
 
-  const setSelectionAt = (index, value) => {
-    setIsSelected(prevState => {
-      const newState = [...prevState];
-      newState[index] = value;
-      return newState;
-    });
-  };
-
-  useEffect(() => {
-    setIsSelected(new Array(listChat.length).fill(false));
-  }, [listChat]);
-
-  const getSelectedItems = () => {
-    return listChat.filter((item, index) => isSelected[index]);
-  };
-
   async function getData() {
     try {
       const foundUser = await AsyncStorage.getItem('foundUser');
@@ -48,6 +33,7 @@ export default function MenuChat({ navigation }) {
         const user = JSON.parse(foundUser);
         setUserData(user);
         fetchConversations(user); // Gọi hàm fetchConversations sau khi lấy dữ liệu thành công
+        fetchFriend(user)
       }
     } catch (error) {
       console.error('Error getting data from AsyncStorage:', error);
@@ -81,18 +67,57 @@ export default function MenuChat({ navigation }) {
       alert('Error', 'An error occurred while fetching data');
     }
   };
-
-
-  const handleSearch = async () => {
+  const fetchFriend = async (userData) => {
     try {
-      const response = await fetch('https://65530f285449cfda0f2e0c90.mockapi.io/api/v1/users');
-      const db = await response.json();
-      setSearchResults(db);
+      if (!userData || !userData._id) {
+        console.log("userData is not loaded yet");
+        return;
+      }
+      console.log(userData._id);
+      const response = await axios.get(
+        `http://localhost:4000/group/getGroupList/${userData._id}`
+      );
+      const data = response.data; // Truy cập data từ response
+      setListFriend(data.userData.friendList);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching data:', error);
       alert('Error', 'An error occurred while fetching data');
     }
   };
+
+  const handleSearch = async () => {
+    // try {
+    //   const response = await axios.get(
+    //     `http://localhost:4000/group/newGroups`,
+    //   );
+    //   const db = await response.json();
+    //   setSearchResults(db);
+    // } catch (error) {
+    //   console.error('Error fetching data:', error);
+    //   alert('Error', 'An error occurred while fetching data');
+    // }
+  };
+
+  const handleCreateGroup  = async()=>{
+    try {
+      console.log(isSelected)
+      const response = await axios.post(
+        `http://localhost:4000/group/newGroups`,{
+          name:nameGroup, creatorId:userData._id, avatar:imageGroup, members:isSelected
+        }
+      );
+      const db = await response.data;
+      console.log(db);
+      alert('Tạo nhóm thành công')
+      setModalForward(false);
+      getData()
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error', 'An error occurred while fetching data');
+    }
+  };
+  
 
   const openModal = () => {
     setModalVisible(true);
@@ -132,7 +157,15 @@ export default function MenuChat({ navigation }) {
       return image;
     }
   };
-
+  const toggleCheckbox = (friendId) => {
+    setIsSelected((prevSelected) => {
+      if (prevSelected.includes(friendId)) {
+        return prevSelected.filter((id) => id !== friendId);
+      } else {
+        return [...prevSelected, friendId];
+      }
+    });
+  };
   useEffect(() => {
     // Code bạn muốn chạy khi imageGroup thay đổi
   }, [imageGroup]);
@@ -352,7 +385,7 @@ export default function MenuChat({ navigation }) {
               </View>
             </View>
             <ScrollView>
-              {listChat.map((item, index) => {
+              {listFriend.map((item, index) => {
                 return (
 
                   <View key={index} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", padding: 10 }}>
@@ -364,19 +397,18 @@ export default function MenuChat({ navigation }) {
                     <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.name}</Text>
 
                     <CheckBox
-                      value={isSelected[index] || false}
-                      onValueChange={(value) => setSelectionAt(index, value)}
-                    />
+                    
+                    value={isSelected.includes(item._id)}
+                       onValueChange={() => toggleCheckbox(item._id)}
+   />
                   </View>
                 )
               })}
               <TouchableOpacity
                 style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center", padding: 10, backgroundColor: "#006AF5" }}
-                onPress={() => {
-                  const selectedItems = getSelectedItems();
-                  const selectedIds = selectedItems.map(item => item._id);
-                  console.log(selectedItems);
-                  console.log(selectedIds);
+                onPress={() => {      
+                  setIsSelected(prevSelected=>[...prevSelected,userData._id])        
+                  handleCreateGroup()
                 }}
               >
                 <Text style={{ fontSize: 18, color: "white" }}>Tạo nhóm</Text>
