@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, CheckBox, Alert, Image } from 'react-native';
 import axios from 'axios';
 import { Octicons, AntDesign } from '@expo/vector-icons';
+import { RadioButton } from 'react-native-paper';
 
-const DeleteMemberScreen = ({ navigation, route }) => {
+const SetCoLeader = ({ navigation, route }) => {
     const { user, group } = route.params;
     const [friends, setFriends] = useState([]);
 
@@ -13,64 +14,40 @@ const DeleteMemberScreen = ({ navigation, route }) => {
 
     const fetchFriends = async () => {
         try {
-            console.log(user)
             const response = await axios.get(`http://localhost:4000/group/getGroupMembers/${group._id}`);
             const groupMembers = response.data.groupMembers;
-            
-            //Lọc ra member có memberId trùng với userId của user hiện tại
-            const userMember = groupMembers.find(member => user._id === member._id);
-
-            let filteredMembers;
-            if (userMember.role === 'leader') {
-                filteredMembers = groupMembers.filter(member => member.role !== 'leader');
-            } else if (userMember.role === 'coLeader') {
-                filteredMembers = groupMembers.filter(member => member.role !== 'leader' && member.role !== 'coLeader');
-            } else {
-                filteredMembers = groupMembers;
-            } setFriends(filteredMembers);
+            const filteredMembers = groupMembers.filter(member => member.role !== 'leader' && member.role !== 'coLeader');
+            setFriends(filteredMembers);
         } catch (error) {
             console.error('Error fetching friends:', error);
         }
     };
 
-    const [isSelected, setIsSelected] = useState(new Array(friends.length).fill(false));
-
-    const setSelectionAt = (index, value) => {
-        setIsSelected(prevState => {
-            const newState = [...prevState];
-            newState[index] = value;
-            return newState;
-        });
-    };
-
-    useEffect(() => {
-        setIsSelected(new Array(friends.length).fill(false));
-    }, [friends]);
-
-    const getSelectedItems = () => {
-        return friends.filter((item, index) => isSelected[index]);
-    };
-
+    const [selectedId, setSelectedId] = useState(null);
 
     const renderFriends = () => {
-        return friends.map((friend, index) => (
-            <View key={friend._id} style={styles.friendItem}>
-                <Image
-                    source={friend.avatar ? { uri: friend.avatar } : require("../../../../../assets/AnexanderTom.jpg")}
-                    style={{ width: 50, height: 50, borderRadius: 50 }}
-                />
-                <Text style={{ fontSize: 16 }}>{friend.name}</Text>
-                <CheckBox
-                    value={isSelected[index] || false}
-                    onValueChange={(value) => setSelectionAt(index, value)}
-                />
-            </View>
-        ));
+        return (
+            <RadioButton.Group
+                onValueChange={newValue => setSelectedId(newValue)}
+                value={selectedId}
+            >
+                {friends.map((friend, index) => (
+                    <View key={friend._id} style={styles.friendItem}>
+                        <Image
+                            source={friend.avatar ? { uri: friend.avatar } : require("../../../../../assets/AnexanderTom.jpg")}
+                            style={{ width: 50, height: 50, borderRadius: 50 }}
+                        />
+                        <Text style={{ fontSize: 16 }}>{friend.name}</Text>
+                        <RadioButton value={friend._id} />
+                    </View>
+                ))}
+            </RadioButton.Group>
+        );
     };
 
-    async function removeMembersFromGroup(memberIds) {
+    async function setCoLeader(memberId) {
         try {
-            const response = await axios.put(`http://localhost:4000/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
+            const response = await axios.put(`http://localhost:4000/group/setCoLeader/${group._id}/${memberId}`);
             alert(response.data.message);
         } catch (error) {
             console.error("Error deleting message:", error);
@@ -108,19 +85,16 @@ const DeleteMemberScreen = ({ navigation, route }) => {
                         fontWeight: "400",
                     }}
                 >
-                    Xoá thành viên
+                    Phân quyền nhóm phó
                 </Text>
             </View>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
                 {renderFriends()}
             </ScrollView>
-            {isSelected.length ? <TouchableOpacity style={styles.addButton} onPress={() => {
-                const selectedItems = getSelectedItems();
-                const selectedIds = selectedItems.map(item => item._id);
-                console.log(selectedItems);
-                console.log(selectedIds);
-                removeMembersFromGroup(selectedIds);
+            {selectedId ? <TouchableOpacity style={styles.addButton} onPress={() => {
+                console.log(selectedId);
+                setCoLeader(selectedId);
             }}>
                 <AntDesign
                     name="caretright"
@@ -162,4 +136,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DeleteMemberScreen;
+export default SetCoLeader;

@@ -128,8 +128,8 @@ export default function ChatGroup({ navigation, route }) {
                 text: msg.message, // Nội dung tin nhắn
                 createdAt: new Date(msg.createdAt), // Thời gian tạo tin nhắn (định dạng Date)
                 user: {
-                    _id: msg.fromSelf? userData._id:msg.name._id, // ID của người gửi tin nhắn
-                    name:  msg.name.name, // Tên của người gửi tin nhắn
+                    _id: msg.fromSelf? userData._id:msg.sender._id, // ID của người gửi tin nhắn
+                    name:  msg.sender.name, // Tên của người gửi tin nhắn
                     avatar:  require("../../../../../assets/AnexanderTom.jpg"),
                 },
                 isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)

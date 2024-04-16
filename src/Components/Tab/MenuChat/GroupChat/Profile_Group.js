@@ -60,21 +60,6 @@ const Profile_group = ({ navigation, route }) => {
     }
   };
 
-  const removeMember = async (memberId) => {
-    try {
-      const response = await axios.delete(`http://localhost:4000/group/removeMember`, {
-        data: {
-          groupId: groupId,
-          memberId: memberId,
-        },
-      });
-      console.log(response.data.message); // Log message trả về từ backend sau khi xóa thành viên thành công
-      fetchGroupMembers(); // Cập nhật danh sách thành viên sau khi xóa thành viên thành công
-    } catch (error) {
-      console.error('Error removing member:', error);
-    }
-  };
-
   const assignDeputy = async (memberId) => {
     try {
       const response = await axios.put(`http://localhost:4000/group/assignDeputy`, {
@@ -172,16 +157,21 @@ const Profile_group = ({ navigation, route }) => {
 
         {member ? member.role === "leader" && (
           <>
-            {renderButton("Xóa thành viên", () => navigation.navigate("DeleteMember", { user: user, group: group })
+            {renderButton("Xóa thành viên", () =>
+              navigation.navigate("DeleteMember", { user: user, group: group })
             )}
-            {renderButton("Gán nhóm phó", () => assignDeputy(member._id))}
+            {renderButton("Gán nhóm phó", () =>
+              navigation.navigate("SetCoLeader", { user: user, group: group })
+            )}
             {renderButton("Nhường nhóm trưởng", () =>
               transferOwnership(member._id)
             )}
           </>
         ) : null}
         {member ? member.role === "coLeader" && (
-          <>{renderButton("Xóa thành viên", () => removeMember(member._id))}</>
+          <>{renderButton("Xóa thành viên", () =>
+            navigation.navigate("DeleteMember", { user: user, group: group })
+          )}</>
         ) : null}
 
       </View>
