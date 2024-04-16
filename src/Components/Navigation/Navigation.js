@@ -6,7 +6,7 @@ import Register from "../Register/Register";
 import Login from "./LoginNavigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import ChatScreen from "../Chat";
+import ChatScreen from "../Tab/MenuChat/Chat/Chat";
 import SplashScreen from "../Login/SplashScreen";
 import HomeLoginZalo from "../Login/HomeLoginZalo";
 import ChangeInformation from "../Tab/User/ChangeInformation";
@@ -20,8 +20,11 @@ import ForgotPassword from "../Login/ForgotPassword";
 import NavigationContactFriendRequest from "../Navigation/NavigationContactFriendRequest";
 import Search from "../Tab/MenuChat/Search/Search"
 import ContactTopTab from "../Navigation/ContactTopTab";
-import ChatGroup from "../ChatGroup";
-import Profile_Friend from "../Tab/MenuChat/Profile/Profile_Friend"
+import ChatGroup from "../Tab/MenuChat/GroupChat/ChatGroup";
+import Profile_Friend from "../Tab/MenuChat/Chat/Profile_Friend"
+import Profile_Group from "../Tab/MenuChat/GroupChat/Profile_Group"
+import GroupMembersScreen from "../Tab/MenuChat/GroupChat/Member";
+import AddMembersScreen from "../Tab/MenuChat/GroupChat/AddMember";
 
 const Stack = createNativeStackNavigator();
 function Navigation() {
@@ -37,6 +40,9 @@ function Navigation() {
           <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="ChatGroup" component={ChatGroup} options={{ headerShown: false }}/>
           <Stack.Screen name="Profile_Friend" component={Profile_Friend} options={{ headerShown: false }}/>
+          <Stack.Screen name="Profile_Group" component={Profile_Group} options={{ headerShown: false }}/>
+          <Stack.Screen name="Member" component={GroupMembersScreen} options={{ headerShown: false }}/>
+          <Stack.Screen name="AddMember" component={AddMembersScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="HomeLoginZalo" component={HomeLoginZalo} options={{ headerShown: false }}/>
           <Stack.Screen name="InformationUser" component={InformationUser} options={{ headerShown: false }}/>

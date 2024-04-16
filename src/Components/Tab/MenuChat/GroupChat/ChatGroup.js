@@ -12,6 +12,7 @@ import EmojiSelector from 'react-native-emoji-selector';
 import Modal from 'react-native-modal';
 import ReactPlayer from 'react-player';
 
+
 export default function ChatGroup({ navigation, route }) {
     const { group } = route.params;
     var userId;
@@ -99,7 +100,7 @@ export default function ChatGroup({ navigation, route }) {
                 user: {
                     _id: userData._id, // ID của người gửi tin nhắn
                     name:  userData.name, // Tên của người gửi tin nhắn
-                    avatar: userData.avatar ? userData.avatar : require("../../assets/AnexanderTom.jpg"),
+                    avatar: userData.avatar ? userData.avatar : require("../../../../../assets/AnexanderTom.jpg"),
                 },
                 isHidden: data.isHidden,
             };
@@ -129,7 +130,7 @@ export default function ChatGroup({ navigation, route }) {
                 user: {
                     _id: msg.fromSelf? userData._id:msg.name._id, // ID của người gửi tin nhắn
                     name:  msg.name.name, // Tên của người gửi tin nhắn
-                    avatar:  require("../../assets/AnexanderTom.jpg"),
+                    avatar:  require("../../../../../assets/AnexanderTom.jpg"),
                 },
                 isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
             }));
@@ -377,7 +378,7 @@ export default function ChatGroup({ navigation, route }) {
                 <TouchableOpacity style={{ width: '13%' }}>
                     <Feather name="video" size={20} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ width: '13%' }}>
+                <TouchableOpacity style={{ width: '13%' }} onPress={()=>navigation.navigate("Profile_Group",{user:userData,group:group})}>
                     <SimpleLineIcons name="list" size={20} color="white" />
                 </TouchableOpacity>
             </View>
@@ -389,7 +390,7 @@ export default function ChatGroup({ navigation, route }) {
                     user={{
                         _id: userData._id, 
                         name: userData.name,
-                        avatar: userData.avatar?userData.avatar:require("../../assets/AnexanderTom.jpg"),
+                        avatar: userData.avatar?userData.avatar:require("../../../../../assets/AnexanderTom.jpg"),
                     }}
                     showUserAvatar
                     renderBubble={renderBubble}
@@ -506,7 +507,7 @@ export default function ChatGroup({ navigation, route }) {
 
                                     <View key={index} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", padding: 10 }}>
                                         <Image
-                                            source={item.avatar ? { uri: item.avatar } : require("../../assets/AnexanderTom.jpg")}
+                                            source={item.avatar ? { uri: item.avatar } : require("../../../../../assets/AnexanderTom.jpg")}
                                             style={{ width: 50, height: 50, borderRadius: 50 }}
                                         />
 

@@ -1,8 +1,9 @@
+
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { Image,Linking } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Clipboard, CheckBox } from 'react-native';
+import { Image, Linking } from 'react-native';
 import axios from 'axios';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,7 +11,6 @@ import io, { Socket } from "socket.io-client";
 import EmojiSelector from 'react-native-emoji-selector';
 import Modal from 'react-native-modal';
 import ReactPlayer from 'react-player';
-
 
 export default function Chat({ navigation, route }) {
     const { friend } = route.params;
@@ -20,9 +20,27 @@ export default function Chat({ navigation, route }) {
     const [currentMessage, setCurrentMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
-    const [img, setImg] = useState(null)
-    var uploadedImage = null;
+    const [listChat, setListChat] = useState([]);
+    const [modalForward, setModalForward] = useState(false);
+    const [selectedMessage, setSelectedMessage] = useState(null);
 
+    const [isSelected, setIsSelected] = useState(new Array(listChat.length).fill(false));
+
+    const setSelectionAt = (index, value) => {
+        setIsSelected(prevState => {
+            const newState = [...prevState];
+            newState[index] = value;
+            return newState;
+        });
+    };
+
+    useEffect(() => {
+        setIsSelected(new Array(listChat.length).fill(false));
+    }, [listChat]);
+
+    const getSelectedItems = () => {
+        return listChat.filter((item, index) => isSelected[index]);
+    };
 
     async function getData() {
         try {
@@ -46,10 +64,16 @@ export default function Chat({ navigation, route }) {
             console.log('Connected to Socket.IO server');
         });
         newSocket.on('sendDataServer', (message) => {
-            console.log(userId)
-            if (message.data.user._id === userId || message.data.user._id === friend._id) {
-                setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
-            }
+            // console.log(userId)
+            // if (message.data.user._id === userId || message.data.user._id === friend._id) {
+            //     setMessages(previousMessages => GiftedChat.append(previousMessages, message.data));
+            // }
+            getData();
+
+        });
+        newSocket.on('message_deleted', messageId => {
+            // Xóa tin nhắn khỏi danh sách nếu tin nhắn được xóa từ một client khác
+            getData()
         });
         setSocket(newSocket); // Lưu socket vào state
         return () => {
@@ -66,60 +90,38 @@ export default function Chat({ navigation, route }) {
     const onSend = async (messages = []) => {
         if (currentMessage.length > 0 && socket) {
 
-            if (img !== null) {
-                uploadedImage = await handleUpImage(img); // Tải tệp lên máy chủ
-                // Tạo tin nhắn chứa URL của tệp
-                const newMessage = {
-                    _id: generateRandomId(currentMessage),
-                    text: uploadedImage, // URL của tệp
-                    createdAt: new Date(),
-                    user: {
-                        _id: userData._id,
-                        avatar: userData.avatar
-                    },
-                };
-                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
-                const response = await axios.post("http://localhost:4000/addmsg", {
-                    from: userData._id,
-                    to: friend._id,
-                    message: uploadedImage,
-                });
-                console.log(response.data.message);
-            } else {
-                // Kiểm tra socket đã sẵn sàng
-                const newMessage = {
-                    _id: generateRandomId(currentMessage),
-                    text: currentMessage,
-                    createdAt: new Date(),
-                    user: {
-                        _id: userData._id, // ID của người gửi tin nhắn
-                        avatar: userData.avatar
-                    },
-                };
-                socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
-                const response = await axios.post("http://localhost:4000/addmsg", {
-                    from: userData._id,
-                    to: friend._id,
-                    message: currentMessage,
-                });
-                console.log(response.data.message);
-            }
 
-            setImg(null);
-            uploadedImage = null;
-            setCurrentMessage("");
-            setMessages(previousMessages => GiftedChat.append(previousMessages, {
-                _id: previousMessages.length + 1,
-                text: currentMessage,
-                createdAt: new Date(),
+            const response = await axios.post("http://localhost:4000/addmsg", {
+                from: userData._id,
+                to: friend._id,
+                message: currentMessage,
+                avatar:userData.avatar
+            });
+            console.log(response.data.data);
+            const newMessage = {
+                _id: response.data.data._id,
+                text: response.data.data.message.text,
+                createdAt: new Date(response.data.data.createdAt),
                 user: {
-                    _id: userData._id,
+                    _id: userData._id, // ID của người gửi tin nhắn
+                    avatar: userData.avatar ? userData.avatar : require("../../../../../assets/AnexanderTom.jpg"),
                 },
-            }));
+                isHidden: response.data.data.isHidden,
+            };
+
+            socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+
+            console.log(response.data.msg);
+            setCurrentMessage("");
+
+
         }
     };
+
     const fetchMessages = async (userData) => {
+        console.log(friend)
         try {
+
             const response = await axios.post('http://localhost:4000/getmsg', {
                 from: userData._id,
                 to: friend._id,
@@ -131,75 +133,58 @@ export default function Chat({ navigation, route }) {
                 user: {
                     _id: msg.fromSelf ? userData._id : friend._id, // ID của người gửi tin nhắn
                     name: msg.fromSelf ? 'You' : friend.name, // Tên của người gửi tin nhắn
+                    avatar: msg.fromSelf ? null : friend.avatar ? friend.avatar : require("../../../../../assets/AnexanderTom.jpg"),
                 },
-                isHidden: !msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
+                isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
             }));
 
-            // Cập nhật state messages với các tin nhắn mới
-            setMessages(formattedMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+            const visibleMessages = formattedMessages.filter(msg => {
+                if (!msg.isHidden || (msg.isHidden && msg.user._id !== userData._id)) {
+                    return true;
+                }
+                return false;
+            });
+            setMessages(visibleMessages.sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)));
+
             console.log(formattedMessages);
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
     };
 
-    const selectImg= async () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.onchange = async e => {
-            const file = e.target.files[0];
-            console.log(file);
-            const formData = new FormData();
-            formData.append('avatar', file);
-            const response1 = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userId}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            const img = response1.data.avatar;
-            setCurrentMessage(img);
-            setIsValue(img);
+    const fetchConversations = async () => {
+        try {
+            console.log(userData._id);
+            const response = await axios.get(
+                `http://localhost:4000/group/getGroupList/${userData._id}`
+            );
+            const data = response.data; // Truy cập data từ response
+            setListChat([...data.userData.friendList, ...data.userData.groupList]);
+            console.log(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            alert('Error', 'An error occurred while fetching data');
         }
-        input.click();
-    }
+    };
 
-    const selectVideo= async () => {
+    async function selectFile() {
         const input = document.createElement('input');
         input.type = 'file';
         input.onchange = async e => {
-            const file = e.target.files[0];
-            console.log(file);
-            const formData3 = new FormData();
-            formData3.append('avatar', file);
-            const response2 = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userId}`, formData3, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            const videoUrl = response2.data.avatar;
-            setCurrentMessage(videoUrl);
-        }
-        input.click();
-    }
 
-    const selectFile = async () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.onchange = async e => {
             const file = e.target.files[0];
+
             console.log(file);
-            const formData2 = new FormData();
-            formData2.append('avatar', file);
-            const response = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userId}`, formData2, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            const fileUrl = response.data.avatar;
-            setCurrentMessage(fileUrl);
+            console.log(file.name);
+
+            // Gọi hàm handleUpImage sau khi chọn tệp
+            const imageUrl = await handleUpImage(file);
+            console.log(imageUrl);
+            setCurrentMessage(imageUrl);
+
         }
         input.click();
-    }
+    };
 
     async function handleUpImage(file) {
         const formData = new FormData();
@@ -218,6 +203,7 @@ export default function Chat({ navigation, route }) {
 
     };
 
+
     const openFileURL = (fileURL) => {
         // Sử dụng Linking.openURL để mở đường dẫn tệp trong trình duyệt hoặc ứng dụng tương ứng.
         Linking.openURL(fileURL);
@@ -235,8 +221,8 @@ export default function Chat({ navigation, route }) {
         const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
 
 
-        console.log("prop"+props.currentMessage.text);
-        console.log("isImageMessage"+isImageMessage);
+        console.log("prop" + props.currentMessage.text);
+        console.log("isImageMessage" + isImageMessage);
 
         return (
             <Bubble
@@ -267,28 +253,30 @@ export default function Chat({ navigation, route }) {
                 renderCustomView={isFileMessage ? () => (
                     <TouchableOpacity onPress={() => openFileURL(props.currentMessage.text)}>
                         {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
-                        <AntDesign name='file1' size={100} style={{alignSelf: 'center'}}/>
+                        <AntDesign name='file1' size={100} style={{ alignSelf: 'center' }} />
                     </TouchableOpacity>
                 ) : null}
-                
-               
+
+
 
             />
         );
     }
 
 
-
-
-
     async function deleteMessage(message) {
-        const messageId = message._id; // Get the message ID from the message object
-        console.log(messageId)
-        const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
-        alert(response.data.message);
-        getData();
-
+        try {
+            const messageId = message._id; // Lấy ID của tin nhắn từ đối tượng tin nhắn
+            console.log(messageId);
+            const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
+            alert(response.data.message);
+            socket.emit('message_deletedClient', messageId);
+        } catch (error) {
+            console.error("Error deleting message:", error);
+            alert("An error occurred while deleting the message.");
+        }
     }
+
 
     async function retrieveMessage(message) {
         const messageId = message._id; // Get the message ID from the message object
@@ -300,15 +288,30 @@ export default function Chat({ navigation, route }) {
 
         const response = await axios.put(`http://localhost:4000/retrievemsg/${messageId}/${senderId}`);
         alert(response.data.message);
-        getData();
+        socket.emit('message_deletedClient', messageId);
 
     }
 
+    async function openForwardMessage(message) {
+        await fetchConversations();
+        setModalForward(true);
+        setSelectedMessage(message);
+    }
+
+    async function forwardMessage(receiver, message) {
+        try {
+            const response = await axios.post(`http://localhost:4000/forwardMessage`, { from: userData._id, to: receiver, message: message });
+            alert(response.data.msg);
+        } catch (error) {
+            console.error("Error deleting message:", error);
+            alert("An error occurred while deleting the message.");
+        }
+    }
+
     function onLongPress(context, message) {
-        console.log(message.user._id)
-        console.log(userData._id)
-        if (message.user._id === userData._id) {
-            const options = ['Thu hồi tin nhắn', 'Xoá tin nhắn', 'Cancel'];
+
+        if (message.user._id == userData._id) {
+            const options = ['Sao chép tin nhắn', 'Gỡ tin nhắn phía tôi', 'Xoá tin nhắn', 'Chuyển tiếp tin nhắn', 'Cancel'];
             const cancelButtonIndex = options.length - 1;
             context.actionSheet().showActionSheetWithOptions({
                 options,
@@ -316,27 +319,48 @@ export default function Chat({ navigation, route }) {
             }, (buttonIndex) => {
                 switch (buttonIndex) {
                     case 0:
-                        retrieveMessage(message);
+                        Clipboard.setString(message.text)
+                        alert('Copy to clipboard')
                         break;
                     case 1:
+                        retrieveMessage(message);
+                        break;
+                    case 2:
                         deleteMessage(message);
+                        break;
+                    case 3:
+                        openForwardMessage(message);
+                        break;
+                    case 4:
+                        console.log('Cancel');
+                        break;
+
+                }
+            });
+        }
+        else {
+            const options = ['Sao chép tin nhắn', 'Chuyển tiếp tin nhắn', 'Cancel'];
+            const cancelButtonIndex = options.length - 1;
+            context.actionSheet().showActionSheetWithOptions({
+                options,
+                cancelButtonIndex
+            }, (buttonIndex) => {
+                switch (buttonIndex) {
+                    case 0:
+                        Clipboard.setString(message.text)
+                        alert('Copy to clipboard')
+                        break;
+                    case 1:
+                        openForwardMessage(message);
                         break;
                     case 2:
                         console.log('Cancel');
                         break;
-                    default:
-                        console.log('No action taken');
+
                 }
             });
         }
     }
-
-    function isImageUrl(url) {
-        // Biểu thức chính quy để kiểm tra định dạng URL hình ảnh
-        const imageUrlRegex = /\.(jpeg|jpg|gif|png)$/;
-        return imageUrlRegex.test(url);
-    }
-
 
     return (
         <View style={styles.container}>
@@ -345,7 +369,7 @@ export default function Chat({ navigation, route }) {
                 paddingHorizontal: 16,
                 paddingVertical: 8,
             }}>
-                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.navigate('BottomTab')}>
                     <AntDesign name="arrowleft" size={20} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ width: '55%' }}>
@@ -358,7 +382,7 @@ export default function Chat({ navigation, route }) {
                 <TouchableOpacity style={{ width: '13%' }}>
                     <Feather name="video" size={20} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ width: '13%' }}>
+                <TouchableOpacity style={{ width: '13%' }} onPress={()=>navigation.navigate("Profile_Friend",{user:userData,friend:friend})}>
                     <SimpleLineIcons name="list" size={20} color="white" />
                 </TouchableOpacity>
             </View>
@@ -421,26 +445,13 @@ export default function Chat({ navigation, route }) {
                             keyboardType="phone-pad"
                         />
 
-<AntDesign
-                                onPress={selectFile}
-                                value={currentMessage}
-                                onChangeText={(text)=>setCurrentMessage(text)}
-                                name="addfile"
-                                size={24}
-                                color="black"
-                                style={{ marginLeft: 5 }}
-                        />
+                        <AntDesign name="addfile" size={24} color="black" style={{ marginLeft: 5 }} />
 
-
-                        <Entypo
-                           onPress={selectVideo}
-                           value={currentMessage}
-                           onChangeText={(text)=>setCurrentMessage(text)}
-                           name="folder-video"
-                           size={24}
-                           color="black"
-                        style={{ marginLeft: 20 }}
-
+                        <SimpleLineIcons
+                            name="microphone"
+                            size={24}
+                            color="black"
+                            style={{ marginLeft: 20 }}
                         />
 
                         <AntDesign
@@ -448,7 +459,9 @@ export default function Chat({ navigation, route }) {
                             size={30}
                             color="black"
                             style={{ marginLeft: 20 }}
-                            onPress={selectImg}
+                            onPress={() => {
+                                selectFile();
+                            }}
                         />
                     </>
                 ) : (
@@ -471,6 +484,56 @@ export default function Chat({ navigation, route }) {
                     </>
 
                 )}
+            </View>
+
+            <View style={{ alignItems: "center", justifyContent: "center", width: "70%", padding: 10 }}>
+                <Modal
+                    visible={modalForward}
+                    animationType="fade"
+                    transparent={true}
+                    onBackdropPress={() => setModalForward(false)}
+                >
+                    <View style={{
+                        backgroundColor: "white", maxHeight: "70%", width: "100%", position: 'absolute'
+                    }}>
+                        <ScrollView>
+                            {listChat.map((item, index) => {
+                                return (
+
+                                    <View key={index} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", padding: 10 }}>
+                                        <Image
+                                            source={item.avatar ? { uri: item.avatar } : require("../../../../../assets/AnexanderTom.jpg")}
+                                            style={{ width: 50, height: 50, borderRadius: 50 }}
+                                        />
+
+                                        <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.name}</Text>
+
+                                        <CheckBox
+                                            value={isSelected[index] || false}
+                                            onValueChange={(value) => setSelectionAt(index, value)}
+                                        />
+                                    </View>
+                                )
+                            })}
+                            <TouchableOpacity
+                                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center", padding: 10, backgroundColor: "#006AF5" }}
+                                onPress={() => {
+                                    const selectedItems = getSelectedItems();
+                                    const selectedIds = selectedItems.map(item => item._id);
+                                    console.log(selectedItems);
+                                    console.log(selectedIds);
+                                    console.log(selectedMessage.text);
+                                    forwardMessage(selectedIds, selectedMessage.text);
+                                    setModalForward(false)
+                                }}
+                            >
+                                <Text style={{ fontSize: 18, color: "white" }}>Chuyển tiếp</Text>
+                            </TouchableOpacity>
+                        </ScrollView>
+
+                    </View>
+                </Modal>
+
             </View>
 
         </View>
