@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, CheckBox, Alert } from 'react-native';
 import axios from 'axios';
-import { Octicons } from '@expo/vector-icons';
+import { Octicons, AntDesign } from '@expo/vector-icons';
 
 const AddMembersScreen = ({ navigation, route }) => {
     const { user,group } = route.params;

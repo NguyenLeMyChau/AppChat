@@ -25,6 +25,7 @@ import Profile_Friend from "../Tab/MenuChat/Chat/Profile_Friend"
 import Profile_Group from "../Tab/MenuChat/GroupChat/Profile_Group"
 import GroupMembersScreen from "../Tab/MenuChat/GroupChat/Member";
 import AddMembersScreen from "../Tab/MenuChat/GroupChat/AddMember";
+import DeleteMemberScreen from "../Tab/MenuChat/GroupChat/DeleteMember";
 
 const Stack = createNativeStackNavigator();
 function Navigation() {
@@ -43,6 +44,7 @@ function Navigation() {
           <Stack.Screen name="Profile_Group" component={Profile_Group} options={{ headerShown: false }}/>
           <Stack.Screen name="Member" component={GroupMembersScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="AddMember" component={AddMembersScreen} options={{ headerShown: false }}/>
+          <Stack.Screen name="DeleteMember" component={DeleteMemberScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="HomeLoginZalo" component={HomeLoginZalo} options={{ headerShown: false }}/>
           <Stack.Screen name="InformationUser" component={InformationUser} options={{ headerShown: false }}/>
