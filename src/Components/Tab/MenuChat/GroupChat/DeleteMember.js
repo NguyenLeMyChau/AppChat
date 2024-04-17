@@ -16,7 +16,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
             console.log(user)
             const response = await axios.get(`http://localhost:4000/group/getGroupMembers/${group._id}`);
             const groupMembers = response.data.groupMembers;
-            
+
             //Lọc ra member có memberId trùng với userId của user hiện tại
             const userMember = groupMembers.find(member => user._id === member._id);
 
@@ -74,7 +74,11 @@ const DeleteMemberScreen = ({ navigation, route }) => {
             alert(response.data.message);
         } catch (error) {
             console.error("Error deleting message:", error);
-            alert("An error occurred while deleting the message.");
+            if (error.response) {
+                alert(error.response.data.message);
+            } else {
+                console.log(error.message);
+            }
         }
         navigation.goBack();
     }

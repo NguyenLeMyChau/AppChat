@@ -51,7 +51,11 @@ const SetCoLeader = ({ navigation, route }) => {
             alert(response.data.message);
         } catch (error) {
             console.error("Error deleting message:", error);
-            alert("An error occurred while deleting the message.");
+            if (error.response) {
+                alert(error.response.data.message);
+            } else {
+                console.log(error.message);
+            }
         }
         navigation.goBack();
     }
