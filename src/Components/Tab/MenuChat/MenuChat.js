@@ -123,7 +123,11 @@ export default function MenuChat({ navigation }) {
       getData()
     } catch (error) {
       console.error('Error fetching data:', error);
-      alert('Error', 'An error occurred while fetching data');
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        console.log(error.message);
+      }
     }
   };
 
