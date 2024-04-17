@@ -27,6 +27,7 @@ import GroupMembersScreen from "../Tab/MenuChat/GroupChat/Member";
 import AddMembersScreen from "../Tab/MenuChat/GroupChat/AddMember";
 import DeleteMemberScreen from "../Tab/MenuChat/GroupChat/DeleteMember";
 import SetCoLeader from "../Tab/MenuChat/GroupChat/SetCoLeader";
+import SetLeader from "../Tab/MenuChat/GroupChat/SetLeader";
 
 const Stack = createNativeStackNavigator();
 function Navigation() {
@@ -47,6 +48,7 @@ function Navigation() {
           <Stack.Screen name="AddMember" component={AddMembersScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="DeleteMember" component={DeleteMemberScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="SetCoLeader" component={SetCoLeader} options={{ headerShown: false }}/>
+          <Stack.Screen name="SetLeader" component={SetLeader} options={{ headerShown: false }}/>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="HomeLoginZalo" component={HomeLoginZalo} options={{ headerShown: false }}/>
           <Stack.Screen name="InformationUser" component={InformationUser} options={{ headerShown: false }}/>

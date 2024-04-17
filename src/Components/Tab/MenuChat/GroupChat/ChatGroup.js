@@ -89,7 +89,7 @@ export default function ChatGroup({ navigation, route }) {
                 from: userData._id,
                 to: group._id,
                 message: currentMessage,
-                avatar:group.avatar,
+                avatar: group.avatar,
             });
             console.log(response.data.data);
             const data = response.data.data;
@@ -99,7 +99,7 @@ export default function ChatGroup({ navigation, route }) {
                 createdAt: new Date(data.createdAt),
                 user: {
                     _id: userData._id, // ID của người gửi tin nhắn
-                    name:  userData.name, // Tên của người gửi tin nhắn
+                    name: userData.name, // Tên của người gửi tin nhắn
                     avatar: userData.avatar ? userData.avatar : require("../../../../../assets/AnexanderTom.jpg"),
                 },
                 isHidden: data.isHidden,
@@ -118,19 +118,19 @@ export default function ChatGroup({ navigation, route }) {
         try {
 
             const response = await axios.post('http://localhost:4000/getGroupMessages', {
-                groupId:group._id,
-                from:  userData._id,
+                groupId: group._id,
+                from: userData._id,
             });
             const data = response.data;
             console.log(data);
-            const formattedMessages = response.data.map(msg => ({   
+            const formattedMessages = response.data.map(msg => ({
                 _id: msg.id, // ID của tin nhắn
                 text: msg.message, // Nội dung tin nhắn
                 createdAt: new Date(msg.createdAt), // Thời gian tạo tin nhắn (định dạng Date)
                 user: {
-                    _id: msg.fromSelf? userData._id:msg.sender._id, // ID của người gửi tin nhắn
-                    name:  msg.sender.name, // Tên của người gửi tin nhắn
-                    avatar:  require("../../../../../assets/AnexanderTom.jpg"),
+                    _id: msg.fromSelf ? userData._id : msg.sender._id, // ID của người gửi tin nhắn
+                    name: msg.sender.name, // Tên của người gửi tin nhắn
+                    avatar: require("../../../../../assets/AnexanderTom.jpg"),
                 },
                 isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
             }));
@@ -220,8 +220,8 @@ export default function ChatGroup({ navigation, route }) {
         console.log("isImageMessage" + isImageMessage);
 
         return (
-            <Bubble     
-            {...props}       
+            <Bubble
+                {...props}
                 wrapperStyle={{
                     left: {
                         backgroundColor: 'white',
@@ -257,7 +257,7 @@ export default function ChatGroup({ navigation, route }) {
             />
         );
     }
-    
+
 
 
     async function deleteMessage(message) {
@@ -378,7 +378,7 @@ export default function ChatGroup({ navigation, route }) {
                 <TouchableOpacity style={{ width: '13%' }}>
                     <Feather name="video" size={20} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ width: '13%' }} onPress={()=>navigation.navigate("Profile_Group",{user:userData,group:group})}>
+                <TouchableOpacity style={{ width: '13%' }} onPress={() => navigation.navigate("Profile_Group", { user: userData, group: group })}>
                     <SimpleLineIcons name="list" size={20} color="white" />
                 </TouchableOpacity>
             </View>
@@ -388,9 +388,9 @@ export default function ChatGroup({ navigation, route }) {
                     messages={messages}
                     onSend={newMessages => onSend(newMessages)}
                     user={{
-                        _id: userData._id, 
+                        _id: userData._id,
                         name: userData.name,
-                        avatar: userData.avatar?userData.avatar:require("../../../../../assets/AnexanderTom.jpg"),
+                        avatar: userData.avatar ? userData.avatar : require("../../../../../assets/AnexanderTom.jpg"),
                     }}
                     showUserAvatar
                     renderBubble={renderBubble}
@@ -400,12 +400,12 @@ export default function ChatGroup({ navigation, route }) {
                     renderInputToolbar={() => null} // Thêm dòng này
                     selectable={true}
                     renderUsernameOnMessage={true}
-                      renderAvatar={(props) => (
+                    renderAvatar={(props) => (
                         <Avatar
-                          {...props}
-                          avatarStyle={{ borderRadius: 16 }}
+                            {...props}
+                            avatarStyle={{ borderRadius: 16 }}
                         />
-                      )}
+                    )}
                 />
 
             </View>
@@ -434,11 +434,12 @@ export default function ChatGroup({ navigation, route }) {
             <View style={styles.chat}>
 
                 <MaterialCommunityIcons
-                    name="emoticon"
-                    size={24}
+                    name="sticker-emoji"
+                    size={30}
                     color="black"
                     onPress={() => setShowEmojiPicker(!showEmojiPicker)}
                 />
+
 
                 {currentMessage === '' ? (
                     <>

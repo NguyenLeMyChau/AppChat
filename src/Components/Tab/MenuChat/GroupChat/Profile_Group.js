@@ -47,52 +47,19 @@ const Profile_group = ({ navigation, route }) => {
   };
 
 
-  const addMember = async (memberId) => {
-    try {
-      const response = await axios.post(`http://localhost:4000/group/addMember`, {
-        groupId: groupId,
-        memberId: memberId,
-      });
-      console.log(response.data.message); // Log message trả về từ backend sau khi thêm thành viên thành công
-      fetchGroupMembers(); // Cập nhật danh sách thành viên sau khi thêm thành viên thành công
-    } catch (error) {
-      console.error('Error adding member:', error);
-    }
-  };
-
-  const assignDeputy = async (memberId) => {
-    try {
-      const response = await axios.put(`http://localhost:4000/group/assignDeputy`, {
-        groupId: groupId,
-        memberId: memberId,
-      });
-      console.log(response.data.message); // Log message trả về từ backend sau khi gán nhóm phó thành công
-      fetchGroupMembers(); // Cập nhật danh sách thành viên sau khi gán nhóm phó thành công
-    } catch (error) {
-      console.error('Error assigning deputy:', error);
-    }
-  };
-
-  const transferOwnership = async (memberId) => {
-    try {
-      const response = await axios.put(`http://localhost:4000/group/transferOwnership`, {
-        groupId: groupId,
-        memberId: memberId,
-      });
-      console.log(response.data.message); // Log message trả về từ backend sau khi nhường nhóm trưởng thành công
-      fetchGroupMembers(); // Cập nhật danh sách thành viên sau khi nhường nhóm trưởng thành công
-    } catch (error) {
-      console.error('Error transferring ownership:', error);
-    }
-  };
 
   const disbandGroup = async () => {
     try {
-      const response = await axios.delete(`http://localhost:4000/group/disband/${groupId}`);
+      const response = await axios.delete(`http://localhost:4000/group/deleteGroup/${group._id}`);
       console.log(response.data.message); // Log message trả về từ backend sau khi giải tán nhóm thành công
+      // Hiển thị cảnh báo cho người dùng
+      alert(response.data.message);
       // Điều hướng đến màn hình khác hoặc làm điều gì đó sau khi giải tán nhóm thành công
+      navigation.navigate("MenuChat"); // Thay "AnotherScreen" bằng tên màn hình mong muốn
     } catch (error) {
       console.error('Error disbanning group:', error);
+      // Hiển thị cảnh báo cho người dùng nếu có lỗi xảy ra
+      alert("An error occurred while disbanning the group.");
     }
   };
 
@@ -164,7 +131,7 @@ const Profile_group = ({ navigation, route }) => {
               navigation.navigate("SetCoLeader", { user: user, group: group })
             )}
             {renderButton("Nhường nhóm trưởng", () =>
-              transferOwnership(member._id)
+              navigation.navigate("SetLeader", { user: user, group: group })
             )}
           </>
         ) : null}

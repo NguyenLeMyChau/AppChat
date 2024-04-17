@@ -429,8 +429,8 @@ export default function Chat({ navigation, route }) {
             <View style={styles.chat}>
 
                 <MaterialCommunityIcons
-                    name="emoticon"
-                    size={24}
+                    name="sticker-emoji"
+                    size={30}
                     color="black"
                     onPress={() => setShowEmojiPicker(!showEmojiPicker)}
                 />
