@@ -63,6 +63,21 @@ const Profile_group = ({ navigation, route }) => {
     }
   };
 
+  const leaveGroup = async () => {
+    const response = await axios.put(`http://localhost:4000/group/leaveGroup/${group._id}/${user._id}`);
+    try {
+      console.log(response.data.message); // Log message trả về từ backend sau khi giải tán nhóm thành công
+      // Hiển thị cảnh báo cho người dùng
+      alert(response.data.message);
+      //Điều hướng đến màn hình khác hoặc làm điều gì đó sau khi giải tán nhóm thành công
+      navigation.navigate("MenuChat"); // Thay "AnotherScreen" bằng tên màn hình mong muốn
+    } catch (error) {
+      console.error('Error leave group:', error);
+      alert("An error occurred while disbanning the group.");
+    }
+  };
+
+
   const renderButton = (text, onPress) => (
     <TouchableOpacity style={styles.functionItem} onPress={onPress}>
       <Text style={styles.functionText}>{text}</Text>
@@ -120,6 +135,9 @@ const Profile_group = ({ navigation, route }) => {
         )}
         {renderButton("Thêm thành viên", () =>
           navigation.navigate("AddMember", { user: user, group: group })
+        )}
+        {renderButton("Rời nhóm", () =>
+          leaveGroup()
         )}
 
         {member ? member.role === "leader" && (
