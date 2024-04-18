@@ -45,6 +45,7 @@ export default function ChatGroup({ navigation, route }) {
 
     async function getData() {
         try {
+            console.log("get data group")
             const foundUser = await AsyncStorage.getItem('foundUser');
             if (foundUser !== null) {
                 const user = JSON.parse(foundUser);
@@ -215,9 +216,6 @@ export default function ChatGroup({ navigation, route }) {
         const videoUrlRegex = /\.(mp4|mov|avi)$/i;
         const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
 
-
-        console.log("prop" + props.currentMessage.user.name);
-        console.log("isImageMessage" + isImageMessage);
 
         return (
             <Bubble

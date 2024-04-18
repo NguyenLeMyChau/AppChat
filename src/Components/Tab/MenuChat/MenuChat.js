@@ -120,7 +120,8 @@ export default function MenuChat({ navigation }) {
       console.log(db);
       alert('Tạo nhóm thành công')
       setModalForward(false);
-      getData()
+      getData();
+      setIsSelected([]);
     } catch (error) {
       console.error('Error fetching data:', error);
       if (error.response) {
