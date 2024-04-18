@@ -144,11 +144,14 @@ export default function MenuChat({ navigation }) {
       setModalForward(false);
       getData();
       setIsSelected([]);
+      setNameGroup("");
       socket.emit('addGroup',db)
     } catch (error) {
       console.error('Error fetching data:', error);
       if (error.response) {
         alert(error.response.data.message);
+        setIsSelected([])
+        setNameGroup("");
       } else {
         console.log(error.message);
       }
@@ -275,16 +278,16 @@ export default function MenuChat({ navigation }) {
                   paddingTop: 10,
                   paddingBottom: 10,
                 }}
-                onPress={() => setModalForward(true)}
+                onPress={() => {setIsSelected([]),setNameGroup(""),setModalForward(true)}}
               >
                 <MaterialIcons
                   style={{ width: "20%" }}
                   name="group-add"
                   size={20}
                   color="gray"
-                  onPress={() => setModalForward(true)}
+                  onPress={() => {setIsSelected([]),setNameGroup(""),setModalForward(true)}}
                 />
-                <Text onPress={() => setModalForward(true)}>Tạo nhóm</Text>
+                <Text onPress={() => {setIsSelected([]),setNameGroup(""),setModalForward(true)}}>Tạo nhóm</Text>
               </View>
               <View
                 style={{
