@@ -6,9 +6,22 @@ import { Octicons, AntDesign } from '@expo/vector-icons';
 const DeleteMemberScreen = ({ navigation, route }) => {
     const { user, group } = route.params;
     const [friends, setFriends] = useState([]);
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         fetchFriends();
+            const newSocket = io('http://localhost:4000');
+            newSocket.on('connect', () => {
+                console.log('Connected to Socket.IO server');
+            });
+            newSocket.on('sendDataServer', (message) => {
+                fetchFriends();
+    
+            });
+            setSocket(newSocket); // Lưu socket vào state
+            return () => {
+                newSocket.disconnect();
+            };
     }, []);
 
     const fetchFriends = async () => {
@@ -73,6 +86,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
         try {
             const response = await axios.put(`http://localhost:4000/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
             alert(response.data.message);
+            socket.emit('sendDataClient',response.data.message);
         } catch (error) {
             console.error("Error deleting message:", error);
             if (error.response) {

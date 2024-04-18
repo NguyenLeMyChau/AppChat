@@ -6,8 +6,22 @@ import axios from 'axios';
 const UserProfileScreen = ({ navigation, route }) => {
     const user = route.params.user;
     const friend = route.params.friend;
+    const [socket, setSocket] = useState(null);
   console.log(friend)
   console.log(user)
+  useEffect(() => {
+    const newSocket = io('http://localhost:4000');
+    newSocket.on('connect', () => {
+        console.log('Connected to Socket.IO server');
+    });
+    newSocket.on('sendDataServer', (message) => {
+        getData();
+    });
+    setSocket(newSocket); // Lưu socket vào state
+    return () => {
+        newSocket.disconnect();
+    };
+}, []);
   // Hàm xử lý chức năng tạo nhóm với user
   const createGroupWithUser = () => {
     // Viết logic xử lý khi tạo nhóm với user
@@ -27,6 +41,7 @@ const UserProfileScreen = ({ navigation, route }) => {
         });
       console.log(response.data.message); // Log message trả về từ backend sau khi xóa kết bạn thành công
       alert(response.data.message)
+      socket.emit('sendDataClient',response.data.message)
       navigation.navigate("BottomTab");
       // Xử lý các hành động khác sau khi xóa kết bạn thành công (nếu cần)
     } catch (error) {

@@ -44,7 +44,6 @@ export default function Chat({ navigation, route }) {
 
     async function getData() {
         try {
-            console.log("get data");
             const foundUser = await AsyncStorage.getItem('foundUser');
             if (foundUser !== null) {
                 const user = JSON.parse(foundUser);
@@ -221,6 +220,10 @@ export default function Chat({ navigation, route }) {
         const videoUrlRegex = /\.(mp4|mov|avi)$/i;
         const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
 
+
+        console.log("prop" + props.currentMessage.text);
+        console.log("isImageMessage" + isImageMessage);
+
         return (
             <Bubble
                 {...props}
@@ -267,7 +270,7 @@ export default function Chat({ navigation, route }) {
             console.log(messageId);
             const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
             alert(response.data.message);
-            socket.emit('message_deletedClient', messageId);
+            socket.emit('sendDataClient', messageId);
         } catch (error) {
             console.error("Error deleting message:", error);
             alert("An error occurred while deleting the message.");
@@ -285,7 +288,7 @@ export default function Chat({ navigation, route }) {
 
         const response = await axios.put(`http://localhost:4000/retrievemsg/${messageId}/${senderId}`);
         alert(response.data.message);
-        socket.emit('message_deletedClient', messageId);
+        socket.emit('sendDataClient', messageId);
 
     }
 
@@ -298,6 +301,7 @@ export default function Chat({ navigation, route }) {
     async function forwardMessage(receiver, message) {
         try {
             const response = await axios.post(`http://localhost:4000/forwardMessage`, { from: userData._id, to: receiver, message: message });
+            socket.emit('sendDataClient', response.data.msg)
             alert(response.data.msg);
         } catch (error) {
             console.error("Error deleting message:", error);

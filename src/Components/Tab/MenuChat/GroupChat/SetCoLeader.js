@@ -7,9 +7,22 @@ import { RadioButton } from 'react-native-paper';
 const SetCoLeader = ({ navigation, route }) => {
     const { user, group } = route.params;
     const [friends, setFriends] = useState([]);
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         fetchFriends();
+            const newSocket = io('http://localhost:4000');
+            newSocket.on('connect', () => {
+                console.log('Connected to Socket.IO server');
+            });
+            newSocket.on('sendDataServer', (message) => {
+                fetchFriends();
+    
+            });
+            setSocket(newSocket); // Lưu socket vào state
+            return () => {
+                newSocket.disconnect();
+            };
     }, []);
 
     const fetchFriends = async () => {
@@ -48,6 +61,7 @@ const SetCoLeader = ({ navigation, route }) => {
     async function setCoLeader(memberId) {
         try {
             const response = await axios.put(`http://localhost:4000/group/setCoLeader/${group._id}/${memberId}`);
+            socket.emit('sendDataClient',response.data.message);
             alert(response.data.message);
         } catch (error) {
             console.error("Error deleting message:", error);

@@ -2,16 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Octicons, SimpleLineIcons } from '@expo/vector-icons';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 const Profile_group = ({ navigation, route }) => {
   const user = route.params.user;
   const group = route.params.group;
   const [member, setMember] = useState({});
+  const [socket, setSocket] = useState(null);
   console.log(group)
   console.log(user)
 
   useEffect(() => {
     fetchGroupMembers();
+    const newSocket = io('http://localhost:4000');
+    newSocket.on('connect', () => {
+        console.log('Connected to Socket.IO server');
+    });
+    newSocket.on('sendDataServer', (message) => {
+      fetchGroupMembers();
+    });
+    setSocket(newSocket); // Lưu socket vào state
+    return () => {
+        newSocket.disconnect();
+    };
   }, []);
 
   const fetchGroupMembers = async () => {
@@ -25,28 +38,6 @@ const Profile_group = ({ navigation, route }) => {
     }
   };
 
-  const cancelgroupship = async (userId, groupId) => {
-    try {
-      const response = await axios.post('http://localhost:4000/user/cancelgroupship', {
-        userId: userId,
-        groupId: groupId,
-      });
-      console.log(response.data.message); // Log message trả về từ backend sau khi xóa kết bạn thành công
-      alert(response.data.message)
-      navigation.navigate("BottomTab");
-      // Xử lý các hành động khác sau khi xóa kết bạn thành công (nếu cần)
-    } catch (error) {
-      console.error('Error cancelling groupship:', error);
-      // Xử lý lỗi nếu có
-    }
-  };
-  const handleCancelgroupship = () => {
-    const userId = user._id; // Thay thế bằng ID của người dùng hiện tại
-    const groupId = group._id; // Thay thế bằng ID của bạn bè cần xóa kết bạn
-    cancelgroupship(userId, groupId);
-  };
-
-
 
   const disbandGroup = async () => {
     try {
@@ -55,7 +46,8 @@ const Profile_group = ({ navigation, route }) => {
       // Hiển thị cảnh báo cho người dùng
       alert(response.data.message);
       // Điều hướng đến màn hình khác hoặc làm điều gì đó sau khi giải tán nhóm thành công
-      navigation.navigate("MenuChat"); // Thay "AnotherScreen" bằng tên màn hình mong muốn
+      socket.emit('sendDataClient',response.data.message);
+      navigation.navigate("BottomTab"); // Thay "AnotherScreen" bằng tên màn hình mong muốn
     } catch (error) {
       console.error('Error disbanning group:', error);
       // Hiển thị cảnh báo cho người dùng nếu có lỗi xảy ra
@@ -69,6 +61,7 @@ const Profile_group = ({ navigation, route }) => {
       console.log(response.data.message); // Log message trả về từ backend sau khi giải tán nhóm thành công
       // Hiển thị cảnh báo cho người dùng
       alert(response.data.message);
+      socket.emit('sendDataClient',response.data.message);
       //Điều hướng đến màn hình khác hoặc làm điều gì đó sau khi giải tán nhóm thành công
       navigation.navigate("MenuChat"); // Thay "AnotherScreen" bằng tên màn hình mong muốn
     } catch (error) {

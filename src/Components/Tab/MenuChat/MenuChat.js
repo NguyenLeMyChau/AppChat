@@ -17,6 +17,7 @@ export default function MenuChat({ navigation }) {
   const [listUsers, setListUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [socket, setSocket] = useState(null);
 
   const [nameGroup, setNameGroup] = useState("");
 
@@ -40,7 +41,23 @@ export default function MenuChat({ navigation }) {
     }
   }
 
+  useEffect(() => {
+    const newSocket = io('http://localhost:4000');
+    newSocket.on('connect', () => {
+        console.log('Connected to Socket.IO server');
+    });
+    newSocket.on('sendDataServer', (message) => {
+        getData();
 
+    });
+    newSocket.on('message_deleted', messageId => {
+        getData()
+    });
+    setSocket(newSocket); // Lưu socket vào state
+    return () => {
+        newSocket.disconnect();
+    };
+}, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getData();

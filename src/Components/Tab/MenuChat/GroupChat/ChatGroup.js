@@ -1,13 +1,13 @@
 
-import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Clipboard, CheckBox } from 'react-native';
 import { Image, Linking } from 'react-native';
 import axios from 'axios';
-import { GiftedChat, Bubble, Message, Avatar } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Avatar } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import io, { Socket } from "socket.io-client";
+import io from "socket.io-client";
 import EmojiSelector from 'react-native-emoji-selector';
 import Modal from 'react-native-modal';
 import ReactPlayer from 'react-player';
@@ -264,7 +264,7 @@ export default function ChatGroup({ navigation, route }) {
             console.log(messageId);
             const response = await axios.delete(`http://localhost:4000/deletemsg/${messageId}`);
             alert(response.data.message);
-            socket.emit('message_deletedClient', messageId);
+            socket.emit('sendDataClient', messageId);
         } catch (error) {
             console.error("Error deleting message:", error);
             alert("An error occurred while deleting the message.");
@@ -282,7 +282,7 @@ export default function ChatGroup({ navigation, route }) {
 
         const response = await axios.put(`http://localhost:4000/retrievemsg/${messageId}/${senderId}`);
         alert(response.data.message);
-        socket.emit('message_deletedClient', messageId);
+        socket.emit('sendDataClient', messageId);
 
     }
 
@@ -296,6 +296,7 @@ export default function ChatGroup({ navigation, route }) {
         try {
             const response = await axios.post(`http://localhost:4000/forwardMessage`, { from: userData._id, to: receiver, message: message });
             alert(response.data.msg);
+            socket.emit('sendDataClient', response.data.msg);
         } catch (error) {
             console.error("Error deleting message:", error);
             alert("An error occurred while deleting the message.");
