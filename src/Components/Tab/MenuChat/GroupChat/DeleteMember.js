@@ -33,7 +33,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
         }
     };
 
-    const [isSelected, setIsSelected] = useState(new Array(friends.length).fill(false));
+    const [isSelected, setIsSelected] = useState([]);
 
     const setSelectionAt = (index, value) => {
         setIsSelected(prevState => {
@@ -44,6 +44,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
     };
 
     useEffect(() => {
+        console.log("isSelected: " + isSelected);
         setIsSelected(new Array(friends.length).fill(false));
     }, [friends]);
 
@@ -120,7 +121,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
             <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
                 {renderFriends()}
             </ScrollView>
-            {isSelected.length ? <TouchableOpacity style={styles.addButton} onPress={() => {
+            {isSelected.some(value => value) ? <TouchableOpacity style={styles.addButton} onPress={() => {
                 const selectedItems = getSelectedItems();
                 const selectedIds = selectedItems.map(item => item._id);
                 console.log(selectedItems);
