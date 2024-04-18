@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, CheckBox, Alert, 
 import axios from 'axios';
 import { Octicons, AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
+import { io } from 'socket.io-client';
 
 const SetLeader = ({ navigation, route }) => {
     const { user, group } = route.params;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Octicons, SimpleLineIcons } from '@expo/vector-icons';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 const UserProfileScreen = ({ navigation, route }) => {
     const user = route.params.user;

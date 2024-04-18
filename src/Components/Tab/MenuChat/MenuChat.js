@@ -6,6 +6,7 @@ import { AuthContext } from "../../Login/AuthProvider";
 import axios from "axios";
 import Modal from 'react-native-modal';
 import Header from "../../Head/Header";
+import { io } from "socket.io-client";
 
 
 export default function MenuChat({ navigation }) {
@@ -50,6 +51,10 @@ export default function MenuChat({ navigation }) {
         getData();
 
     });
+    newSocket.on('addGroup', (message) => {
+      getData();
+
+  });
     newSocket.on('message_deleted', messageId => {
         getData()
     });
@@ -139,6 +144,7 @@ export default function MenuChat({ navigation }) {
       setModalForward(false);
       getData();
       setIsSelected([]);
+      socket.emit('addGroup',db)
     } catch (error) {
       console.error('Error fetching data:', error);
       if (error.response) {

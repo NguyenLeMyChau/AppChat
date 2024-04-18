@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, CheckBox, Alert, Image } from 'react-native';
 import axios from 'axios';
 import { Octicons, AntDesign } from '@expo/vector-icons';
+import { io } from 'socket.io-client';
 
 const DeleteMemberScreen = ({ navigation, route }) => {
     const { user, group } = route.params;
