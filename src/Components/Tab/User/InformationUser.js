@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, ImageBackground } from
 import { Octicons, AntDesign, Entypo } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import AnexanderTom from '../../../../assets/AnexanderTom.jpg'
 
 export default function InformationUser({ navigation }) {
 
@@ -23,10 +24,12 @@ export default function InformationUser({ navigation }) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.coverImage}>
-                {/* source={require('/assets/coverimage.jpg')} */}
-                    <ImageBackground  style={{ width: '100%', height: '100%' }}>
+                    <ImageBackground
+                        source={require('/assets/coverimage.jpg')}
+                        style={{ width: '100%', height: '100%' }}>
+                            
                         <View style={styles.tab}>
-                        <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
+                            <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()} />
 
                             <AntDesign name="eyeo" size={25} color="white" style={{ marginLeft: "70%" }} />
 
@@ -38,8 +41,7 @@ export default function InformationUser({ navigation }) {
                     </ImageBackground>
                 </View>
                 <Image
-                // require('/assets/AnexanderTom.jpg')
-                    source={userData.avatar ? { uri: userData.avatar } : null}
+                    source={userData.avatar ? { uri: userData.avatar } : AnexanderTom}
                     style={styles.avatar} />
             </View>
 
@@ -53,7 +55,7 @@ export default function InformationUser({ navigation }) {
             </View>
 
             <View style={{ marginTop: 20, alignItems: "center" }}>
-                {/* <Image source={require('/assets/jpeg.jpg')} style={styles.imgChat} /> */}
+                <Image source={require('/assets/jpeg.jpg')} style={styles.imgChat} />
                 <Text style={{ ...styles.name, fontSize: 15, marginBottom: 10 }}>Hôm nay {userData.name} có gì vui?</Text>
                 <Text style={{ ...styles.name, fontSize: 14, fontWeight: 200 }}>Đây là nhật ký của bạn - Hãy làm đầy Nhật ký với{'\n'} những dấu ấn cuộc đời đáng nhớ nhé!</Text>
                 <TouchableOpacity style={styles.uploadStatus}>

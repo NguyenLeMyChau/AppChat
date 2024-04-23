@@ -6,13 +6,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Platform } from 'react-native';
+import AnexanderTom from '../../../../assets/AnexanderTom.jpg'
 
 export default function ChangeInformation({ navigation }) {
     const [userData, setUserData] = useState({});
     const [name, setName] = useState('');
     const [gender, setGender] = useState(true);
     const [avatar, setAvatar] = useState(null);
-    const [change,setChange] = useState(false);
+    const [change, setChange] = useState(false);
 
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');
@@ -24,31 +25,40 @@ export default function ChangeInformation({ navigation }) {
     }, []);
 
 
-    const selectFile = async () => {
+    async function selectFile() {
         const input = document.createElement('input');
         input.type = 'file';
-        input.onchange = e => {
+        input.onchange = async e => {
             const file = e.target.files[0];
             console.log(file);
-            setAvatar(file);
+
+            // Gọi hàm handleUpImage sau khi chọn tệp
+            const imageUrl = await handleUpImage(file);
+            console.log(imageUrl);
+            setAvatar(imageUrl);
         }
         input.click();
     }
 
-    const handleChange = async (file) => {
-        var avatarCurrent = userData.avatar;
+
+    async function handleUpImage(file) {
         const formData = new FormData();
         formData.append('avatar', file);
-        if(file!==null){
+        if (file !== null) {
             const responseAvatar = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userData._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            avatarCurrent = responseAvatar.data.avatar;           
+            const image = responseAvatar.data.avatar;
+            return image;
         }
-        
-        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, { name, gender, avatar: avatarCurrent });
+
+    };
+
+    const handleChange = async () => {
+
+        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, { name, gender, avatar: avatar });
 
         const { data } = response;
 
@@ -56,21 +66,23 @@ export default function ChangeInformation({ navigation }) {
             let updatedUser;
             if (name === '') {
                 updatedUser = {
+                    _id: userData._id,
                     name: userData.name,
                     email: userData.email,
                     gender: gender,
-                    avatar: avatarCurrent
+                    avatar: avatar
                 };
             } else {
                 updatedUser = {
+                    _id: userData._id,
                     name: name,
                     email: userData.email,
                     gender: gender,
-                    avatar: avatarCurrent
+                    avatar: avatar
                 };
             }
 
-            alert("Cập nhật thông tin thành công");
+            alert(data.message);
             Alert.alert(data.message);
             console.log(updatedUser);
             await AsyncStorage.setItem('foundUser', JSON.stringify(updatedUser));
@@ -79,13 +91,20 @@ export default function ChangeInformation({ navigation }) {
 
         } else {
             Alert.alert(data.message);
-           alert(data.message);
+            if (error.response) {
+                alert(error.response.data.message);
+            } else {
+                console.log(error.message);
+            }
         }
     };
 
     useEffect(() => {
         setGender(userData.gender);
     }, [userData.gender]);
+
+    useEffect(() => {
+    }, [avatar]);
 
     const options = [
         { label: 'Nữ', value: true },
@@ -124,11 +143,11 @@ export default function ChangeInformation({ navigation }) {
             <View style={{ backgroundColor: "white" }}>
                 <View style={{ flexDirection: "row", paddingTop: 20 }}>
                     <View style={styles.head}>
-                        <TouchableOpacity onPress={() => {selectFile(),setChange(true)}}>
+                        <TouchableOpacity onPress={() => { selectFile(), setChange(true) }}>
                             <ImageBackground
-                                source={userData.avatar ? { uri: userData.avatar } : require('../../../../assets/AnexanderTom.jpg')}
+                                source={avatar ? avatar : userData.avatar ? { uri: userData.avatar } : AnexanderTom}
                                 style={styles.avatar}
-                                imageStyle={{ borderRadius: 75 }}
+                                imageStyle={{ borderRadius: 75, borderWidth: 1, borderColor: "#C4C4C4" }}
                             >
 
                                 <LinearGradient
@@ -146,7 +165,7 @@ export default function ChangeInformation({ navigation }) {
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                             <TextInput
                                 style={styles.option}
-                                onChangeText={(text) => {setName(text),setChange(true)}}
+                                onChangeText={(text) => { setName(text), setChange(true) }}
                                 placeholder={userData.name} />
                             <Octicons name="pencil" size={18} color="black" style={{ right: 25 }} />
                         </View>
@@ -194,15 +213,15 @@ export default function ChangeInformation({ navigation }) {
                         </RadioForm>
                     </View>
                 </View>
-                {change?
-                <TouchableOpacity style={styles.uploadStatus} onPress={async () => {
-                    await handleChange(avatar);
-                }}>
-                    <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
-                        Lưu
-                    </Text>
-                </TouchableOpacity>
-                :null}
+                {change ?
+                    <TouchableOpacity style={styles.uploadStatus} onPress={async () => {
+                        await handleChange(avatar);
+                    }}>
+                        <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
+                            Lưu
+                        </Text>
+                    </TouchableOpacity>
+                    : null}
             </View>
 
 

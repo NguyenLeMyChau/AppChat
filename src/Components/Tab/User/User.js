@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from "@expo/vector-icons";
-// import avt from '/assets/AnexanderTom.jpg';
 import Header from '../../Head/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AnexanderTom from '../../../../assets/AnexanderTom.jpg'
 
 export default function User({ navigation }) {
   const [userData, setUserData] = useState({});
@@ -38,7 +38,7 @@ export default function User({ navigation }) {
             <Image
               style={styles.avt}
               // require('/assets/AnexanderTom.jpg')
-              source={userData.avatar ? { uri: userData.avatar } :null}
+              source={userData.avatar ? { uri: userData.avatar } : AnexanderTom}
             />
             <View style={styles.columnText}>
               <Text style={styles.bold}>{userData.name}</Text>
