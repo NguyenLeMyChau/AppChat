@@ -131,7 +131,8 @@ export default function ChatGroup({ navigation, route }) {
                 user: {
                     _id: msg.fromSelf ? userData._id : msg.sender._id, // ID của người gửi tin nhắn
                     name: msg.sender.name, // Tên của người gửi tin nhắn
-                    avatar: require("../../../../../assets/AnexanderTom.jpg"),
+                    avatar: msg.fromSelf ? userData.avatar : msg.sender.avatar,
+                    // require("../../../../../assets/AnexanderTom.jpg")
                 },
                 isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
             }));
