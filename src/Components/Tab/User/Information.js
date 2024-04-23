@@ -23,7 +23,9 @@ export default function Information({ navigation }) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.coverImage}>
-                    <ImageBackground source={require('../../../../assets/coverimage.jpg')} style={{ width: '100%', height: '100%', justifyContent: "space-between" }}>
+                    <ImageBackground 
+                    source={require('../../../../assets/coverimage.jpg')} 
+                    style={{ width: '100%', height: '100%', justifyContent: "space-between" }}>
                         <View style={styles.tab}>
                             <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()} />
                         </View>

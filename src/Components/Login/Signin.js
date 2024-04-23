@@ -44,27 +44,21 @@ export default function Signin({ navigation }) {
       );
       const { data } = response; // data = response.data
 
-      if (data.success) {
-        
-        console.log(data.foundUser);
-        AsyncStorage.setItem("foundUser", JSON.stringify(data.foundUser));
-        // Lưu thông tin user vào AsyncStorage để sử dụng ở các màn hình khác
-        //JSON.stringify(data.foundUser) chuyển object thành chuỗi JSON
-        Alert.alert("Logged In Successfully");
-        alert("Logged In Successfully");
-        navigation.navigate("BottomTab");
-      } else if(data.status === 400) {
-        alert("Login Failed for email and pas empty");
-      }
+      console.log(data.foundUser);
+      AsyncStorage.setItem("foundUser", JSON.stringify(data.foundUser));
+      // Lưu thông tin user vào AsyncStorage để sử dụng ở các màn hình khác
+      //JSON.stringify(data.foundUser) chuyển object thành chuỗi JSON
+      Alert.alert(data.message);
+      alert(data.message);
+      navigation.navigate("BottomTab");
+
     } catch (error) {
-      console.error( error);
-      Alert.alert(
-        "Login Failed",
-        "An error occurred while logging in. Please try again later."
-      );
-      alert(
-        "An error occurred while logging in. Please try again later."
-      );
+      console.error(error);
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        console.log(error.message);
+      }
     }
   };
 
@@ -109,7 +103,7 @@ export default function Signin({ navigation }) {
       </View>
 
       <View style={styles.btnForgetPass}>
-        <TouchableOpacity onPress={()=>navigation.navigate('ForgotPassword')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
           <Text style={{ color: "#006AF5", fontSize: 18, fontWeight: "bold" }}>
             Lấy lại mật khẩu
           </Text>

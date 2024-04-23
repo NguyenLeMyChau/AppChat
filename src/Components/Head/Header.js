@@ -25,7 +25,7 @@ export default function Header() {
         async function fetchData() {
             const userData = await getData();
             await getFriendList(userData._id);
-            await getFriendRequestsSentToUser(userData._id)
+            await getFriendRequestsSentToUser(userData._id);
         }
         fetchData();
 
@@ -33,32 +33,43 @@ export default function Header() {
 
 
     const findUserByEmail = async () => {
+        try {
+            const response = await axios.get(`http://localhost:4000/user/findUserByEmail/${email}`);
+            const { data } = response;
 
-        const response = await axios.get(`http://localhost:4000/user/findUserByEmail/${email}`);
-        const { data } = response;
-
-        if (data.success) {
             Alert.alert(data.user);
             console.log(data.user);
             setUserDataFind(data.user);
-        } else {
-            Alert.alert(data.message);
+            setBoolModal(true);
+
+        } catch (error) {
+            console.log(error);
+            setBoolModal(false);
+            if (error.response) {
+                alert(error.response.data.message);
+            } else {
+                console.log(error.message);
+            }
         }
 
     }
 
     const sendFriendRequest = async () => {
+        try {
+            const response = await axios.post(`http://localhost:4000/user/sendFriendRequest`, { senderId: userData._id, receiverId: userDataFind._id });
+            const { data } = response;
 
-        const response = await axios.post(`http://localhost:4000/user/sendFriendRequest`, { senderId: userData._id, receiverId: userDataFind._id });
-        const { data } = response;
-
-        if (data.success) {
             console.log(data.user);
-            alert("Lời mời kết bạn đã được gửi thành công");
-        } else {
-            Alert.alert(data.message);
+            alert(data.message);
         }
-        alert(data.message);
+        catch (error) {
+            console.log(error);
+            if (error.response) {
+                alert(error.response.data.error);
+            } else {
+                console.log(error.message);
+            }
+        }
 
     }
 
@@ -102,8 +113,15 @@ export default function Header() {
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={() => {
-                findUserByEmail(),
-                    setBoolModal(true)
+                if (email == '') {
+                    alert("Vui lòng nhập địa chỉ email cần tìm");
+                } else if (email == userData.email) {
+                    alert("Không tìm bản thân được");
+                }
+                else {
+                    findUserByEmail()
+                }
+
             }}>
                 <SimpleLineIcons name="magnifier" size={20} color="white" />
             </TouchableOpacity>
