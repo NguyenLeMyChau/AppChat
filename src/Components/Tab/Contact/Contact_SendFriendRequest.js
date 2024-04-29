@@ -37,7 +37,7 @@ export default function Contact_SendFriendRequest({ navigation }) {
   const getFriendRequestsSentToUser = async (userId) => {
     console.log(userId)
 
-    const response = await axios.get(`http://localhost:4000/user/getFriendRequestsSentToUser/${userId}`);
+    const response = await axios.get(`http://192.168.0.116:4000/user/getFriendRequestsSentToUser/${userId}`);
     const { data } = response;
 
     console.log("Contact:" + data.friendRequestsSent)
@@ -56,7 +56,7 @@ export default function Contact_SendFriendRequest({ navigation }) {
     console.log(dataMain._id)
     console.log(friendId)
 
-    const response = await axios.post(`http://localhost:4000/user/acceptFriendRequestAndSendMessage`, { userId: dataMain._id, friendId: friendId });
+    const response = await axios.post(`http://192.168.0.116:4000/user/acceptFriendRequestAndSendMessage`, { userId: dataMain._id, friendId: friendId });
     const { data } = response;
 
     if (data.success) {
@@ -74,7 +74,7 @@ export default function Contact_SendFriendRequest({ navigation }) {
     console.log(dataMain._id)
     console.log(friendId)
 
-    const response = await axios.post(`http://localhost:4000/user/rejectFriendRequest`, { userId: dataMain._id, friendId: friendId });
+    const response = await axios.post(`http://192.168.0.116:4000/user/rejectFriendRequest`, { userId: dataMain._id, friendId: friendId });
     const { data } = response;
 
     if (data.success) {

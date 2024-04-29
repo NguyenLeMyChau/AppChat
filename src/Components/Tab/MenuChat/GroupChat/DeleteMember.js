@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, CheckBox, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView , Alert, Image } from 'react-native';
 import axios from 'axios';
 import { Octicons, AntDesign } from '@expo/vector-icons';
 import { io } from 'socket.io-client';
+import CheckBox from '@react-native-community/checkbox';
 
 const DeleteMemberScreen = ({ navigation, route }) => {
     const { user, group } = route.params;
@@ -11,7 +12,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         fetchFriends();
-            const newSocket = io('http://localhost:4000');
+            const newSocket = io('http://192.168.0.116:4000');
             newSocket.on('connect', () => {
                 console.log('Connected to Socket.IO server');
             });
@@ -28,7 +29,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
     const fetchFriends = async () => {
         try {
             console.log(user)
-            const response = await axios.get(`http://localhost:4000/group/getGroupMembers/${group._id}`);
+            const response = await axios.get(`http://192.168.0.116:4000/group/getGroupMembers/${group._id}`);
             const groupMembers = response.data.groupMembers;
 
             //Lọc ra member có memberId trùng với userId của user hiện tại
@@ -85,7 +86,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
 
     async function removeMembersFromGroup(memberIds) {
         try {
-            const response = await axios.put(`http://localhost:4000/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
+            const response = await axios.put(`http://192.168.0.116:4000/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
             alert(response.data.message);
             socket.emit('sendDataClient',response.data.message);
         } catch (error) {

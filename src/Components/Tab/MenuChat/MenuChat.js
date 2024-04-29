@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, FlatList, Image, CheckBox, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ImageBackground } from "react-native";
+import { Button, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ImageBackground } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
 import { AuthContext } from "../../Login/AuthProvider";
@@ -7,6 +7,11 @@ import axios from "axios";
 import Modal from 'react-native-modal';
 import Header from "../../Head/Header";
 import { io } from "socket.io-client";
+import { Checkbox } from "react-native-paper";
+
+
+
+
 
 
 export default function MenuChat({ navigation }) {
@@ -43,7 +48,7 @@ export default function MenuChat({ navigation }) {
   }
 
   useEffect(() => {
-    const newSocket = io('http://localhost:4000');
+    const newSocket = io('http://192.168.0.116:4000');
     newSocket.on('connect', () => {
         console.log('Connected to Socket.IO server');
     });
@@ -79,7 +84,7 @@ export default function MenuChat({ navigation }) {
       }
       console.log(userData._id);
       const response = await axios.get(
-        `http://localhost:4000/group/getGroupList/${userData._id}`
+        `http://192.168.0.116:4000/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
       setListChat([...data.userData.friendList, ...data.userData.groupList]);
@@ -97,7 +102,7 @@ export default function MenuChat({ navigation }) {
       }
       console.log(userData._id);
       const response = await axios.get(
-        `http://localhost:4000/group/getGroupList/${userData._id}`
+        `http://192.168.0.116:4000/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
       setListFriend(data.userData.friendList);
@@ -111,7 +116,7 @@ export default function MenuChat({ navigation }) {
   const handleSearch = async () => {
     // try {
     //   const response = await axios.get(
-    //     `http://localhost:4000/group/newGroups`,
+    //     `http://192.168.0.116:4000/group/newGroups`,
     //   );
     //   const db = await response.json();
     //   setSearchResults(db);
@@ -134,7 +139,7 @@ export default function MenuChat({ navigation }) {
       });
       console.log(selectedId)
       const response = await axios.post(
-        `http://localhost:4000/group/newGroups`, {
+        `http://192.168.0.116:4000/group/newGroups`, {
         name: nameGroup, creatorId: userData._id, avatar: imageGroup, members: selectedId
       }
       );
@@ -187,7 +192,7 @@ export default function MenuChat({ navigation }) {
     formData.append('avatar', file);
 
     if (file !== null) {
-      const responseAvatar = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userData._id}`, formData, {
+      const responseAvatar = await axios.post(`http://192.168.0.116:4000/user/uploadAvatarS3/${userData._id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -248,7 +253,7 @@ export default function MenuChat({ navigation }) {
                 padding: 10,
                 width: "60%",
                 borderRadius: 10,
-                borderWidth: 0.1,
+                borderWidth: 1,
               }}
             >
               <View
@@ -359,43 +364,42 @@ export default function MenuChat({ navigation }) {
           </TouchableOpacity>
         </Modal>
       </View>
-      <ScrollView style={{ backgroundColor: "while", width: "100%" }}>
-        <FlatList
-          style={styles.items}
-          data={listChat}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => (item.members && item.members.length) ?
-                navigation.navigate("ChatGroup", { group: item }) : navigation.navigate("ChatScreen", { friend: item })
-              }
-            >
-              <Image
-                style={styles.image}
-                source={
-                  item.avatar
-                    ? { uri: item.avatar }
-                    : require("../../../../assets/AnexanderTom.jpg")
-                }
-              />
+      <FlatList
+  style={[styles.items, { backgroundColor: "white" }]} // Thêm style backgroundColor vào FlatList
+  data={listChat}
+  renderItem={({ item }) => (
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() => (item.members && item.members.length) ?
+        navigation.navigate("ChatGroup", { group: item }) : navigation.navigate("ChatScreen", { friend: item })
+      }
+    >
+      <Image
+        style={styles.image}
+        source={
+          item.avatar
+            ? { uri: item.avatar }
+            : require("../../../../assets/AnexanderTom.jpg")
+        }
+      />
 
-              <View style={{ width: "70%" }}>
-                <Text style={styles.name} numberOfLines={1}>
-                  {item.name}
-                </Text>
-                <Text style={styles.name} numberOfLines={1}>
-                  Text chat
-                </Text>
-              </View>
-              <View>
-                <Text style={styles.time}>Time</Text>
-                <Text style={styles.noti}>?</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          numColumns={1}
-        />
-      </ScrollView>
+      <View style={{ width: "70%" }}>
+        <Text style={styles.name} numberOfLines={1}>
+          {item.name}
+        </Text>
+        <Text style={styles.name} numberOfLines={1}>
+          Text chat
+        </Text>
+      </View>
+      <View>
+        <Text style={styles.time}>Time</Text>
+        <Text style={styles.noti}>?</Text>
+      </View>
+    </TouchableOpacity>
+  )}
+  numColumns={1}
+/>
+
 
       <View style={{ alignItems: "center", justifyContent: "center", width: "70%", padding: 10, marginTop: 100 }}>
         <Modal
@@ -435,11 +439,9 @@ export default function MenuChat({ navigation }) {
                     />
 
                     <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.name}</Text>
-
-                    <CheckBox
-
-                      value={isSelected.includes(item._id)}
-                      onValueChange={() => toggleCheckbox(item._id)}
+                    <Checkbox
+                      status={isSelected.includes(item._id) ? 'checked' : 'unchecked'}
+                      onPress={() => toggleCheckbox(item._id)}
                     />
                   </View>
                 )
@@ -467,13 +469,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  tittle: {
-    fontSize: 20,
-    color: 'white',
+  header: {
+    flexDirection: "row",
+    alignItems: 'center',
+    width: "100%"
   },
-
   items: {
-
     marginTop: 5,
     width: "100%",
     borderRadius: 10,
@@ -485,12 +486,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     padding: 15,
-
-  },
-  header_item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   image: {
     borderRadius: 50,
@@ -499,7 +494,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 'column'
+    flex: 1
   },
   name: {
     marginLeft: 10,
@@ -507,13 +502,9 @@ const styles = StyleSheet.create({
     color: 'black',
     width: 150,
   },
-  header: {
-    flexDirection: "row", alignItems: 'center', width: "100%"
-  },
   time: {
     color: 'black',
     fontSize: 12,
-
   },
   noti: {
     textAlign: 'center',
@@ -523,6 +514,27 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     borderRadius: 10,
     marginTop: 5,
+  },
+  modalContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "70%",
+    padding: 10,
+    marginTop: 100
+  },
+  modalContent: {
+    backgroundColor: "white",
+    maxHeight: "70%",
+    width: "100%",
+    position: 'absolute'
+  },
+  headerModal: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    width: "100%",
+    height: 90,
+    borderBottomWidth: 1
   },
   avatar: {
     width: 70,
@@ -536,7 +548,37 @@ const styles = StyleSheet.create({
     padding: 13,
     paddingLeft: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#rgba(0, 0, 0, 0.1)",
+    borderBottomColor: "#0000001A",
     width: "100%"
   },
-})
+  groupName: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  friendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "space-between",
+    padding: 10
+  },
+  friendImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50
+  },
+  friendName: {
+    fontSize: 16,
+    marginLeft: 10
+  },
+  createGroupButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "center",
+    padding: 10,
+    backgroundColor: "#006AF5"
+  },
+  createGroupText: {
+    fontSize: 18,
+    color: "white"
+  }
+});

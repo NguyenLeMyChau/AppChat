@@ -20,7 +20,7 @@ export default function Search  ({navigation}){
             style={{
               height: 40,
               borderColor: "blue",
-              borderWidth: "0",
+              borderWidth: 0,
               paddingHorizontal: 10,
               width: "80%",
               color: "gray",

@@ -45,7 +45,7 @@ export default function ChangeInformation({ navigation }) {
         const formData = new FormData();
         formData.append('avatar', file);
         if (file !== null) {
-            const responseAvatar = await axios.post(`http://localhost:4000/user/uploadAvatarS3/${userData._id}`, formData, {
+            const responseAvatar = await axios.post(`http://192.168.0.116:4000/user/uploadAvatarS3/${userData._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -58,7 +58,7 @@ export default function ChangeInformation({ navigation }) {
 
     const handleChange = async () => {
 
-        const response = await axios.put(`http://localhost:4000/user/updateUser/${userData._id}`, { name, gender, avatar: avatar });
+        const response = await axios.put(`http://192.168.0.116:4000/user/updateUser/${userData._id}`, { name, gender, avatar: avatar });
 
         const { data } = response;
 

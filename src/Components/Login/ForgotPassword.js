@@ -9,7 +9,7 @@ const ForgotPassword = ({navigation}) => {
   const handleForgotPassword = async () => {
     try {
       console.log(email);
-      const response = await axios.post("http://localhost:4000/user/resetPassword", { email: email });
+      const response = await axios.post("http://192.168.0.116:4000/user/resetPassword", { email: email });
       if (response.data.success) {
         Alert.alert("Success", "An email with instructions to reset your password has been sent to your email address.");
         alert("Success", "An email with instructions to reset your password has been sent to your email address.");

@@ -14,7 +14,7 @@ const Profile_group = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchGroupMembers();
-    const newSocket = io('http://localhost:4000');
+    const newSocket = io('http://192.168.0.116:4000');
     newSocket.on('connect', () => {
         console.log('Connected to Socket.IO server');
     });
@@ -29,7 +29,7 @@ const Profile_group = ({ navigation, route }) => {
 
   const fetchGroupMembers = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/group/getGroupMembers/${group._id}`);
+      const response = await axios.get(`http://192.168.0.116:4000/group/getGroupMembers/${group._id}`);
       const data = response.data.groupMembers.find(item => item._id === user._id)
       setMember(data)
       console.log(data);
@@ -41,7 +41,7 @@ const Profile_group = ({ navigation, route }) => {
 
   const disbandGroup = async () => {
     try {
-      const response = await axios.delete(`http://localhost:4000/group/deleteGroup/${group._id}`);
+      const response = await axios.delete(`http://192.168.0.116:4000/group/deleteGroup/${group._id}`);
       console.log(response.data.message); // Log message trả về từ backend sau khi giải tán nhóm thành công
       // Hiển thị cảnh báo cho người dùng
       alert(response.data.message);
@@ -57,7 +57,7 @@ const Profile_group = ({ navigation, route }) => {
 
   const leaveGroup = async () => {
     try {
-      const response = await axios.put(`http://localhost:4000/group/leaveGroup/${group._id}/${user._id}`);
+      const response = await axios.put(`http://192.168.0.116:4000/group/leaveGroup/${group._id}/${user._id}`);
       console.log(response.data.message); // Log message trả về từ backend sau khi giải tán nhóm thành công
       // Hiển thị cảnh báo cho người dùng
       alert(response.data.message);

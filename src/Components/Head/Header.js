@@ -34,7 +34,7 @@ export default function Header() {
 
     const findUserByEmail = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/user/findUserByEmail/${email}`);
+            const response = await axios.get(`http://192.168.0.116:4000/user/findUserByEmail/${email}`);
             const { data } = response;
 
             Alert.alert(data.user);
@@ -56,7 +56,7 @@ export default function Header() {
 
     const sendFriendRequest = async () => {
         try {
-            const response = await axios.post(`http://localhost:4000/user/sendFriendRequest`, { senderId: userData._id, receiverId: userDataFind._id });
+            const response = await axios.post(`http://192.168.0.116:4000/user/sendFriendRequest`, { senderId: userData._id, receiverId: userDataFind._id });
             const { data } = response;
 
             console.log(data.user);
@@ -76,7 +76,7 @@ export default function Header() {
     const getFriendList = async (userId) => {
         console.log(userId)
 
-        const response = await axios.get(`http://localhost:4000/user/getFriendList/${userId}`);
+        const response = await axios.get(`http://192.168.0.116:4000/user/getFriendList/${userId}`);
         const { data } = response;
 
         if (data.success) {
@@ -92,7 +92,7 @@ export default function Header() {
     const getFriendRequestsSentToUser = async (userId) => {
         console.log(userId)
 
-        const response = await axios.get(`http://localhost:4000/user/getFriendRequestsSentToUser/${userId}`);
+        const response = await axios.get(`http://192.168.0.116:4000/user/getFriendRequestsSentToUser/${userId}`);
         const { data } = response;
 
         console.log("Contact:" + data.friendRequestsSent)
@@ -127,7 +127,7 @@ export default function Header() {
             </TouchableOpacity>
 
             <TextInput
-                style={{ height: 40, borderColor: 'blue', borderWidth: '0', paddingHorizontal: 10, width: '65%', color: 'white', marginLeft: 20, fontSize: 18 }}
+                style={{ height: 40, borderColor: 'blue', borderWidth: 0, paddingHorizontal: 10, width: '65%', color: 'white', marginLeft: 20, fontSize: 18 }}
                 placeholder="Tìm kiếm"
                 onChangeText={(text) => setEmail(text)}
             />

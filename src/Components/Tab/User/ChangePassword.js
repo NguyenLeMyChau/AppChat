@@ -45,7 +45,7 @@ export default function ChangePassword({ navigation }) {
     }, []);
 
     const handleChange = async () => {
-        const response = await axios.put(`http://localhost:4000/user/updatePassword/${userData.email}`, {currentPassword:password,newPassword: passwordNew});
+        const response = await axios.put(`http://192.168.0.116:4000/user/updatePassword/${userData.email}`, {currentPassword:password,newPassword: passwordNew});
         const { data } = response;
 
         if (data.success) {

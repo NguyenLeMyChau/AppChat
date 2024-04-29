@@ -25,7 +25,7 @@ export default function InformationUser({ navigation }) {
             <View style={styles.header}>
                 <View style={styles.coverImage}>
                     <ImageBackground
-                        source={require('/assets/coverimage.jpg')}
+                        source={require('../../../../assets/coverimage.jpg')}
                         style={{ width: '100%', height: '100%' }}>
                             
                         <View style={styles.tab}>
@@ -55,7 +55,7 @@ export default function InformationUser({ navigation }) {
             </View>
 
             <View style={{ marginTop: 20, alignItems: "center" }}>
-                <Image source={require('/assets/jpeg.jpg')} style={styles.imgChat} />
+                <Image source={require('../../../../assets/jpeg.jpg')} style={styles.imgChat} />
                 <Text style={{ ...styles.name, fontSize: 15, marginBottom: 10 }}>Hôm nay {userData.name} có gì vui?</Text>
                 <Text style={{ ...styles.name, fontSize: 14, fontWeight: 200 }}>Đây là nhật ký của bạn - Hãy làm đầy Nhật ký với{'\n'} những dấu ấn cuộc đời đáng nhớ nhé!</Text>
                 <TouchableOpacity style={styles.uploadStatus}>
