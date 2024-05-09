@@ -24,6 +24,7 @@ import Modal from "react-native-modal";
 import Video from 'react-native-video';
 import { Checkbox } from "react-native-paper";
 import EmojiPicker from "rn-emoji-keyboard";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function ChatGroup({ navigation, route }) {
   const { group } = route.params;
@@ -407,7 +408,10 @@ export default function ChatGroup({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View
+     <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -446,8 +450,7 @@ export default function ChatGroup({ navigation, route }) {
         >
           <SimpleLineIcons name="list" size={20} color="white" />
         </TouchableOpacity>
-      </View>
-
+        </LinearGradient>
       <View style={{ height: "85%" }}>
         <GiftedChat
           messages={messages}
@@ -636,6 +639,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E9EBED",
+    paddingTop: 35
   },
 
   chat: {
@@ -652,13 +656,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
     padding: 10,
+    width: 220,
   },
 
   txtSDTFocus: {
     fontSize: 16,
     color: "black",
     padding: 10,
-    width: 270,
+    width: 300,
   },
 
   chatText: {

@@ -6,11 +6,13 @@ import {
 } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { io } from "socket.io-client";
 
 export default function Contact_SendFriendRequest({ navigation }) {
   const [dataMain, setDataMain] = useState({})
   const [listUser, setListUser] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   async function getData() {
     const foundUser = await AsyncStorage.getItem('foundUser');
@@ -19,20 +21,27 @@ export default function Contact_SendFriendRequest({ navigation }) {
     return userData;
   }
 
+  
   useEffect(() => {
     async function fetchData() {
-      const userData = await getData();
-      await getFriendRequestsSentToUser(userData._id);
-    }
-    fetchData();
-
-    // Sau đó gọi fetchData mỗi 2 giây
-    const intervalId = setInterval(fetchData, 2000);
-
-    // Hủy interval khi component unmount
-    return () => clearInterval(intervalId);
-
+           const userData = await getData();
+           await getFriendRequestsSentToUser(userData._id);
+         }
+         fetchData();
+    const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
+    newSocket.on("connect", () => {
+      console.log("Connected to Socket.IO server");
+    });
+    newSocket.on("sendDataServer", (message) => {
+      fetchData();
+    });
+   
+    setSocket(newSocket); // Lưu socket vào state
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
+  
 
   const getFriendRequestsSentToUser = async (userId) => {
     console.log(userId)
@@ -58,10 +67,11 @@ export default function Contact_SendFriendRequest({ navigation }) {
 
     const response = await axios.post(`https://backend-chatapp-rdj6.onrender.com/user/acceptFriendRequestAndSendMessage`, { userId: dataMain._id, friendId: friendId });
     const { data } = response;
-
+  
     if (data.success) {
       Alert.alert(data.message.text);
       console.log(data.message.text);
+      socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
     } else {
       Alert.alert(data.message.text);
     }
@@ -76,10 +86,11 @@ export default function Contact_SendFriendRequest({ navigation }) {
 
     const response = await axios.post(`https://backend-chatapp-rdj6.onrender.com/user/rejectFriendRequest`, { userId: dataMain._id, friendId: friendId });
     const { data } = response;
-
+    
     if (data.success) {
       Alert.alert(data.message.text);
       console.log(data.message.text);
+      socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
     } else {
       Alert.alert(data.message.text);
     }

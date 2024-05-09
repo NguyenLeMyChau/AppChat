@@ -5,6 +5,7 @@ import { Octicons, AntDesign } from '@expo/vector-icons';
 import { Image } from 'react-native';
 import { io } from 'socket.io-client';
 import { Checkbox } from "react-native-paper";
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const AddMembersScreen = ({ navigation, route }) => {
@@ -85,14 +86,17 @@ const AddMembersScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View
+     <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
         style={{
-          backgroundImage: "linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)",
+          backgroundColor: "blue",
           flexDirection: "row",
           alignItems: "center",
           paddingHorizontal: 16,
           paddingVertical: 8,
-          height: "8%",
+          height: 50,
           width: "100%",
         }}
       >
@@ -115,7 +119,7 @@ const AddMembersScreen = ({ navigation, route }) => {
         >
           Thêm vào nhóm
         </Text>
-      </View>
+     </LinearGradient>
       <ScrollView>{renderFriends()}</ScrollView>
       {selectedMembers.length ? <TouchableOpacity style={styles.addButton} onPress={handleAddMembers}>
         <AntDesign
@@ -131,6 +135,7 @@ const AddMembersScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 35
   },
   friendItem: {
     flexDirection: 'row',

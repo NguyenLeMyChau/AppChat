@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Octicons, SimpleLineIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const UserProfileScreen = ({ navigation, route }) => {
     const user = route.params.user;
@@ -59,14 +60,17 @@ const UserProfileScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View
+      <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
         style={{
-          backgroundImage: "linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)",
+          backgroundColor: "blue",
           flexDirection: "row",
           alignItems: "center",
           paddingHorizontal: 16,
           paddingVertical: 8,
-          height: "8%",
+          height: 50,
           width: "100%",
         }}
       >
@@ -89,7 +93,7 @@ const UserProfileScreen = ({ navigation, route }) => {
         >
           Tùy chọn
         </Text>
-      </View>
+      </LinearGradient>
 
       <View style={styles.userInfo}>
         <Image
@@ -136,6 +140,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    paddingTop: 35
   },
   userInfo: {
     alignItems: 'center',

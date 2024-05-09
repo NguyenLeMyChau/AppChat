@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Octicons, AntDesign } from '@expo/vector-icons';
 import { io } from 'socket.io-client';
 import { Checkbox } from "react-native-paper";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const DeleteMemberScreen = ({ navigation, route }) => {
     const { user, group } = route.params;
@@ -80,7 +81,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
                     style={{ width: 50, height: 50, borderRadius: 50 }}
                 />
                 <Text style={{ fontSize: 16 }}>{friend.name}</Text>
-                <CheckBox
+                <Checkbox
                     status={isSelected[index] ? 'checked' : 'unchecked'}
                     onPress={(value) => setSelectionAt(index, value)}
                 />
@@ -108,17 +109,20 @@ const DeleteMemberScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <View
-                style={{
-                    backgroundImage: "linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingHorizontal: 16,
-                    paddingVertical: 8,
-                    height: "8%",
-                    width: "100%",
-                }}
-            >
+            <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={{
+          backgroundColor: "blue",
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          paddingVertical: 8,
+          height: 50,
+          width: "100%",
+        }}
+      >
                 <TouchableOpacity>
                     <Octicons
                         name="arrow-left"
@@ -138,7 +142,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
                 >
                     Xoá thành viên
                 </Text>
-            </View>
+           </LinearGradient>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
                 {renderFriends()}
@@ -163,7 +167,8 @@ const DeleteMemberScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        paddingTop: 35
     },
     friendItem: {
         flexDirection: 'row',

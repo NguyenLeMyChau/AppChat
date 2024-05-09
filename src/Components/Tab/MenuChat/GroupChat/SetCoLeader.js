@@ -5,6 +5,7 @@ import { Octicons, AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
 import { io } from 'socket.io-client';
 import CheckBox from '@react-native-community/checkbox';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SetCoLeader = ({ navigation, route }) => {
     const { user, group } = route.params;
@@ -78,17 +79,20 @@ const SetCoLeader = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <View
-                style={{
-                    backgroundImage: "linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingHorizontal: 16,
-                    paddingVertical: 8,
-                    height: "8%",
-                    width: "100%",
-                }}
-            >
+            <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={{
+          backgroundColor: "blue",
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          paddingVertical: 8,
+          height: 50,
+          width: "100%",
+        }}
+      >
                 <TouchableOpacity>
                     <Octicons
                         name="arrow-left"
@@ -108,7 +112,7 @@ const SetCoLeader = ({ navigation, route }) => {
                 >
                     Phân quyền nhóm phó
                 </Text>
-            </View>
+            </LinearGradient>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
                 {renderFriends()}
@@ -130,7 +134,8 @@ const SetCoLeader = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        paddingTop: 35
     },
     friendItem: {
         flexDirection: 'row',

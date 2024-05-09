@@ -15,6 +15,7 @@ import axios from "axios";
 import Modal from "react-native-modal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
+import { io } from "socket.io-client";
 
 export default function Header() {
   const [listFriend, setListFriend] = useState([]);
@@ -24,6 +25,7 @@ export default function Header() {
   const [userDataFind, setUserDataFind] = useState({});
   const [email, setEmail] = useState("");
   var [boolModal, setBoolModal] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   async function getData() {
     const foundUser = await AsyncStorage.getItem("foundUser");
@@ -31,7 +33,6 @@ export default function Header() {
     setUserData(userData);
     return userData;
   }
-
   useEffect(() => {
     async function fetchData() {
       const userData = await getData();
@@ -39,7 +40,20 @@ export default function Header() {
       await getFriendRequestsSentToUser(userData._id);
     }
     fetchData();
+    const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
+    newSocket.on("connect", () => {
+      console.log("Connected to Socket.IO server");
+    });
+    newSocket.on("sendDataServer", (message) => {
+      fetchData();
+    });
+   
+    setSocket(newSocket); // Lưu socket vào state
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
+
 
   const findUserByEmail = async () => {
     try {
@@ -69,7 +83,7 @@ export default function Header() {
       );
       const { data } = response;
 
-      console.log(data.user);
+      socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
       alert(data.message);
     } catch (error) {
       console.log(error);

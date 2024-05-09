@@ -1,12 +1,8 @@
 
-import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
-import { useRef } from 'react';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, Modal, TextInput, TouchableOpacity } from 'react-native';
 import { StyleSheet, View, Button, Text } from 'react-native';
-import { Image } from 'react-native';
-import OTPTextView from 'react-native-otp-textinput';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { OtpInput } from "react-native-otp-entry";
 import AnexanderTom from "../../../assets/AnexanderTom.jpg"
