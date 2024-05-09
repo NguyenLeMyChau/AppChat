@@ -74,7 +74,9 @@ export default function Information({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#rgba(0, 0, 0, 0.05)'
+        backgroundColor: '#rgba(0, 0, 0, 0.05)',
+        paddingTop:35,
+        
     },
     header: {
         width: '100%',
@@ -107,14 +109,14 @@ const styles = StyleSheet.create({
 
     name: {
         fontSize: 18,
-        fontWeight: '400',
+        fontWeight:'400',
         color: "white",
         marginLeft: 15
     },
 
     option: {
         fontSize: 16,
-        fontWeight: 400,
+        fontWeight: '400',
         width: "25%"
     },
 

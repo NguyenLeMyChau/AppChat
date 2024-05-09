@@ -48,7 +48,7 @@ export default function MenuChat({ navigation }) {
   }
 
   useEffect(() => {
-    const newSocket = io('http://192.168.0.116:4000');
+    const newSocket = io('https://backend-chatapp-rdj6.onrender.com');
     newSocket.on('connect', () => {
         console.log('Connected to Socket.IO server');
     });
@@ -84,7 +84,7 @@ export default function MenuChat({ navigation }) {
       }
       console.log(userData._id);
       const response = await axios.get(
-        `http://192.168.0.116:4000/group/getGroupList/${userData._id}`
+        `https://backend-chatapp-rdj6.onrender.com/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
       setListChat([...data.userData.friendList, ...data.userData.groupList]);
@@ -102,7 +102,7 @@ export default function MenuChat({ navigation }) {
       }
       console.log(userData._id);
       const response = await axios.get(
-        `http://192.168.0.116:4000/group/getGroupList/${userData._id}`
+        `https://backend-chatapp-rdj6.onrender.com/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
       setListFriend(data.userData.friendList);
@@ -116,7 +116,7 @@ export default function MenuChat({ navigation }) {
   const handleSearch = async () => {
     // try {
     //   const response = await axios.get(
-    //     `http://192.168.0.116:4000/group/newGroups`,
+    //     `https://backend-chatapp-rdj6.onrender.com/group/newGroups`,
     //   );
     //   const db = await response.json();
     //   setSearchResults(db);
@@ -139,7 +139,7 @@ export default function MenuChat({ navigation }) {
       });
       console.log(selectedId)
       const response = await axios.post(
-        `http://192.168.0.116:4000/group/newGroups`, {
+        `https://backend-chatapp-rdj6.onrender.com/group/newGroups`, {
         name: nameGroup, creatorId: userData._id, avatar: imageGroup, members: selectedId
       }
       );
@@ -192,7 +192,7 @@ export default function MenuChat({ navigation }) {
     formData.append('avatar', file);
 
     if (file !== null) {
-      const responseAvatar = await axios.post(`http://192.168.0.116:4000/user/uploadAvatarS3/${userData._id}`, formData, {
+      const responseAvatar = await axios.post(`https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -365,7 +365,7 @@ export default function MenuChat({ navigation }) {
         </Modal>
       </View>
       <FlatList
-  style={[styles.items, { backgroundColor: "white" }]} // Thêm style backgroundColor vào FlatList
+  style={styles.items} // Thêm style backgroundColor vào FlatList
   data={listChat}
   renderItem={({ item }) => (
     <TouchableOpacity
@@ -468,6 +468,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop:35
   },
   header: {
     flexDirection: "row",
@@ -475,11 +476,12 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   items: {
-    marginTop: 5,
+    backgroundColor: "black" ,
     width: "100%",
-    borderRadius: 10,
     overflow: "hidden",
-    borderWidth: 0,
+
+  
+
   },
   item: {
     height: 70,
@@ -488,17 +490,16 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   image: {
-    borderRadius: 50,
+    borderRadius: 25,
     borderWidth: 1,
     width: 50,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1
+    
   },
   name: {
     marginLeft: 10,
-    height: 50,
     color: 'black',
     width: 150,
   },

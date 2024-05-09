@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, ImageBackground, TextI
 import { Octicons, AntDesign, Entypo, SimpleLineIcons } from "@expo/vector-icons";
 import Header from '../../Head/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Option({ navigation }) {
     const [userData, setUserData] = useState({});
@@ -20,13 +21,18 @@ export default function Option({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+           <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={styles.header}
+      >
                 <TouchableOpacity>
                     <Octicons name="arrow-left" size={25} color="white" onPress={() => navigation.goBack()}/>
                 </TouchableOpacity>
 
                 <Text style={styles.name}>{userData.name}</Text>
-            </View>
+                </LinearGradient>
 
             <View>
                 <TouchableOpacity>
@@ -89,16 +95,16 @@ export default function Option({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        paddingTop:35,
     },
 
     header: {
-        backgroundImage: 'linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)',
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 16,
         paddingVertical: 8,
-        height: '8%',
+        height: 50,
         width: '100%'
     },
 

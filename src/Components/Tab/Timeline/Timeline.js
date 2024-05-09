@@ -121,7 +121,7 @@ export default function Timeline() {
         }} />
 
       <View style={{ width: "100%", height: "auto", paddingTop: 10, paddingLeft: 15, paddingBottom: 15 }}>
-        <Text style={{ ...styles.textMoment, fontWeight: 550, top: -8 }}>Khoảnh khắc</Text>
+        <Text style={{ ...styles.textMoment, fontWeight: '500', top: -8 }}>Khoảnh khắc</Text>
 
         <View>
 
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop:35
   },
 
   header: {

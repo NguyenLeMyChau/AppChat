@@ -11,7 +11,7 @@ const UserProfileScreen = ({ navigation, route }) => {
   console.log(friend)
   console.log(user)
   useEffect(() => {
-    const newSocket = io('http://192.168.0.116:4000');
+    const newSocket = io('https://backend-chatapp-rdj6.onrender.com');
     newSocket.on('connect', () => {
         console.log('Connected to Socket.IO server');
     });
@@ -36,7 +36,7 @@ const UserProfileScreen = ({ navigation, route }) => {
   // Hàm xử lý chức năng xóa bạn bè
   const cancelFriendship = async (userId, friendId) => {
     try {
-        const response = await axios.post('http://192.168.0.116:4000/user/cancelFriendship', {
+        const response = await axios.post('https://backend-chatapp-rdj6.onrender.com/user/cancelFriendship', {
             userId:userId,
             friendId:friendId,
         });

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView , Alert, Image } f
 import axios from 'axios';
 import { Octicons, AntDesign } from '@expo/vector-icons';
 import { io } from 'socket.io-client';
-import CheckBox from '@react-native-community/checkbox';
+import { Checkbox } from "react-native-paper";
 
 const DeleteMemberScreen = ({ navigation, route }) => {
     const { user, group } = route.params;
@@ -12,7 +12,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         fetchFriends();
-            const newSocket = io('http://192.168.0.116:4000');
+            const newSocket = io('https://backend-chatapp-rdj6.onrender.com');
             newSocket.on('connect', () => {
                 console.log('Connected to Socket.IO server');
             });
@@ -29,7 +29,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
     const fetchFriends = async () => {
         try {
             console.log(user)
-            const response = await axios.get(`http://192.168.0.116:4000/group/getGroupMembers/${group._id}`);
+            const response = await axios.get(`https://backend-chatapp-rdj6.onrender.com/group/getGroupMembers/${group._id}`);
             const groupMembers = response.data.groupMembers;
 
             //Lọc ra member có memberId trùng với userId của user hiện tại
@@ -50,14 +50,18 @@ const DeleteMemberScreen = ({ navigation, route }) => {
 
     const [isSelected, setIsSelected] = useState([]);
 
-    const setSelectionAt = (index, value) => {
-        setIsSelected(prevState => {
-            const newState = [...prevState];
-            newState[index] = value;
-            return newState;
-        });
-    };
-
+    const setSelectionAt = (index,value) => {
+        setIsSelected((prevState) => {
+           
+            if (prevState.includes(index)) {
+              return prevState.filter((id) => id !== index);
+            } else {
+              const newState = [...prevState];
+              newState[index] = value;
+              return newState;
+            }
+          });
+        };
     useEffect(() => {
         console.log("isSelected: " + isSelected);
         setIsSelected(new Array(friends.length).fill(false));
@@ -77,16 +81,18 @@ const DeleteMemberScreen = ({ navigation, route }) => {
                 />
                 <Text style={{ fontSize: 16 }}>{friend.name}</Text>
                 <CheckBox
-                    value={isSelected[index] || false}
-                    onValueChange={(value) => setSelectionAt(index, value)}
+                    status={isSelected[index] ? 'checked' : 'unchecked'}
+                    onPress={(value) => setSelectionAt(index, value)}
                 />
+
+                
             </View>
         ));
     };
 
     async function removeMembersFromGroup(memberIds) {
         try {
-            const response = await axios.put(`http://192.168.0.116:4000/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
+            const response = await axios.put(`https://backend-chatapp-rdj6.onrender.com/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
             alert(response.data.message);
             socket.emit('sendDataClient',response.data.message);
         } catch (error) {

@@ -13,7 +13,7 @@ const SetCoLeader = ({ navigation, route }) => {
 
     useEffect(() => {
         fetchFriends();
-            const newSocket = io('http://192.168.0.116:4000');
+            const newSocket = io('https://backend-chatapp-rdj6.onrender.com');
             newSocket.on('connect', () => {
                 console.log('Connected to Socket.IO server');
             });
@@ -29,7 +29,7 @@ const SetCoLeader = ({ navigation, route }) => {
 
     const fetchFriends = async () => {
         try {
-            const response = await axios.get(`http://192.168.0.116:4000/group/getGroupMembers/${group._id}`);
+            const response = await axios.get(`https://backend-chatapp-rdj6.onrender.com/group/getGroupMembers/${group._id}`);
             const groupMembers = response.data.groupMembers;
             const filteredMembers = groupMembers.filter(member => member.role !== 'leader' && member.role !== 'coLeader');
             setFriends(filteredMembers);
@@ -62,7 +62,7 @@ const SetCoLeader = ({ navigation, route }) => {
 
     async function setCoLeader(memberId) {
         try {
-            const response = await axios.put(`http://192.168.0.116:4000/group/setCoLeader/${group._id}/${memberId}`);
+            const response = await axios.put(`https://backend-chatapp-rdj6.onrender.com/group/setCoLeader/${group._id}/${memberId}`);
             socket.emit('sendDataClient',response.data.message);
             alert(response.data.message);
         } catch (error) {

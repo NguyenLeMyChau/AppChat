@@ -23,8 +23,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import io, { Socket } from "socket.io-client";
 import Modal from "react-native-modal";
 import ReactPlayer from "react-player";
-import CheckBox from "@react-native-community/checkbox";
+import { Checkbox } from "react-native-paper";
 import EmojiPicker from 'rn-emoji-keyboard';
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Chat({ navigation, route }) {
   const { friend } = route.params;
@@ -40,14 +41,19 @@ export default function Chat({ navigation, route }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isSelected, setIsSelected] = useState(
-    new Array(listChat.length).fill(false)
+    []
   );
 
-  const setSelectionAt = (index, value) => {
-    setIsSelected((prevState) => {
-      const newState = [...prevState];
-      newState[index] = value;
-      return newState;
+  const setSelectionAt = (index,value) => {
+  setIsSelected((prevState) => {
+     
+      if (prevState.includes(index)) {
+        return prevState.filter((id) => id !== index);
+      } else {
+        const newState = [...prevState];
+        newState[index] = value;
+        return newState;
+      }
     });
   };
 
@@ -75,7 +81,7 @@ export default function Chat({ navigation, route }) {
 
   useEffect(() => {
     getData();
-    const newSocket = io("http://192.168.0.116:4000");
+    const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
     newSocket.on("connect", () => {
       console.log("Connected to Socket.IO server");
     });
@@ -104,7 +110,7 @@ export default function Chat({ navigation, route }) {
 
   const onSend = async (messages = []) => {
     if (currentMessage.length > 0 && socket) {
-      const response = await axios.post("http://192.168.0.116:4000/addmsg", {
+      const response = await axios.post("https://backend-chatapp-rdj6.onrender.com/addmsg", {
         from: userData._id,
         to: friend._id,
         message: currentMessage,
@@ -134,7 +140,7 @@ export default function Chat({ navigation, route }) {
   const fetchMessages = async (userData) => {
     console.log(friend);
     try {
-      const response = await axios.post("http://192.168.0.116:4000/getmsg", {
+      const response = await axios.post("https://backend-chatapp-rdj6.onrender.com/getmsg", {
         from: userData._id,
         to: friend._id,
       });
@@ -176,7 +182,7 @@ export default function Chat({ navigation, route }) {
     try {
       console.log(userData._id);
       const response = await axios.get(
-        `http://192.168.0.116:4000/group/getGroupList/${userData._id}`
+        `https://backend-chatapp-rdj6.onrender.com/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
       setListChat([...data.userData.friendList, ...data.userData.groupList]);
@@ -210,7 +216,7 @@ export default function Chat({ navigation, route }) {
 
     if (file !== null) {
       const responseAvatar = await axios.post(
-        `http://192.168.0.116:4000/user/uploadAvatarS3/${userId}`,
+        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userId}`,
         formData,
         {
           headers: {
@@ -298,7 +304,7 @@ export default function Chat({ navigation, route }) {
       const messageId = message._id; // Lấy ID của tin nhắn từ đối tượng tin nhắn
       console.log(messageId);
       const response = await axios.delete(
-        `http://192.168.0.116:4000/deletemsg/${messageId}`
+        `https://backend-chatapp-rdj6.onrender.com/deletemsg/${messageId}`
       );
       alert(response.data.message);
       socket.emit("sendDataClient", messageId);
@@ -317,7 +323,7 @@ export default function Chat({ navigation, route }) {
     console.log(message.user._id);
 
     const response = await axios.put(
-      `http://192.168.0.116:4000/retrievemsg/${messageId}/${senderId}`
+      `https://backend-chatapp-rdj6.onrender.com/retrievemsg/${messageId}/${senderId}`
     );
     alert(response.data.message);
     socket.emit("sendDataClient", messageId);
@@ -332,7 +338,7 @@ export default function Chat({ navigation, route }) {
   async function forwardMessage(receiver, message) {
     try {
       const response = await axios.post(
-        `http://192.168.0.116:4000/forwardMessage`,
+        `https://backend-chatapp-rdj6.onrender.com/forwardMessage`,
         { from: userData._id, to: receiver, message: message }
       );
       socket.emit("sendDataClient", response.data.msg);
@@ -409,7 +415,10 @@ export default function Chat({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View
+       <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -448,7 +457,8 @@ export default function Chat({ navigation, route }) {
         >
           <SimpleLineIcons name="list" size={20} color="white" />
         </TouchableOpacity>
-      </View>
+        </LinearGradient>
+
 
       <View style={{ height: "85%" }}>
         <GiftedChat
@@ -475,7 +485,6 @@ export default function Chat({ navigation, route }) {
           onClose={()=>{setIsOpen(!isOpen)}}
           categoryPosition='bottom'
           allowMultipleSelections
-        
           open={isOpen}
         />
         <TouchableOpacity  onPress={() => setIsOpen(!isOpen)}>
@@ -494,7 +503,6 @@ export default function Chat({ navigation, route }) {
               style={styles.txtSDT}
               value={currentMessage}
               onChangeText={(text) => setCurrentMessage(text)}
-              keyboardType="phone-pad"
             />
 
             <AntDesign
@@ -528,7 +536,6 @@ export default function Chat({ navigation, route }) {
               style={styles.txtSDTFocus}
               value={currentMessage}
               onChangeText={(text) => setCurrentMessage(text)}
-              keyboardType="phone-pad"
             />
 
             <MaterialCommunityIcons
@@ -589,9 +596,10 @@ export default function Chat({ navigation, route }) {
                       {item.name}
                     </Text>
 
-                    <CheckBox
-                      value={isSelected[index] || false}
-                      onValueChange={(value) => setSelectionAt(index, value)}
+                    <Checkbox                  
+                      status={isSelected[index] ? 'checked' : 'unchecked'}
+                      onPress={(value) => setSelectionAt(index,value)}
+
                     />
                   </View>
                 );
@@ -630,6 +638,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E9EBED",
+    paddingTop:35
   },
 
   chat: {

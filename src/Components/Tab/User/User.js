@@ -32,7 +32,7 @@ export default function User({ navigation }) {
 
       </View>
 
-      <View style={styles.user}>
+      
         <TouchableOpacity onPress={() => navigation.navigate('InformationUser')}>
           <View style={styles.user}>
             <Image
@@ -46,12 +46,7 @@ export default function User({ navigation }) {
             </View>
           </View>
         </TouchableOpacity>
-        <View style={[styles.flexEndContainer, styles.iconRightContainer]}>
-          <TouchableOpacity>
-            <MaterialCommunityIcons name='account-sync-outline' size={30} style={styles.icon}></MaterialCommunityIcons>
-          </TouchableOpacity>
-        </View>
-      </View>
+        
 
       <View
         style={{
@@ -153,6 +148,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop:35
   },
 
   header_icon: {

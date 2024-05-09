@@ -14,7 +14,7 @@ const GroupMembersScreen = ({navigation, route }) => {
 
   const fetchGroupMembers = async () => {
     try {
-    const response = await axios.get(`http://192.168.0.116:4000/group/getGroupMembers/${group._id}`);
+    const response = await axios.get(`https://backend-chatapp-rdj6.onrender.com/group/getGroupMembers/${group._id}`);
       setMembers(response.data.groupMembers);
     } catch (error) {
       console.error('Error fetching group members:', error);

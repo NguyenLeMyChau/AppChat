@@ -20,16 +20,14 @@ import axios from "axios";
 import { GiftedChat, Bubble, Avatar } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io from "socket.io-client";
-import EmojiSelector from "react-native-emoji-selector";
 import Modal from "react-native-modal";
 import ReactPlayer from "react-player";
-import CheckBox from "@react-native-community/checkbox";
+import { Checkbox } from "react-native-paper";
 import EmojiPicker from "rn-emoji-keyboard";
 
 export default function ChatGroup({ navigation, route }) {
   const { group } = route.params;
   var userId;
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [userData, setUserData] = useState({});
   const [currentMessage, setCurrentMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -43,14 +41,18 @@ export default function ChatGroup({ navigation, route }) {
     new Array(listChat.length).fill(false)
   );
 
-  const setSelectionAt = (index, value) => {
+  const setSelectionAt = (index,value) => {
     setIsSelected((prevState) => {
-      const newState = [...prevState];
-      newState[index] = value;
-      return newState;
-    });
-  };
-
+       
+        if (prevState.includes(index)) {
+          return prevState.filter((id) => id !== index);
+        } else {
+          const newState = [...prevState];
+          newState[index] = value;
+          return newState;
+        }
+      });
+    };
   useEffect(() => {
     setIsSelected(new Array(listChat.length).fill(false));
   }, [listChat]);
@@ -76,7 +78,7 @@ export default function ChatGroup({ navigation, route }) {
 
   useEffect(() => {
     getData();
-    const newSocket = io("http://192.168.0.116:4000");
+    const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
     newSocket.on("connect", () => {
       console.log("Connected to Socket.IO server");
     });
@@ -102,7 +104,7 @@ export default function ChatGroup({ navigation, route }) {
   const onSend = async (messages = []) => {
     if (currentMessage.length > 0 && socket) {
       const response = await axios.post(
-        "http://192.168.0.116:4000/sendMessageToGroup",
+        "https://backend-chatapp-rdj6.onrender.com/sendMessageToGroup",
         {
           from: userData._id,
           to: group._id,
@@ -136,7 +138,7 @@ export default function ChatGroup({ navigation, route }) {
   const fetchMessages = async (userData) => {
     try {
       const response = await axios.post(
-        "http://192.168.0.116:4000/getGroupMessages",
+        "https://backend-chatapp-rdj6.onrender.com/getGroupMessages",
         {
           groupId: group._id,
           from: userData._id,
@@ -179,7 +181,7 @@ export default function ChatGroup({ navigation, route }) {
     try {
       console.log(userData._id);
       const response = await axios.get(
-        `http://192.168.0.116:4000/group/getGroupList/${userData._id}`
+        `https://backend-chatapp-rdj6.onrender.com/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
       setListChat([...data.userData.friendList, ...data.userData.groupList]);
@@ -212,7 +214,7 @@ export default function ChatGroup({ navigation, route }) {
 
     if (file !== null) {
       const responseAvatar = await axios.post(
-        `http://192.168.0.116:4000/user/uploadAvatarS3/${userId}`,
+        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userId}`,
         formData,
         {
           headers: {
@@ -297,7 +299,7 @@ export default function ChatGroup({ navigation, route }) {
       const messageId = message._id; // Lấy ID của tin nhắn từ đối tượng tin nhắn
       console.log(messageId);
       const response = await axios.delete(
-        `http://192.168.0.116:4000/deletemsg/${messageId}`
+        `https://backend-chatapp-rdj6.onrender.com/deletemsg/${messageId}`
       );
       alert(response.data.message);
       socket.emit("sendDataClient", messageId);
@@ -316,7 +318,7 @@ export default function ChatGroup({ navigation, route }) {
     console.log(message.user._id);
 
     const response = await axios.put(
-      `http://192.168.0.116:4000/retrievemsg/${messageId}/${senderId}`
+      `https://backend-chatapp-rdj6.onrender.com/retrievemsg/${messageId}/${senderId}`
     );
     alert(response.data.message);
     socket.emit("sendDataClient", messageId);
@@ -331,7 +333,7 @@ export default function ChatGroup({ navigation, route }) {
   async function forwardMessage(receiver, message) {
     try {
       const response = await axios.post(
-        `http://192.168.0.116:4000/forwardMessage`,
+        `https://backend-chatapp-rdj6.onrender.com/forwardMessage`,
         { from: userData._id, to: receiver, message: message }
       );
       alert(response.data.msg);
@@ -593,9 +595,10 @@ export default function ChatGroup({ navigation, route }) {
                       {item.name}
                     </Text>
 
-                    <CheckBox
-                      value={isSelected[index] || false}
-                      onValueChange={(value) => setSelectionAt(index, value)}
+                    <Checkbox                  
+                      status={isSelected[index] ? 'checked' : 'unchecked'}
+                      onPress={(value) => setSelectionAt(index,value)}
+
                     />
                   </View>
                 );
@@ -615,6 +618,7 @@ export default function ChatGroup({ navigation, route }) {
                   console.log(selectedIds);
                   console.log(selectedMessage.text);
                   forwardMessage(selectedIds, selectedMessage.text);
+                  setModalForward(false);
                 }}
               >
                 <Text style={{ fontSize: 18, color: "white" }}>

@@ -39,7 +39,7 @@ export default function Signin({ navigation }) {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.116:4000/user/login",
+        "https://backend-chatapp-rdj6.onrender.com/user/login",
         userData
       );
       const { data } = response; // data = response.data

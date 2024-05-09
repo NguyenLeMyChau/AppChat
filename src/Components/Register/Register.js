@@ -63,7 +63,7 @@ export default function Register({ navigation }) {
       otp,avatar
     };
 
-    const response = await axios.post('http://192.168.0.116:4000/user/signup', userData);
+    const response = await axios.post('https://backend-chatapp-rdj6.onrender.com/user/signup', userData);
     const { data } = response;
 
     if (data.success) {
