@@ -21,7 +21,7 @@ import { GiftedChat, Bubble, Avatar } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io from "socket.io-client";
 import Modal from "react-native-modal";
-import ReactPlayer from "react-player";
+import Video from 'react-native-video';
 import { Checkbox } from "react-native-paper";
 import EmojiPicker from "rn-emoji-keyboard";
 
@@ -265,12 +265,11 @@ export default function ChatGroup({ navigation, route }) {
               )
             : isVideoMessage
             ? () => (
-                <ReactPlayer
-                  url={props.currentMessage.text}
-                  width={200}
-                  height={200}
-                  controls={true}
-                />
+              <Video
+              source={{ uri: props.currentMessage.text }} // Can be a URL or a local file.
+              style={{ width: 200, height: 200 }} // You can control the video dimensions with the style prop
+              controls={true}
+            />
               )
             : null
         }

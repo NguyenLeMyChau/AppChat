@@ -22,10 +22,10 @@ import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io, { Socket } from "socket.io-client";
 import Modal from "react-native-modal";
-import ReactPlayer from "react-player";
 import { Checkbox } from "react-native-paper";
 import EmojiPicker from 'rn-emoji-keyboard';
 import { LinearGradient } from "expo-linear-gradient";
+import Video from 'react-native-video';
 
 export default function Chat({ navigation, route }) {
   const { friend } = route.params;
@@ -44,9 +44,9 @@ export default function Chat({ navigation, route }) {
     []
   );
 
-  const setSelectionAt = (index,value) => {
-  setIsSelected((prevState) => {
-     
+  const setSelectionAt = (index, value) => {
+    setIsSelected((prevState) => {
+
       if (prevState.includes(index)) {
         return prevState.filter((id) => id !== index);
       } else {
@@ -154,8 +154,8 @@ export default function Chat({ navigation, route }) {
           avatar: msg.fromSelf
             ? null
             : friend.avatar
-            ? friend.avatar
-            : require("../../../../../assets/AnexanderTom.jpg"),
+              ? friend.avatar
+              : require("../../../../../assets/AnexanderTom.jpg"),
         },
         isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
       }));
@@ -177,7 +177,7 @@ export default function Chat({ navigation, route }) {
       console.error("Error fetching messages:", error);
     }
   };
- 
+
   const fetchConversations = async () => {
     try {
       console.log(userData._id);
@@ -263,36 +263,35 @@ export default function Chat({ navigation, route }) {
         renderMessageText={
           isImageMessage
             ? () => (
-                <Image
-                  source={{ uri: props.currentMessage.text }}
-                  style={{ width: 200, height: 200 }}
-                />
-              )
+              <Image
+                source={{ uri: props.currentMessage.text }}
+                style={{ width: 200, height: 200 }}
+              />
+            )
             : isVideoMessage
-            ? () => (
-                <ReactPlayer
-                  url={props.currentMessage.text}
-                  width={200}
-                  height={200}
+              ? () => (
+                <Video
+                  source={{ uri: props.currentMessage.text }} // Can be a URL or a local file.
+                  style={{ width: 200, height: 200 }} // You can control the video dimensions with the style prop
                   controls={true}
                 />
               )
-            : null
+              : null
         }
         renderCustomView={
           isFileMessage
             ? () => (
-                <TouchableOpacity
-                  onPress={() => openFileURL(props.currentMessage.text)}
-                >
-                  {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
-                  <AntDesign
-                    name="file1"
-                    size={100}
-                    style={{ alignSelf: "center" }}
-                  />
-                </TouchableOpacity>
-              )
+              <TouchableOpacity
+                onPress={() => openFileURL(props.currentMessage.text)}
+              >
+                {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
+                <AntDesign
+                  name="file1"
+                  size={100}
+                  style={{ alignSelf: "center" }}
+                />
+              </TouchableOpacity>
+            )
             : null
         }
       />
@@ -415,7 +414,7 @@ export default function Chat({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-       <LinearGradient
+      <LinearGradient
         colors={["#006AF5", "#5ac8fa"]}
         start={[0, 0.5]}
         end={[1, 0.5]}
@@ -457,7 +456,7 @@ export default function Chat({ navigation, route }) {
         >
           <SimpleLineIcons name="list" size={20} color="white" />
         </TouchableOpacity>
-        </LinearGradient>
+      </LinearGradient>
 
 
       <View style={{ height: "85%" }}>
@@ -477,24 +476,24 @@ export default function Chat({ navigation, route }) {
 
       <View style={styles.chat}>
         <EmojiPicker
-        emojisPerRow={5}
-        pickerStyle={{width: '90%',height:'40%'}}
+          emojisPerRow={5}
+          pickerStyle={{ width: '90%', height: '40%' }}
           onEmojiSelected={emoji => {
-            setCurrentMessage(prevSelected => prevSelected +emoji.emoji)
-            }}
-          onClose={()=>{setIsOpen(!isOpen)}}
+            setCurrentMessage(prevSelected => prevSelected + emoji.emoji)
+          }}
+          onClose={() => { setIsOpen(!isOpen) }}
           categoryPosition='bottom'
           allowMultipleSelections
           open={isOpen}
         />
-        <TouchableOpacity  onPress={() => setIsOpen(!isOpen)}>
-        <MaterialCommunityIcons
-          name="sticker-emoji"
-          size={30}
-          color="black"
-        />
+        <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
+          <MaterialCommunityIcons
+            name="sticker-emoji"
+            size={30}
+            color="black"
+          />
         </TouchableOpacity>
-        
+
 
         {currentMessage === "" ? (
           <>
@@ -596,9 +595,9 @@ export default function Chat({ navigation, route }) {
                       {item.name}
                     </Text>
 
-                    <Checkbox                  
+                    <Checkbox
                       status={isSelected[index] ? 'checked' : 'unchecked'}
-                      onPress={(value) => setSelectionAt(index,value)}
+                      onPress={(value) => setSelectionAt(index, value)}
 
                     />
                   </View>
@@ -638,7 +637,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E9EBED",
-    paddingTop:35
+    paddingTop: 35
   },
 
   chat: {

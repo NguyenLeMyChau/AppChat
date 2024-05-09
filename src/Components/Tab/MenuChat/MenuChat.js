@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   items: {
-    backgroundColor: "black" ,
+    backgroundColor: "white" ,
     width: "100%",
     overflow: "hidden",
 

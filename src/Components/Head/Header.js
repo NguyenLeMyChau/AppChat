@@ -47,7 +47,6 @@ export default function Header() {
         `https://backend-chatapp-rdj6.onrender.com/user/findUserByEmail/${email}`
       );
       const { data } = response;
-      x;
       console.log(data.user);
       setUserDataFind(data.user);
       setBoolModal(true);
