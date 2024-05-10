@@ -202,11 +202,8 @@ export default function Chat({ navigation, route }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
     });
-
-    console.log('..........result', result);
 
     if (!result.canceled) {
       // Gọi hàm handleUpImage sau khi chọn tệp
@@ -237,8 +234,6 @@ export default function Chat({ navigation, route }) {
           }
         );
         const image = responseAvatar.data.avatar;
-        console.log(image);
-        console.log('.....End up image.......')
         return image;
       }
 
@@ -286,7 +281,7 @@ export default function Chat({ navigation, route }) {
                 <Image
                     source={{ uri: props.currentMessage.text }}
                     style={{ width: 300, height: 300 }}
-                    resizeMode="contain"
+                    // resizeMode="contain"
                   />
                 </TouchableOpacity>
 

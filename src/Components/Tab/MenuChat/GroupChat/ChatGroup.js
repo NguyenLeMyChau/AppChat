@@ -193,7 +193,6 @@ export default function ChatGroup({ navigation, route }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
     });
 
