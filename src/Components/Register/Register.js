@@ -7,7 +7,7 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import { OtpInput } from "react-native-otp-entry";
 import AnexanderTom from "../../../assets/AnexanderTom.jpg"
 import axios from 'axios';
-
+import { LinearGradient } from "expo-linear-gradient";
 
 
 export default function Register({ navigation }) {
@@ -131,11 +131,13 @@ export default function Register({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={{
-        flexDirection: "row", alignItems: 'center', width: "100%", backgroundImage: 'linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-      }}>
+      <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={styles.header}
+      >
+
         <MaterialIcons
           onPress={() => navigation.goBack()}
           name="keyboard-backspace"
@@ -145,7 +147,7 @@ export default function Register({ navigation }) {
         <Text style={{ fontSize: 20, color: 'white', padding: 10, marginLeft: 10 }}>
           Tạo tài khoản
         </Text>
-      </View>
+        </LinearGradient>
 
       <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Tên Zalo</Text>
@@ -294,6 +296,16 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'cover',
+  },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    height: 90,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingTop: 30
   },
   Area: {
     width: '90%',

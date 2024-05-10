@@ -25,6 +25,7 @@ import Video from 'react-native-video';
 import { Checkbox } from "react-native-paper";
 import EmojiPicker from "rn-emoji-keyboard";
 import { LinearGradient } from "expo-linear-gradient";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ChatGroup({ navigation, route }) {
   const { group } = route.params;
@@ -42,18 +43,18 @@ export default function ChatGroup({ navigation, route }) {
     new Array(listChat.length).fill(false)
   );
 
-  const setSelectionAt = (index,value) => {
+  const setSelectionAt = (index, value) => {
     setIsSelected((prevState) => {
-       
-        if (prevState.includes(index)) {
-          return prevState.filter((id) => id !== index);
-        } else {
-          const newState = [...prevState];
-          newState[index] = value;
-          return newState;
-        }
-      });
-    };
+
+      if (prevState.includes(index)) {
+        return prevState.filter((id) => id !== index);
+      } else {
+        const newState = [...prevState];
+        newState[index] = value;
+        return newState;
+      }
+    });
+  };
   useEffect(() => {
     setIsSelected(new Array(listChat.length).fill(false));
   }, [listChat]);
@@ -113,7 +114,6 @@ export default function ChatGroup({ navigation, route }) {
           avatar: group.avatar,
         }
       );
-      console.log(response.data.data);
       const data = response.data.data;
       const newMessage = {
         _id: data._id,
@@ -146,7 +146,6 @@ export default function ChatGroup({ navigation, route }) {
         }
       );
       const data = response.data;
-      console.log(data);
       const formattedMessages = response.data.map((msg) => ({
         _id: msg.id, // ID của tin nhắn
         text: msg.message, // Nội dung tin nhắn
@@ -180,42 +179,47 @@ export default function ChatGroup({ navigation, route }) {
 
   const fetchConversations = async () => {
     try {
-      console.log(userData._id);
       const response = await axios.get(
         `https://backend-chatapp-rdj6.onrender.com/group/getGroupList/${userData._id}`
       );
       const data = response.data; // Truy cập data từ response
       setListChat([...data.userData.friendList, ...data.userData.groupList]);
-      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
       alert("Error", "An error occurred while fetching data");
     }
   };
   async function selectFile() {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.onchange = async (e) => {
-      const file = e.target.files[0];
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
 
-      console.log(file);
-      console.log(file.name);
+    console.log('..........result', result);
 
+    if (!result.canceled) {
       // Gọi hàm handleUpImage sau khi chọn tệp
-      const imageUrl = await handleUpImage(file);
+      const imageUrl = await handleUpImage(result.assets[0].uri);
       console.log(imageUrl);
       setCurrentMessage(imageUrl);
-    };
-    input.click();
+    }
   }
 
-  async function handleUpImage(file) {
+  async function handleUpImage(uri) {
     const formData = new FormData();
+    let file = {
+      uri: uri,
+      name: 'image.jpg',
+      type: 'image/jpeg'
+    };
     formData.append("avatar", file);
+
 
     if (file !== null) {
       const responseAvatar = await axios.post(
-        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userId}`,
+        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`,
         formData,
         {
           headers: {
@@ -259,35 +263,36 @@ export default function ChatGroup({ navigation, route }) {
         renderMessageText={
           isImageMessage
             ? () => (
-                <Image
-                  source={{ uri: props.currentMessage.text }}
-                  style={{ width: 200, height: 200 }}
+              <Image
+                source={{ uri: props.currentMessage.text }}
+                style={{ width: 300, height: 300 }}
+                resizeMode="contain"
+              />
+            )
+            : isVideoMessage
+              ? () => (
+                <Video
+                  source={{ uri: props.currentMessage.text }} // Can be a URL or a local file.
+                  style={{ width: 200, height: 200 }} // You can control the video dimensions with the style prop
+                  controls={true}
                 />
               )
-            : isVideoMessage
-            ? () => (
-              <Video
-              source={{ uri: props.currentMessage.text }} // Can be a URL or a local file.
-              style={{ width: 200, height: 200 }} // You can control the video dimensions with the style prop
-              controls={true}
-            />
-              )
-            : null
+              : null
         }
         renderCustomView={
           isFileMessage
             ? () => (
-                <TouchableOpacity
-                  onPress={() => openFileURL(props.currentMessage.text)}
-                >
-                  {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
-                  <AntDesign
-                    name="file1"
-                    size={100}
-                    style={{ alignSelf: "center" }}
-                  />
-                </TouchableOpacity>
-              )
+              <TouchableOpacity
+                onPress={() => openFileURL(props.currentMessage.text)}
+              >
+                {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
+                <AntDesign
+                  name="file1"
+                  size={100}
+                  style={{ alignSelf: "center" }}
+                />
+              </TouchableOpacity>
+            )
             : null
         }
       />
@@ -297,7 +302,6 @@ export default function ChatGroup({ navigation, route }) {
   async function deleteMessage(message) {
     try {
       const messageId = message._id; // Lấy ID của tin nhắn từ đối tượng tin nhắn
-      console.log(messageId);
       const response = await axios.delete(
         `https://backend-chatapp-rdj6.onrender.com/deletemsg/${messageId}`
       );
@@ -312,10 +316,6 @@ export default function ChatGroup({ navigation, route }) {
   async function retrieveMessage(message) {
     const messageId = message._id; // Get the message ID from the message object
     const senderId = message.user._id; // Get the message ID from the message object
-
-    console.log(messageId);
-    console.log(message);
-    console.log(message.user._id);
 
     const response = await axios.put(
       `https://backend-chatapp-rdj6.onrender.com/retrievemsg/${messageId}/${senderId}`
@@ -408,7 +408,7 @@ export default function ChatGroup({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-     <LinearGradient
+      <LinearGradient
         colors={["#006AF5", "#5ac8fa"]}
         start={[0, 0.5]}
         end={[1, 0.5]}
@@ -450,7 +450,7 @@ export default function ChatGroup({ navigation, route }) {
         >
           <SimpleLineIcons name="list" size={20} color="white" />
         </TouchableOpacity>
-        </LinearGradient>
+      </LinearGradient>
       <View style={{ height: "85%" }}>
         <GiftedChat
           messages={messages}
@@ -597,9 +597,9 @@ export default function ChatGroup({ navigation, route }) {
                       {item.name}
                     </Text>
 
-                    <Checkbox                  
+                    <Checkbox
                       status={isSelected[index] ? 'checked' : 'unchecked'}
-                      onPress={(value) => setSelectionAt(index,value)}
+                      onPress={(value) => setSelectionAt(index, value)}
 
                     />
                   </View>

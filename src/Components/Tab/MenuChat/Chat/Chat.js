@@ -26,10 +26,15 @@ import { Checkbox } from "react-native-paper";
 import EmojiPicker from 'rn-emoji-keyboard';
 import { LinearGradient } from "expo-linear-gradient";
 import Video from 'react-native-video';
+import * as ImagePicker from 'expo-image-picker';
+import ImageView from 'react-native-image-viewing';
 
 export default function Chat({ navigation, route }) {
   const { friend } = route.params;
-  var userId;
+  const [isImageViewVisible, setIsImageViewVisible] = useState(false);
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
+
+
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [userData, setUserData] = useState({});
   const [currentMessage, setCurrentMessage] = useState("");
@@ -194,40 +199,49 @@ export default function Chat({ navigation, route }) {
   };
 
   async function selectFile() {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.onchange = async (e) => {
-      const file = e.target.files[0];
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
 
-      console.log(file);
-      console.log(file.name);
+    console.log('..........result', result);
 
+    if (!result.canceled) {
       // Gọi hàm handleUpImage sau khi chọn tệp
-      const imageUrl = await handleUpImage(file);
+      const imageUrl = await handleUpImage(result.assets[0].uri);
       console.log(imageUrl);
       setCurrentMessage(imageUrl);
-    };
-    input.click();
+    }
   }
 
-  async function handleUpImage(file) {
-    const formData = new FormData();
-    formData.append("avatar", file);
+  async function handleUpImage(uri) {
 
-    if (file !== null) {
-      const responseAvatar = await axios.post(
-        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      const image = responseAvatar.data.avatar;
-      console.log(image);
-      return image;
-    }
+      const formData = new FormData();
+      let file = {
+        uri: uri,
+        name: 'image.jpg',
+        type: 'image/jpeg'
+      };
+      formData.append("avatar", file);
+
+      if (file !== null) {
+        const responseAvatar = await axios.post(
+          `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        const image = responseAvatar.data.avatar;
+        console.log(image);
+        console.log('.....End up image.......')
+        return image;
+      }
+
   }
 
   const openFileURL = (fileURL) => {
@@ -263,10 +277,27 @@ export default function Chat({ navigation, route }) {
         renderMessageText={
           isImageMessage
             ? () => (
-              <Image
-                source={{ uri: props.currentMessage.text }}
-                style={{ width: 200, height: 200 }}
-              />
+              <View>
+                <TouchableOpacity onPress={() => {
+                  setIsImageViewVisible(true);
+                  setSelectedImageUri(props.currentMessage.text);
+                }}
+                >                  
+                <Image
+                    source={{ uri: props.currentMessage.text }}
+                    style={{ width: 300, height: 300 }}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+
+                <ImageView
+                  images={[{ uri: selectedImageUri }]}
+                  imageIndex={0}
+                  visible={isImageViewVisible}
+                  onRequestClose={() => setIsImageViewVisible(false)}
+                />
+              </View>
+
             )
             : isVideoMessage
               ? () => (
@@ -654,13 +685,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
     padding: 10,
+    width: 220
   },
 
   txtSDTFocus: {
     fontSize: 16,
     color: "black",
     padding: 10,
-    width: 270,
+    width: 300,
   },
 
   chatText: {

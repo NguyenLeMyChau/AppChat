@@ -10,6 +10,7 @@ import {
 } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -64,7 +65,15 @@ export default function Signin({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+
+      <LinearGradient
+        colors={["#006AF5", "#5ac8fa"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={styles.header}
+      >
+
+
         <TouchableOpacity>
           <Octicons
             name="arrow-left"
@@ -75,7 +84,8 @@ export default function Signin({ navigation }) {
         </TouchableOpacity>
 
         <Text style={styles.name}>Đăng nhập</Text>
-      </View>
+
+      </LinearGradient>
 
       <Text style={styles.title}>
         Vui lòng nhập số điện thoại và mật khẩu để đăng nhập
@@ -144,13 +154,13 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundImage: "linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)",
     flexDirection: "row",
     alignItems: "center",
+    width: "100%",
+    height: 90,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    height: "8%",
-    width: "100%",
+    paddingTop: 35
   },
 
   name: {
