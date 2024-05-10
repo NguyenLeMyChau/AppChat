@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Platform } from "react-native";
 import AnexanderTom from "../../../../assets/AnexanderTom.jpg";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ChangeInformation({ navigation }) {
   const [userData, setUserData] = useState({});
@@ -38,23 +39,33 @@ export default function ChangeInformation({ navigation }) {
     getData();
   }, []);
 
-  async function selectFile() {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.onchange = async (e) => {
-      const file = e.target.files[0];
-      console.log(file);
+  useEffect(() => {
+    setAvatar(avatar);
+    console.log('................avatar', avatar);
+  }, [avatar]);
 
+  async function selectFile() {
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
       // Gọi hàm handleUpImage sau khi chọn tệp
-      const imageUrl = await handleUpImage(file);
-      console.log(imageUrl);
+      const imageUrl = await handleUpImage(result.assets[0].uri);
       setAvatar(imageUrl);
-    };
-    input.click();
+    }
   }
 
-  async function handleUpImage(file) {
+  async function handleUpImage(uri) {
     const formData = new FormData();
+    let file = {
+      uri: uri,
+      name: 'image.jpg',
+      type: 'image/jpeg'
+    };
     formData.append("avatar", file);
     if (file !== null) {
       const responseAvatar = await axios.post(
@@ -100,12 +111,10 @@ export default function ChangeInformation({ navigation }) {
       }
 
       alert(data.message);
-      Alert.alert(data.message);
       console.log(updatedUser);
       await AsyncStorage.setItem("foundUser", JSON.stringify(updatedUser));
       setUserData(updatedUser);
     } else {
-      Alert.alert(data.message);
       if (error.response) {
         alert(error.response.data.message);
       } else {
@@ -118,7 +127,7 @@ export default function ChangeInformation({ navigation }) {
     setGender(userData.gender);
   }, [userData.gender]);
 
-  useEffect(() => {}, [avatar]);
+  useEffect(() => { }, [avatar]);
 
   const options = [
     { label: "Nữ", value: true },
@@ -165,7 +174,7 @@ export default function ChangeInformation({ navigation }) {
       </LinearGradient>
 
       <View style={{ backgroundColor: "white" }}>
-        <View style={{ flexDirection: "row", paddingTop: 20 ,justifyContent:'flex-start'}}>
+        <View style={{ flexDirection: "row", paddingTop: 20, justifyContent: 'flex-start' }}>
           <View style={styles.head}>
             <TouchableOpacity
               onPress={() => {
@@ -177,8 +186,8 @@ export default function ChangeInformation({ navigation }) {
                   avatar
                     ? avatar
                     : userData.avatar
-                    ? { uri: userData.avatar }
-                    : AnexanderTom
+                      ? { uri: userData.avatar }
+                      : AnexanderTom
                 }
                 style={styles.avatar}
                 imageStyle={{
