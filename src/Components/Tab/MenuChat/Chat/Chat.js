@@ -26,7 +26,7 @@ import Modal from "react-native-modal";
 import { Checkbox } from "react-native-paper";
 import EmojiPicker from 'rn-emoji-keyboard';
 import { LinearGradient } from "expo-linear-gradient";
-import { Video } from 'expo-av';
+import { Video, Audio } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import ImageView from 'react-native-image-viewing';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -36,7 +36,8 @@ export default function Chat({ navigation, route }) {
   const { friend } = route.params;
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
   const [selectedImageUri, setSelectedImageUri] = useState(null);
-
+  const [recording, setRecording] = useState();
+  const [isRecording, setIsRecording] = useState(false);
 
   const [userData, setUserData] = useState({});
   const [currentMessage, setCurrentMessage] = useState("");
@@ -207,6 +208,47 @@ export default function Chat({ navigation, route }) {
     }
   };
 
+  //Ghi âm
+  async function startRecording() {
+    try {
+      console.log('Requesting permissions..');
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      console.log('Starting recording..');
+      const recordingInstance = new Audio.Recording();
+      await recordingInstance.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+      setRecording(recordingInstance);
+      setIsRecording(true);
+      console.log('Recording started');
+      await recordingInstance.startAsync();
+    } catch (err) {
+      console.error('Failed to start recording', err);
+    }
+  }
+
+
+  async function stopRecording() {
+    console.log('Stopping recording..');
+    setIsRecording(false);
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
+    console.log('Recording stopped and stored at', uri);
+    setRecording(undefined);
+
+    // Assuming the recording is an audio file with .aac extension
+    const audioFile = {
+      uri: uri,
+      type: 'audio',
+      filename: 'recording.aac',
+    };
+
+    const audioUrl = await handleUpImage(audioFile.uri, audioFile.type, audioFile.filename);
+    console.log(audioUrl);
+  }
+
   async function selectFile() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -240,6 +282,10 @@ export default function Chat({ navigation, route }) {
         break;
       case 'video':
         file.type = 'video/mp4';
+        file.name = filename;
+        break;
+      case 'audio':
+        file.type = 'audio/aac';
         file.name = filename;
         break;
       default:
@@ -286,7 +332,6 @@ export default function Chat({ navigation, route }) {
 
     }
   };
-
 
   async function handleUpFile(uri, type, filename) {
 
@@ -640,22 +685,26 @@ export default function Chat({ navigation, route }) {
               onChangeText={(text) => setCurrentMessage(text)}
             />
 
+            <SimpleLineIcons
+              name="microphone"
+              size={24}
+              color="black"
+              style={{ marginLeft: 0 }}
+              onPress={recording ? stopRecording : startRecording}
+            />
+
+            {isRecording && <Text>Recording...</Text>}
+
             <AntDesign
               name="addfile"
               size={24}
               color="black"
-              style={{ marginLeft: 5 }}
+              style={{ marginLeft: 20 }}
               onPress={() => {
                 pickFile();
               }}
             />
 
-            <SimpleLineIcons
-              name="microphone"
-              size={24}
-              color="black"
-              style={{ marginLeft: 20 }}
-            />
 
             <AntDesign
               name="picture"
