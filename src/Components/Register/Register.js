@@ -236,11 +236,14 @@ export default function Register({ navigation }) {
       <TouchableOpacity
         style={styles.register}
         onPress={() => {
-          setModalVisible(true);
-          handleSendOTP();
+          if (isEmailValid && isNameValid && isPassValid && isConfirmPasswordValid) {
+            setModalVisible(true);
+            handleSendOTP();
+          } else {
+            console.log("Vui long kiem tra lai thong tin!");
+          }
         }}
         
-        disabled={!(isEmailValid && isNameValid && isPassValid &&isConfirmPasswordValid)}
       >
         <AntDesign
           name="arrowright"

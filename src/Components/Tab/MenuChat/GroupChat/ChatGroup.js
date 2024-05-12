@@ -3,6 +3,7 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
   Feather,
+  Entypo
 } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -201,6 +202,69 @@ export default function ChatGroup({ navigation, route }) {
       alert("Error", "An error occurred while fetching data");
     }
   };
+
+
+  // Chụp ảnh
+  const takePicture = async () => {
+    try {
+      if (Platform.OS!== 'web') {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Quyền truy cập camera bị từ chối!');
+          return;
+        }
+      }
+      
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5,
+      });
+      
+      if (!result.canceled) {
+        console.log('..............fileType', result.assets[0].type);
+        console.log('..............fileName', result.assets[0].fileName);
+        const CameraImageUrl = await handleUpImage(result.assets[0].uri, result.assets[0].type, result.assets[0].fileName);
+        console.log(CameraImageUrl);
+        setCurrentMessage(CameraImageUrl);
+      }
+    } catch (error) {
+      console.error('Error taking picture:', error);
+    }
+  };
+  
+  //Video
+
+  const takeVideo = async () => {
+    try {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Quyền truy cập camera bị từ chối!');
+          return;
+        }
+      }
+  
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5,
+      });
+  
+      if (!result.canceled) {
+        console.log('..............fileType', result.assets[0].type);
+        console.log('..............fileName', result.assets[0].fileName);
+        const CameraVideoUrl = await handleUpImage(result.assets[0].uri, result.assets[0].type, result.assets[0].fileName);
+        console.log(CameraVideoUrl);
+        setCurrentMessage(CameraVideoUrl);
+      }
+    } catch (error) {
+      console.error('Error taking video:', error);
+    }
+  };
+  
 
   // Ghi âm
   async function startRecording() {
@@ -611,14 +675,22 @@ export default function ChatGroup({ navigation, route }) {
           </Text>
           <Text style={{ color: "white", fontSize: 13 }}>Truy cập</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ width: "13%" }}>
+        <TouchableOpacity style={{ width: "10%" }}>
           <MaterialCommunityIcons name="phone" size={20} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={{ width: "13%" }}>
-          <Feather name="video" size={20} color="white" />
+        <TouchableOpacity style={{ width: "10%" }}>
+        <Entypo
+              name="camera"
+              size={20}
+              onPress={takePicture}
+              color="white"
+            />
+        </TouchableOpacity>
+        <TouchableOpacity style={{ width: "10%" }}>
+          <Feather name="video" size={20} color="white"  onPress={takeVideo}/>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ width: "13%" }}
+          style={{ width: "10%" }}
           onPress={() =>
             navigation.navigate("Profile_Group", {
               user: userData,
