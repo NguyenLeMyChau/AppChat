@@ -7,6 +7,7 @@ import {
 } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { useState } from "react";
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -25,9 +26,11 @@ import Modal from "react-native-modal";
 import { Checkbox } from "react-native-paper";
 import EmojiPicker from 'rn-emoji-keyboard';
 import { LinearGradient } from "expo-linear-gradient";
-import Video from 'react-native-video';
+import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import ImageView from 'react-native-image-viewing';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function Chat({ navigation, route }) {
   const { friend } = route.params;
@@ -35,7 +38,6 @@ export default function Chat({ navigation, route }) {
   const [selectedImageUri, setSelectedImageUri] = useState(null);
 
 
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [userData, setUserData] = useState({});
   const [currentMessage, setCurrentMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -44,6 +46,14 @@ export default function Chat({ navigation, route }) {
   const [modalForward, setModalForward] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+
+  React.useEffect(() => {
+    ScreenOrientation.unlockAsync(); // Cho phép xoay màn hình
+
+    return () => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT); // Khóa màn hình theo chế độ mặc định khi component unmount
+    };
+  }, []);
 
   const [isSelected, setIsSelected] = useState(
     []
@@ -76,7 +86,6 @@ export default function Chat({ navigation, route }) {
       if (foundUser !== null) {
         const user = JSON.parse(foundUser);
         setUserData(user);
-        userId = user._id;
         fetchMessages(user); // Gọi hàm fetchConversations sau khi lấy dữ liệu thành công
       }
     } catch (error) {
@@ -206,36 +215,137 @@ export default function Chat({ navigation, route }) {
     });
 
     if (!result.canceled) {
-      // Gọi hàm handleUpImage sau khi chọn tệp
-      const imageUrl = await handleUpImage(result.assets[0].uri);
+      console.log('..............fileType', result.assets[0].type);
+      console.log('..............fileName', result.assets[0].fileName);
+      const imageUrl = await handleUpImage(result.assets[0].uri, result.assets[0].type, result.assets[0].fileName);
       console.log(imageUrl);
       setCurrentMessage(imageUrl);
     }
   }
 
-  async function handleUpImage(uri) {
+  async function handleUpImage(uri, type, filename) {
 
-      const formData = new FormData();
-      let file = {
-        uri: uri,
-        name: 'image.jpg',
-        type: 'image/jpeg'
-      };
-      formData.append("avatar", file);
+    const formData = new FormData();
 
-      if (file !== null) {
-        const responseAvatar = await axios.post(
-          `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        const image = responseAvatar.data.avatar;
-        return image;
-      }
+    let file = {
+      uri: uri,
+      name: filename,
+      type: ''
+    };
+
+    switch (type) {
+      case 'image':
+        file.type = 'image/jpeg';
+        file.name = filename;
+        break;
+      case 'video':
+        file.type = 'video/mp4';
+        file.name = filename;
+        break;
+      default:
+        throw new Error('Invalid file type');
+    }
+
+    formData.append("avatar", file);
+
+    if (file !== null) {
+      const responseAvatar = await axios.post(
+        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const image = responseAvatar.data.avatar;
+      return image;
+    }
+  }
+
+  const pickFile = async () => {
+    try {
+      const res = await DocumentPicker.getDocumentAsync();
+
+      console.log('..............res: ', JSON.stringify(res));
+
+      const result = res.assets[0];
+
+      console.log('..............File extension: ' + result.mimeType);
+      console.log('..............uri: ' + result.uri);
+      console.log('..............name: ' + result.name);
+
+      // Call handleUpImage with the file's URI, type, and name
+      const imageUrl = await handleUpFile(result.uri, result.mimeType, result.name);
+      console.log(imageUrl);
+      setCurrentMessage(imageUrl);
+
+    } catch (err) {
+
+      console.log('Error: ' + err);
+
+    }
+  };
+
+
+  async function handleUpFile(uri, type, filename) {
+
+    const formData = new FormData();
+
+    let file = {
+      uri: uri,
+      name: filename,
+      type: type
+    };
+
+    switch (type) {
+      case 'image/jpeg':
+      case 'image/png':
+        file.name = filename;
+        break;
+      case 'video/mp4':
+        file.name = filename;
+        break;
+      case 'application/json':
+        file.name = filename;
+        break;
+      case 'text/csv':
+        file.name = filename;
+        break;
+      case 'application/vnd.ms-excel':
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        file.name = filename;
+        break;
+      case 'application/msword':
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        file.name = filename;
+        break;
+      case 'application/pdf':
+        file.name = filename;
+        break;
+      case 'text/plain':
+        file.name = filename;
+        break;
+      default:
+        throw new Error('Invalid file type');
+    }
+
+
+    formData.append("avatar", file);
+
+    if (file !== null) {
+      const responseAvatar = await axios.post(
+        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const image = responseAvatar.data.avatar;
+      return image;
+    }
 
   }
 
@@ -255,7 +365,7 @@ export default function Chat({ navigation, route }) {
     const isVideoMessage = videoUrlRegex.test(props.currentMessage.text);
 
     console.log("prop" + props.currentMessage.text);
-    console.log("isImageMessage" + isImageMessage);
+    console.log("isVideoMessage" + isVideoMessage);
 
     return (
       <Bubble
@@ -277,11 +387,11 @@ export default function Chat({ navigation, route }) {
                   setIsImageViewVisible(true);
                   setSelectedImageUri(props.currentMessage.text);
                 }}
-                >                  
-                <Image
+                >
+                  <Image
                     source={{ uri: props.currentMessage.text }}
                     style={{ width: 300, height: 300 }}
-                    // resizeMode="contain"
+                  // resizeMode="contain"
                   />
                 </TouchableOpacity>
 
@@ -297,28 +407,28 @@ export default function Chat({ navigation, route }) {
             : isVideoMessage
               ? () => (
                 <Video
-                  source={{ uri: props.currentMessage.text }} // Can be a URL or a local file.
-                  style={{ width: 200, height: 200 }} // You can control the video dimensions with the style prop
-                  controls={true}
+                  source={{ uri: props.currentMessage.text }}
+                  volume={1.0}
+                  isMuted={false}
+                  resizeMode="contain"
+                  style={{ width: 300, height: 300 }}
+                  useNativeControls
                 />
               )
-              : null
-        }
-        renderCustomView={
-          isFileMessage
-            ? () => (
-              <TouchableOpacity
-                onPress={() => openFileURL(props.currentMessage.text)}
-              >
-                {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
-                <AntDesign
-                  name="file1"
-                  size={100}
-                  style={{ alignSelf: "center" }}
-                />
-              </TouchableOpacity>
-            )
-            : null
+              : isFileMessage
+                ? () => (
+                  <TouchableOpacity
+                    onPress={() => openFileURL(props.currentMessage.text)}
+                  >
+                    {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
+                    <AntDesign
+                      name="file1"
+                      size={100}
+                      style={{ alignSelf: "center" }}
+                    />
+                  </TouchableOpacity>
+                )
+                : null
         }
       />
     );
@@ -535,6 +645,9 @@ export default function Chat({ navigation, route }) {
               size={24}
               color="black"
               style={{ marginLeft: 5 }}
+              onPress={() => {
+                pickFile();
+              }}
             />
 
             <SimpleLineIcons
