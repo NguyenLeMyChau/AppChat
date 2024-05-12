@@ -22,7 +22,7 @@ import { GiftedChat, Bubble, Avatar } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io from "socket.io-client";
 import Modal from "react-native-modal";
-import { Video } from 'expo-av';
+import { Video, Audio } from 'expo-av';
 import { Checkbox } from "react-native-paper";
 import EmojiPicker from "rn-emoji-keyboard";
 import { LinearGradient } from "expo-linear-gradient";
@@ -32,8 +32,8 @@ import * as DocumentPicker from 'expo-document-picker';
 
 export default function ChatGroup({ navigation, route }) {
   const { group } = route.params;
-  var userId;
-  const [userData, setUserData] = useState({});
+  const [recording, setRecording] = useState();
+  const [isRecording, setIsRecording] = useState(false); const [userData, setUserData] = useState({});
   const [currentMessage, setCurrentMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
@@ -202,6 +202,67 @@ export default function ChatGroup({ navigation, route }) {
     }
   };
 
+  // Ghi âm
+  async function startRecording() {
+    try {
+      console.log('Requesting permissions..');
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      console.log('Starting recording..');
+      const recordingInstance = new Audio.Recording();
+      await recordingInstance.prepareToRecordAsync({
+        android: {
+          extension: '.mp4',
+          outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+          audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+        },
+        ios: {
+          extension: '.mp4',
+          outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+          audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false,
+        },
+      });
+      setRecording(recordingInstance);
+      setIsRecording(true);
+      console.log('Recording started');
+      await recordingInstance.startAsync();
+    } catch (err) {
+      console.error('Failed to start recording', err);
+    }
+  }
+
+  async function stopRecording() {
+    console.log('Stopping recording..');
+    setIsRecording(false);
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
+    console.log('Recording stopped and stored at', uri);
+    setRecording(undefined);
+
+    // Assuming the recording is an audio file with .mp4 extension
+    const audioFile = {
+      uri: uri,
+      type: 'audio/mp4',
+      filename: 'recording.mp4',
+    };
+
+    const audioUrl = await handleUpImage(audioFile.uri, audioFile.type, audioFile.filename);
+    console.log(audioUrl);
+    setCurrentMessage(audioUrl);
+  }
+
 
   async function selectFile() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -235,6 +296,10 @@ export default function ChatGroup({ navigation, route }) {
         file.name = filename;
         break;
       case 'video':
+        file.type = 'video/mp4';
+        file.name = filename;
+        break;
+      case 'audio/mp4':
         file.type = 'video/mp4';
         file.name = filename;
         break;
@@ -619,20 +684,25 @@ export default function ChatGroup({ navigation, route }) {
               onChangeText={(text) => setCurrentMessage(text)}
             />
 
-            <AntDesign
-              name="addfile"
-              size={24}
-              color="black"
-              style={{ marginLeft: 5 }}
-              onPress={() => {pickFile()}}
-            />
-
             <SimpleLineIcons
               name="microphone"
               size={24}
               color="black"
-              style={{ marginLeft: 20 }}
+              style={{ marginLeft: 0 }}
+              onPress={recording ? stopRecording : startRecording}
             />
+            {isRecording && <Text>Recording...</Text>}
+
+
+            <AntDesign
+              name="addfile"
+              size={24}
+              color="black"
+              style={{ marginLeft: 20 }}
+              onPress={() => { pickFile() }}
+            />
+
+
 
             <AntDesign
               name="picture"

@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Clipboard,
+  Button,
 } from "react-native";
 import { Image, Linking } from "react-native";
 import axios from "axios";
@@ -208,7 +209,7 @@ export default function Chat({ navigation, route }) {
     }
   };
 
-  //Ghi âm
+  // Ghi âm
   async function startRecording() {
     try {
       console.log('Requesting permissions..');
@@ -219,7 +220,27 @@ export default function Chat({ navigation, route }) {
       });
       console.log('Starting recording..');
       const recordingInstance = new Audio.Recording();
-      await recordingInstance.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+      await recordingInstance.prepareToRecordAsync({
+        android: {
+          extension: '.mp4',
+          outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+          audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+        },
+        ios: {
+          extension: '.mp4',
+          outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+          audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false,
+        },
+      });
       setRecording(recordingInstance);
       setIsRecording(true);
       console.log('Recording started');
@@ -229,7 +250,6 @@ export default function Chat({ navigation, route }) {
     }
   }
 
-
   async function stopRecording() {
     console.log('Stopping recording..');
     setIsRecording(false);
@@ -238,15 +258,16 @@ export default function Chat({ navigation, route }) {
     console.log('Recording stopped and stored at', uri);
     setRecording(undefined);
 
-    // Assuming the recording is an audio file with .aac extension
+    // Assuming the recording is an audio file with .mp4 extension
     const audioFile = {
       uri: uri,
-      type: 'audio',
-      filename: 'recording.aac',
+      type: 'audio/mp4',
+      filename: 'recording.mp4',
     };
 
     const audioUrl = await handleUpImage(audioFile.uri, audioFile.type, audioFile.filename);
     console.log(audioUrl);
+    setCurrentMessage(audioUrl);
   }
 
   async function selectFile() {
@@ -284,8 +305,8 @@ export default function Chat({ navigation, route }) {
         file.type = 'video/mp4';
         file.name = filename;
         break;
-      case 'audio':
-        file.type = 'audio/aac';
+      case 'audio/mp4':
+        file.type = 'video/mp4';
         file.name = filename;
         break;
       default:
@@ -694,6 +715,8 @@ export default function Chat({ navigation, route }) {
             />
 
             {isRecording && <Text>Recording...</Text>}
+
+
 
             <AntDesign
               name="addfile"
