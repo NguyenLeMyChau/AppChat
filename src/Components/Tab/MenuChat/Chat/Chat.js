@@ -616,21 +616,20 @@ export default function Chat({ navigation, route }) {
 
   const takePicture = async () => {
     try {
-      if (Platform.OS!== 'web') {
+      if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
           alert('Quyền truy cập camera bị từ chối!');
           return;
         }
       }
-      
+
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
         quality: 0.5,
       });
-      
+
       if (!result.canceled) {
         console.log('..............fileType', result.assets[0].type);
         console.log('..............fileName', result.assets[0].fileName);
@@ -642,7 +641,7 @@ export default function Chat({ navigation, route }) {
       console.error('Error taking picture:', error);
     }
   };
-  
+
   const takeVideo = async () => {
     try {
       if (Platform.OS !== 'web') {
@@ -652,14 +651,13 @@ export default function Chat({ navigation, route }) {
           return;
         }
       }
-  
+
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         allowsEditing: true,
-        aspect: [4, 3],
         quality: 0.5,
       });
-  
+
       if (!result.canceled) {
         console.log('..............fileType', result.assets[0].type);
         console.log('..............fileName', result.assets[0].fileName);
@@ -671,9 +669,9 @@ export default function Chat({ navigation, route }) {
       console.error('Error taking video:', error);
     }
   };
-  
-  
-  
+
+
+
 
 
   return (
@@ -706,14 +704,14 @@ export default function Chat({ navigation, route }) {
         <TouchableOpacity style={{ width: "10%" }}>
           <MaterialCommunityIcons name="phone" size={20} color="white" />
         </TouchableOpacity>
-       
+
         <TouchableOpacity style={{ width: "10%" }}>
-        <Entypo
-              name="camera"
-              size={20}
-              onPress={takePicture}
-              color="white"
-            />
+          <Entypo
+            name="camera"
+            size={20}
+            onPress={takePicture}
+            color="white"
+          />
         </TouchableOpacity>
         <TouchableOpacity style={{ width: "10%" }}>
           <Feather name="video" size={20} color="white" onPress={takeVideo} />
