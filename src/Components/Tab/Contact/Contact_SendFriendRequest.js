@@ -30,7 +30,7 @@ export default function Contact_SendFriendRequest({ navigation }) {
          fetchData();
     const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
     newSocket.on("connect", () => {
-      console.log("Connected to Socket.IO server");
+      console.log("Connected to Socket.IO server Freind");
     });
     newSocket.on("sendDataServer", (message) => {
       fetchData();
@@ -75,27 +75,19 @@ export default function Contact_SendFriendRequest({ navigation }) {
     } else {
       Alert.alert(data.message.text);
     }
-
-    alert(data.message);
-
   }
 
   const rejectFriendRequest = async (friendId) => {
-    console.log(dataMain._id)
-    console.log(friendId)
-
+try {
     const response = await axios.post(`https://backend-chatapp-rdj6.onrender.com/user/rejectFriendRequest`, { userId: dataMain._id, friendId: friendId });
     const { data } = response;
-    
-    if (data.success) {
-      Alert.alert(data.message.text);
-      console.log(data.message.text);
-      socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
-    } else {
-      Alert.alert(data.message.text);
+   
+      alert(data.message);
+      console.log(data.message);
+      socket.emit("sendDataClient", ""); // Gửi tin nhắn qua Socket.IO
+   } catch (error) {
+      alert("Error");
     }
-
-    alert(data.message);
   }
 
 

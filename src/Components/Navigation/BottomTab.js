@@ -13,7 +13,16 @@ function BottomTab () {
     return (
         <Tab.Navigator 
         initialRouteName="MenuChat"     
-
+        screenOptions={{
+          tabBarActiveTintColor: 'blue',
+          tabBarInactiveTintColor: '#000000',
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            backgroundColor: '#ffffff',
+            height: 60,
+            },
+        }}
       >
         <Tab.Screen name="MenuChat" component={MenuChat}  
        options={{

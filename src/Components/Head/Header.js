@@ -40,18 +40,6 @@ export default function Header() {
       await getFriendRequestsSentToUser(userData._id);
     }
     fetchData();
-    const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
-    newSocket.on("connect", () => {
-      console.log("Connected to Socket.IO server");
-    });
-    newSocket.on("sendDataServer", (message) => {
-      fetchData();
-    });
-   
-    setSocket(newSocket); // Lưu socket vào state
-    return () => {
-      newSocket.disconnect();
-    };
   }, []);
 
 
@@ -82,8 +70,11 @@ export default function Header() {
         { senderId: userData._id, receiverId: userDataFind._id }
       );
       const { data } = response;
-
-      socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
+      const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
+      newSocket.on("connect", () => {
+        console.log("Connected to Socket.IO server 2");
+      });
+      newSocket.emit("sendDataClient", "sended"); // Gửi tin nhắn qua Socket.IO
       alert(data.message);
     } catch (error) {
       console.log(error);
