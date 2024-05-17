@@ -933,14 +933,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
     padding: 10,
-    width: 220
+    width: "50%",
   },
 
   txtSDTFocus: {
     fontSize: 16,
     color: "black",
     padding: 10,
-    width: 300,
+    width: "75%",
   },
 
   chatText: {

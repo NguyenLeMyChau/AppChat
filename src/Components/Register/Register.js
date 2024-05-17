@@ -30,13 +30,10 @@ export default function Register({ navigation }) {
   const handleSendOTP = async () => {
 
     try {
-      const response = await axios.post('http://localhost:4000/user/sendOTP', { email: email, checkGetPassEmail: false }, {
+      const response = await axios.post('https://backend-chatapp-rdj6.onrender.com/user/sendOTP', { email: email, checkGetPassEmail: false }, {
       });
       const { data } = response; // data = response.data
       if (data.success) {
-        console.log(data.otp);
-        Alert.alert(data.message);
-       
       } else {
         Alert.alert(data.message);
         setModalVisible(false);

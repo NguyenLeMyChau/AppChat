@@ -67,14 +67,9 @@ export default function Contact_SendFriendRequest({ navigation }) {
 
     const response = await axios.post(`https://backend-chatapp-rdj6.onrender.com/user/acceptFriendRequestAndSendMessage`, { userId: dataMain._id, friendId: friendId });
     const { data } = response;
-  
-    if (data.success) {
-      Alert.alert(data.message.text);
-      console.log(data.message.text);
-      socket.emit("sendDataClient", newMessage); // Gửi tin nhắn qua Socket.IO
-    } else {
-      Alert.alert(data.message.text);
-    }
+      Alert.alert(data.message);
+      console.log(data.message);
+      socket.emit("sendDataClient", ""); // Gửi tin nhắn qua Socket.IO
   }
 
   const rejectFriendRequest = async (friendId) => {
@@ -82,7 +77,7 @@ try {
     const response = await axios.post(`https://backend-chatapp-rdj6.onrender.com/user/rejectFriendRequest`, { userId: dataMain._id, friendId: friendId });
     const { data } = response;
    
-      alert(data.message);
+      Alert.alert(data.message);
       console.log(data.message);
       socket.emit("sendDataClient", ""); // Gửi tin nhắn qua Socket.IO
    } catch (error) {
