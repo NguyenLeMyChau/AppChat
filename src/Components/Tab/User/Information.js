@@ -33,7 +33,7 @@ export default function Information({ navigation }) {
 
                         <View style={styles.tabEnd}>
                             <Image
-                                source={userData.avatar ? { uri: userData.avatar } : AnexanderTom}
+                                source={userData.avatar ? { uri: userData.avatar } : {uri:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}}
                                 style={styles.avatar} />
                             <Text style={styles.name}>{userData.name}</Text>
                         </View>

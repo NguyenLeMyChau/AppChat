@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, Animated } from 'react-native';
 import Header from '../../Head/Header';
-import avatar from "../../../../assets/AnexanderTom.jpg";
 import { AntDesign, MaterialIcons, FontAwesome, MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -72,7 +71,7 @@ export default function Timeline() {
       <View style={styles.header}>
         <View style={styles.headerWrite}>
           <Image
-            source={userData.avatar ? { uri: userData.avatar } : avatar}
+            source={userData.avatar ? { uri: userData.avatar } : {uri:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}}
             style={styles.avatar} />
           <TextInput
             placeholder="Hôm nay bạn thế nào?"
@@ -126,7 +125,7 @@ export default function Timeline() {
         <View>
 
           <ImageBackground
-            source={userData.avatar ? { uri: userData.avatar } : avatar}
+            source={userData.avatar ? { uri: userData.avatar } : {uri:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}}
             style={styles.story}>
             <LinearGradient
               colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.7)']}

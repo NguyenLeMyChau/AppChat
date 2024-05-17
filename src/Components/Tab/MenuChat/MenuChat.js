@@ -2,35 +2,22 @@ import { useContext, useEffect, useState } from "react";
 import { Button, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ImageBackground } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
-import { AuthContext } from "../../Login/AuthProvider";
 import axios from "axios";
 import Modal from 'react-native-modal';
 import Header from "../../Head/Header";
 import { io } from "socket.io-client";
 import { Checkbox } from "react-native-paper";
-
-
-
-
-
-
+import * as ImagePicker from 'expo-image-picker';
 export default function MenuChat({ navigation }) {
   const [userData, setUserData] = useState({});
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [listChat, setListChat] = useState([]);
   const [listFriend, setListFriend] = useState([]);
-  const [listUsers, setListUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [socket, setSocket] = useState(null);
 
   const [nameGroup, setNameGroup] = useState("");
-
   const [imageGroup, setImageGroup] = useState(null);
-
   const [modalForward, setModalForward] = useState(false);
-
   const [isSelected, setIsSelected] = useState([]);
 
   async function getData() {
@@ -52,15 +39,15 @@ export default function MenuChat({ navigation }) {
     newSocket.on('connect', () => {
         console.log('Connected to Socket.IO server');
     });
-    newSocket.on('sendDataServer', (message) => {
+    newSocket.on('sendDataServer', () => {
         getData();
 
     });
-    newSocket.on('addGroup', (message) => {
+    newSocket.on('addGroup', () => {
       getData();
 
   });
-    newSocket.on('message_deleted', messageId => {
+    newSocket.on('message_deleted', () => {
         getData()
     });
     setSocket(newSocket); // Lưu socket vào state
@@ -169,39 +156,43 @@ export default function MenuChat({ navigation }) {
   };
 
   async function selectFile() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.onchange = async e => {
 
-      const file = e.target.files[0];
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
 
-      console.log(file);
-      console.log(file.name);
-
+    if (!result.canceled) {
       // Gọi hàm handleUpImage sau khi chọn tệp
-      const imageUrl = await handleUpImage(file);
-      console.log(imageUrl);
+      const imageUrl = await handleUpImage(result.assets[0].uri);
       setImageGroup(imageUrl);
     }
+  }
 
-    input.click();
-  };
-
-  async function handleUpImage(file) {
+  async function handleUpImage(uri) {
     const formData = new FormData();
-    formData.append('avatar', file);
-
+    let file = {
+      uri: uri,
+      name: 'image.jpg',
+      type: 'image/jpeg'
+    };
+    formData.append("avatar", file);
     if (file !== null) {
-      const responseAvatar = await axios.post(`https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const responseAvatar = await axios.post(
+        `https://backend-chatapp-rdj6.onrender.com/user/uploadAvatarS3/${userData._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
+      );
       const image = responseAvatar.data.avatar;
-      console.log(image);
       return image;
     }
-  };
+  }
+
   const toggleCheckbox = (friendId) => {
     setIsSelected((prevSelected) => {
       if (prevSelected.includes(friendId)) {
@@ -379,7 +370,7 @@ export default function MenuChat({ navigation }) {
         source={
           item.avatar
             ? { uri: item.avatar }
-            : require("../../../../assets/AnexanderTom.jpg")
+            : {uri: "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}
         }
       />
 
@@ -414,7 +405,7 @@ export default function MenuChat({ navigation }) {
             <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, width: "100%", height: 90, borderBottomWidth: 1 }}>
               <TouchableOpacity onPress={() => { selectFile() }}>
                 <ImageBackground
-                  source={imageGroup ? { uri: imageGroup } : require('../../../../assets/AnexanderTom.jpg')}
+                  source={imageGroup ? { uri: imageGroup } : {uri : "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}}
                   style={styles.avatar}
                   imageStyle={{ borderRadius: 75 }}
                 />

@@ -19,7 +19,9 @@ const DeleteMemberScreen = ({ navigation, route }) => {
             });
             newSocket.on('sendDataServer', (message) => {
                 fetchFriends();
-    
+            });
+            newSocket.on('leaveGroup', (message) => {
+                fetchFriends();
             });
             setSocket(newSocket); // Lưu socket vào state
             return () => {
@@ -95,7 +97,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
         try {
             const response = await axios.put(`https://backend-chatapp-rdj6.onrender.com/group/removeMembersFromGroup/${group._id}`, { memberIds: memberIds });
             alert(response.data.message);
-            socket.emit('sendDataClient',response.data.message);
+            socket.emit('leaveGroup',memberIds);
         } catch (error) {
             console.error("Error deleting message:", error);
             if (error.response) {

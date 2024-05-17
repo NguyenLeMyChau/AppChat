@@ -1,29 +1,73 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Modal, Button } from "react-native";
 import axios from "axios";
 import { Octicons } from "@expo/vector-icons/build/Icons";
+import { OtpInput } from "react-native-otp-entry";
+
 
 const ForgotPassword = ({navigation}) => {
   const [email, setEmail] = useState("");
 
-  const handleForgotPassword = async () => {
-    try {
-      console.log(email);
-      const response = await axios.post("https://backend-chatapp-rdj6.onrender.com/user/resetPassword", { email: email });
-      if (response.data.success) {
-        Alert.alert("Success", "An email with instructions to reset your password has been sent to your email address.");
-        alert("Success", "An email with instructions to reset your password has been sent to your email address.");
-        console.log(response.data.message);
-      } else {
-        Alert.alert("Error", response.data.message);
-        alert("Error" + response.data.message);
-      }
-    } catch (error) {
-      console.error("Error resetting password:", error);
-      Alert.alert("Error", "An error occurred while resetting your password. Please try again later.");
-      alert("Error", "An error occurred while resetting your password. Please try again later.");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [otpR,setOtpR] = useState('');
+  const [otpConfirm, setOtpConfirm] = useState(false);
+  const [passwordNew, setPasswordNew] = useState('');
+    const [rePassword, setRePassword] = useState('');
+    const [confirmRepassword,setconfirmRePassword] = useState(false);
+  useEffect(()=>{
+    if (passwordNew !== rePassword) {
+      setconfirmRePassword(false)
+  }else setconfirmRePassword(true)
+  })
+
+  const [isNewPasswordValid, setIsNewPasswordValid] = useState();
+      
+  const handleCheckNewPass = (text) => {
+    setPasswordNew(text);
+   if(text.length >= 8){
+        setIsNewPasswordValid(true);
+    } else {
+      setIsNewPasswordValid(false);
     }
   };
+  const handleConfirmOtp = () => {
+   if(otp === otpR){
+        setOtpConfirm(true);
+        setModalVisible(false);
+    } else {
+      setOtpConfirm(false);
+      setModalVisible(false);
+    }
+  };
+
+  const handleSendOTP = async () => {
+
+    try {
+      const response = await axios.post('https://backend-chatapp-rdj6.onrender.com/user/sendOTP', { email: email, checkGetPassEmail: true }, {
+      });
+      const { data } = response; // data = response.data
+      if (data.success) {
+        setOtpR(data.otp)
+      } 
+    } catch (error) {
+      console.error('Error send OTP:', error);
+      alert("Tài khoản không tồn tại");
+    }
+  };
+
+  const handleChange = async () => {
+    const response = await axios.put(`https://backend-chatapp-rdj6.onrender.com/user/updatePassword/${email}`, {newPassword: passwordNew});
+    const { data } = response;
+
+    if (data.success) {
+        alert(data.message);
+        navigation.navigate('Signin')
+    } else {
+        Alert.alert(data.message);
+        alert(data.message);
+    }
+}
 
   return (
     
@@ -43,7 +87,39 @@ const ForgotPassword = ({navigation}) => {
     fontSize: 18,
     fontWeight: "400",}}>Lấy lại mật khẩu</Text>
       </View>
-      <View style={{ flex:1,alignItems: "center",
+      {otpConfirm?(
+         <View style={{ width: '90%', marginBottom: 20 }}>
+
+         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold', marginTop: 20 }}>Mật khẩu mới</Text>
+
+         <TextInput
+             style={[styles.txtSDT]}
+             placeholder="Nhập mật khẩu mới"
+             value={passwordNew}
+             onChangeText={handleCheckNewPass}
+             underlineColorAndroid="transparent"
+             secureTextEntry={true}
+         />
+         {!isNewPasswordValid && <Text style={{color: 'red'}}>Mật khẩu mới phải lớn hơn 8 kí tự </Text>}    
+
+
+         <TextInput
+             style={styles.txtSDT}
+             placeholder="Nhập lại mật khẩu mới"
+             value={rePassword}
+             onChangeText={(text) => {setRePassword(text)}}
+             underlineColorAndroid="transparent"
+             secureTextEntry={true}
+         />
+         {confirmRepassword?null:<Text style={{color:'red'}}>Nhập lại mật khẩu không chính xác</Text>}
+         <TouchableOpacity style={styles.uploadStatus} onPress={() => handleChange()} disabled={confirmRepassword?false:true}>
+                    <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
+                        Cập nhật
+                    </Text>
+                </TouchableOpacity>
+
+     </View>
+      ):( <View style={{ flex:1,alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20}}>
       <Text style={styles.title}>Forgot Password</Text>
@@ -53,10 +129,35 @@ const ForgotPassword = ({navigation}) => {
         onChangeText={text => setEmail(text)}
         value={email}
       />
-      <TouchableOpacity style={styles.button} onPress={handleForgotPassword}>
+      <TouchableOpacity style={styles.button} onPress={()=>{setModalVisible(true);handleSendOTP() }}>
         <Text style={styles.buttonText}>Reset Password</Text>
       </TouchableOpacity>
-      </View>
+      </View>)}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={{ marginTop: "70%", backgroundColor: "white", borderWidth: 1, padding: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: "600", marginBottom: 20 }}>Nhập OTP</Text>
+          <OtpInput
+            numberOfDigits={6}
+            onTextChange={(text) => setOtp(text)}
+            focusColor="green"
+            theme={{
+              containerStyle: { backgroundColor: 'white' }, // Thay đổi màu nền của OTP entry
+              pinCodeContainerStyle: { backgroundColor: 'white' }, // Thay đổi màu nền của ô nhập OTP
+              focusedPinCodeContainerStyle: { borderColor: 'gray' } // Thay đổi màu viền của ô nhập OTP khi được focus
+            }}
+          />
+
+          <Button title="Verify OTP" onPress={()=>handleConfirmOtp()}/>
+        </View>
+
+      </Modal>
     </View>
   );
 };
@@ -64,16 +165,17 @@ const ForgotPassword = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
+    paddingTop:35
   },
   header: {
-    backgroundImage: "linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)",
+    backgroundColor: "#007bff",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 8,
-    height: "8%",
+    height: 60,
     width: "100%",
+   
   },
   title: {
     fontSize: 24,
@@ -88,6 +190,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 20
   },
+  txtSDT: {
+    borderBottomWidth: 1,
+    fontSize: 16,
+    color: 'gray',
+    padding: 10,
+},
   button: {
     width: "100%",
     height: 40,
@@ -99,7 +207,18 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16
-  }
+  },
+  uploadStatus: {
+    width: "90%",
+    height: 40,
+    backgroundColor: '#006AF5',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 20,
+    marginLeft: 20,
+   color:"while"
+},
 });
 
 export default ForgotPassword;

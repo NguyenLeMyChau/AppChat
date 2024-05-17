@@ -5,9 +5,9 @@ import { Alert, Modal, TextInput, TouchableOpacity } from 'react-native';
 import { StyleSheet, View, Button, Text } from 'react-native';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { OtpInput } from "react-native-otp-entry";
-import AnexanderTom from "../../../assets/AnexanderTom.jpg"
 import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Register({ navigation }) {
@@ -18,7 +18,7 @@ export default function Register({ navigation }) {
   const [gender, setGender] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [otp, setOtp] = useState('');
-  const avatar = AnexanderTom;
+  const avatar = {uri:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"};
   
 
   const options = [
@@ -62,7 +62,28 @@ export default function Register({ navigation }) {
     if (data.success) {
       alert(data.message);
       setModalVisible(false);
-      navigation.navigate('Signin');
+     
+  
+      try {
+        const response = await axios.post(
+          "https://backend-chatapp-rdj6.onrender.com/user/login",
+          { email: email,
+            password : password,}
+        );
+        const { data } = response; // data = response.data
+  
+        console.log(data.foundUser);
+        AsyncStorage.setItem("foundUser", JSON.stringify(data.foundUser));
+        navigation.navigate("BottomTab");
+  
+      } catch (error) {
+        console.error(error);
+        if (error.response) {
+          alert(error.response.data.message);
+        } else {
+          console.log(error.message);
+        }
+      }
     } else {
       Alert.alert(data.message);
     }

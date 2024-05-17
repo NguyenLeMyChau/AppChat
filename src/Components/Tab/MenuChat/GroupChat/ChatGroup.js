@@ -34,7 +34,8 @@ import * as DocumentPicker from 'expo-document-picker';
 export default function ChatGroup({ navigation, route }) {
   const { group } = route.params;
   const [recording, setRecording] = useState();
-  const [isRecording, setIsRecording] = useState(false); const [userData, setUserData] = useState({});
+  const [isRecording, setIsRecording] = useState(false); 
+  const [userData, setUserData] = useState({});
   const [currentMessage, setCurrentMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
@@ -83,7 +84,6 @@ export default function ChatGroup({ navigation, route }) {
       if (foundUser !== null) {
         const user = JSON.parse(foundUser);
         setUserData(user);
-        userId = user._id;
         fetchMessages(user);
       }
     } catch (error) {
@@ -93,6 +93,7 @@ export default function ChatGroup({ navigation, route }) {
 
   useEffect(() => {
     getData();
+    console.log('aaaaa',userData._id);
     const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
     newSocket.on("connect", () => {
       console.log("Connected to Socket.IO server");
@@ -100,10 +101,17 @@ export default function ChatGroup({ navigation, route }) {
     newSocket.on("sendDataServer", (message) => {
       getData();
     });
-    newSocket.on("message_deleted", (messageId) => {
-      // Xóa tin nhắn khỏi danh sách nếu tin nhắn được xóa từ một client khác
-      getData();
+    newSocket.on("leaveGroup", (data) => {
+      console.log("123",data)
+        navigation.navigate('MenuChat')
     });
+    newSocket.on("message_deleted", (data) => {
+      console.log("sadsa",userData._id)
+      console.log("sadsa2",data)
+      console.log("sadsa3",data.data[0])
+      if(userData._id===data.data[0])
+        navigation.navigate('MenuChat')
+  });
     setSocket(newSocket); // Lưu socket vào state
     return () => {
       newSocket.disconnect();
@@ -158,7 +166,7 @@ export default function ChatGroup({ navigation, route }) {
           from: userData._id,
         }
       );
-      const data = response.data;
+      
       const formattedMessages = response.data.map((msg) => ({
         _id: msg.id, // ID của tin nhắn
         text: msg.message, // Nội dung tin nhắn
@@ -166,9 +174,8 @@ export default function ChatGroup({ navigation, route }) {
         user: {
           _id: msg.fromSelf ? userData._id : msg.sender._id, // ID của người gửi tin nhắn
           name: msg.sender.name, // Tên của người gửi tin nhắn
-          avatar: msg.fromSelf ? userData.avatar : msg.sender.avatar,
-          // require("../../../../../assets/AnexanderTom.jpg")
-          avatar: msg.sender.avatar,
+           avatar: msg.fromSelf ? userData.avatar : msg.avatar?msg.avatar:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"
+          
         },
         isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
       }));
@@ -184,7 +191,6 @@ export default function ChatGroup({ navigation, route }) {
         )
       );
 
-      console.log(formattedMessages);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -207,13 +213,13 @@ export default function ChatGroup({ navigation, route }) {
   // Chụp ảnh
   const takePicture = async () => {
     try {
-      if (Platform.OS!== 'web') {
+      
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
           alert('Quyền truy cập camera bị từ chối!');
           return;
         }
-      }
+      
       
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -238,13 +244,13 @@ export default function ChatGroup({ navigation, route }) {
 
   const takeVideo = async () => {
     try {
-      if (Platform.OS !== 'web') {
+      
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
           alert('Quyền truy cập camera bị từ chối!');
           return;
         }
-      }
+      
   
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
@@ -495,10 +501,10 @@ export default function ChatGroup({ navigation, route }) {
         wrapperStyle={{
           left: {
             backgroundColor: "white",
-            maxWidth: "85%",
+            Width: "80%",
           },
           right: {
-            maxWidth: "85%",
+            Width: "80%",
           },
         }}
         renderMessageText={
@@ -517,9 +523,9 @@ export default function ChatGroup({ navigation, route }) {
                   volume={1.0}
                   isMuted={false}
                   resizeMode="contain"
-                  shouldPlay
                   style={{ width: 300, height: 300 }}
                   useNativeControls
+
                 />
               )
               : isFileMessage
@@ -844,7 +850,7 @@ export default function ChatGroup({ navigation, route }) {
                       source={
                         item.avatar
                           ? { uri: item.avatar }
-                          : require("../../../../../assets/AnexanderTom.jpg")
+                          : {uri : "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}
                       }
                       style={{ width: 50, height: 50, borderRadius: 50 }}
                     />
