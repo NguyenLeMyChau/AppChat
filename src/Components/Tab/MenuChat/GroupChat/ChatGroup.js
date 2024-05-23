@@ -171,9 +171,7 @@ export default function ChatGroup({ navigation, route }) {
       );
       
       const formattedMessages = response.data.map((msg) => {
-        console.log('.....................MSG', msg)
         const avatar = msg.fromSelf ? userData.avatar : msg.senderInfo.avatar ? msg.senderInfo.avatar : "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W";
-        console.log(avatar); // In ra avatar
 
         return {
           _id: msg.id, // ID của tin nhắn

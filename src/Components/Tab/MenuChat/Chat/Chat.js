@@ -172,7 +172,7 @@ export default function Chat({ navigation, route }) {
             ? null
             : friend.avatar
               ? friend.avatar
-              : require("../../../../../assets/AnexanderTom.jpg"),
+              : "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W",
         },
         isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
       }));
@@ -484,16 +484,16 @@ export default function Chat({ navigation, route }) {
               )
               : isFileMessage
                 ? () => (
-                  <TouchableOpacity style={{width: 300,height:200,padding:5}}
+                  <TouchableOpacity style={{ width: 300, height: 200, padding: 5 }}
                     onPress={() => openFileURL(props.currentMessage.text)}
                   >
-                    
+
                     <AntDesign
                       name="file1"
                       size={100}
                       style={{ alignSelf: "center" }}
                     />
-                    <Text style={{maxHeight:100, color: 'black',fontSize:14,alignSelf:'center' }}>File: {props.currentMessage.text}</Text>
+                    <Text style={{ maxHeight: 100, color: 'black', fontSize: 14, alignSelf: 'center' }}>File: {props.currentMessage.text}</Text>
                   </TouchableOpacity>
                 )
                 : null
@@ -883,30 +883,30 @@ export default function Chat({ navigation, route }) {
                   </View>
                 );
               })}
-              </ScrollView>
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: 10,
-                  backgroundColor: "#006AF5",
-                }}
-                onPress={() => {
-                  const selectedItems = getSelectedItems();
-                  const selectedIds = selectedItems.map((item) => item._id);
-                  console.log(selectedItems);
-                  console.log(selectedIds);
-                  console.log(selectedMessage.text);
-                  forwardMessage(selectedIds, selectedMessage.text);
-                  setModalForward(false);
-                }}
-              >
-                <Text style={{ fontSize: 18, color: "white" }}>
-                  Chuyển tiếp
-                </Text>
-              </TouchableOpacity>
-            
+            </ScrollView>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 10,
+                backgroundColor: "#006AF5",
+              }}
+              onPress={() => {
+                const selectedItems = getSelectedItems();
+                const selectedIds = selectedItems.map((item) => item._id);
+                console.log(selectedItems);
+                console.log(selectedIds);
+                console.log(selectedMessage.text);
+                forwardMessage(selectedIds, selectedMessage.text);
+                setModalForward(false);
+              }}
+            >
+              <Text style={{ fontSize: 18, color: "white" }}>
+                Chuyển tiếp
+              </Text>
+            </TouchableOpacity>
+
           </View>
         </Modal>
       </View>
