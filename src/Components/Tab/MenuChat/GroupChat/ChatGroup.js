@@ -35,7 +35,7 @@ import ImageView from 'react-native-image-viewing';
 export default function ChatGroup({ navigation, route }) {
   const { group } = route.params;
   const [recording, setRecording] = useState();
-  const [isRecording, setIsRecording] = useState(false); 
+  const [isRecording, setIsRecording] = useState(false);
   const [userData, setUserData] = useState({});
   const [currentMessage, setCurrentMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -96,7 +96,7 @@ export default function ChatGroup({ navigation, route }) {
 
   useEffect(() => {
     getData();
-    console.log('aaaaa',userData._id);
+    console.log('aaaaa', userData._id);
     const newSocket = io("https://backend-chatapp-rdj6.onrender.com");
     newSocket.on("connect", () => {
       console.log("Connected to Socket.IO server");
@@ -105,16 +105,16 @@ export default function ChatGroup({ navigation, route }) {
       getData();
     });
     newSocket.on("leaveGroup", (data) => {
-      console.log("123",data)
-        navigation.navigate('MenuChat')
+      console.log("123", data)
+      navigation.navigate('MenuChat')
     });
     newSocket.on("message_deleted", (data) => {
-      console.log("sadsa",userData._id)
-      console.log("sadsa2",data)
-      console.log("sadsa3",data.data[0])
-      if(userData._id===data.data[0])
+      console.log("sadsa", userData._id)
+      console.log("sadsa2", data)
+      console.log("sadsa3", data.data[0])
+      if (userData._id === data.data[0])
         navigation.navigate('MenuChat')
-  });
+    });
     setSocket(newSocket); // Lưu socket vào state
     return () => {
       newSocket.disconnect();
@@ -148,7 +148,7 @@ export default function ChatGroup({ navigation, route }) {
           name: userData.name, // Tên của người gửi tin nhắn
           avatar: userData.avatar
             ? userData.avatar
-            : require("../../../../../assets/AnexanderTom.jpg"),
+            : { uri: 'https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W' },
         },
         isHidden: data.isHidden,
       };
@@ -170,17 +170,25 @@ export default function ChatGroup({ navigation, route }) {
         }
       );
 
-      const formattedMessages = response.data.map((msg) => ({
-        _id: msg.id, // ID của tin nhắn
-        text: msg.message, // Nội dung tin nhắn
-        createdAt: new Date(msg.createdAt), // Thời gian tạo tin nhắn (định dạng Date)
-        user: {
-          _id: msg.fromSelf ? userData._id : msg.sender._id, // ID của người gửi tin nhắn
-          name: msg.sender.name, // Tên của người gửi tin nhắn
-           avatar: msg.fromSelf ? userData.avatar : msg.senderInfo.avatar?msg.avatar:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"
-        },
-        isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
-      }));
+      const formattedMessages = response.data.map((msg) => {
+        const avatar = msg.fromSelf ? userData.avatar : msg.senderInfo.avatar ? msg.avatar : "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W";
+
+        console.log(avatar); // In ra avatar
+
+        return {
+          _id: msg.id, // ID của tin nhắn
+          text: msg.message, // Nội dung tin nhắn
+          createdAt: new Date(msg.createdAt), // Thời gian tạo tin nhắn (định dạng Date)
+          user: {
+            _id: msg.fromSelf ? userData._id : msg.sender._id, // ID của người gửi tin nhắn
+            name: msg.sender.name, // Tên của người gửi tin nhắn
+            avatar: avatar
+          },
+          isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
+        };
+      });
+
+
       const visibleMessages = formattedMessages.filter((msg) => {
 
         if (!msg.isHidden || (msg.isHidden && msg.user._id !== userData._id)) {
@@ -216,21 +224,21 @@ export default function ChatGroup({ navigation, route }) {
   // Chụp ảnh
   const takePicture = async () => {
     try {
-      
-        const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Quyền truy cập camera bị từ chối!');
-          return;
-        }
-      
-      
+
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Quyền truy cập camera bị từ chối!');
+        return;
+      }
+
+
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        
+
         quality: 0.5,
       });
-      
+
       if (!result.canceled) {
         console.log('..............fileType', result.assets[0].type);
         console.log('..............fileName', result.assets[0].fileName);
@@ -242,26 +250,26 @@ export default function ChatGroup({ navigation, route }) {
       console.error('Error taking picture:', error);
     }
   };
-  
+
   //Video
 
   const takeVideo = async () => {
     try {
-      
-        const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Quyền truy cập camera bị từ chối!');
-          return;
-        }
-      
-  
+
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Quyền truy cập camera bị từ chối!');
+        return;
+      }
+
+
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         allowsEditing: true,
 
         quality: 0.5,
       });
-  
+
       if (!result.canceled) {
         console.log('..............fileType', result.assets[0].type);
         console.log('..............fileName', result.assets[0].fileName);
@@ -273,7 +281,7 @@ export default function ChatGroup({ navigation, route }) {
       console.error('Error taking video:', error);
     }
   };
-  
+
 
   // Ghi âm
   async function startRecording() {
@@ -549,7 +557,7 @@ export default function ChatGroup({ navigation, route }) {
               )
               : isFileMessage
                 ? () => (
-                  <TouchableOpacity style={{maxWidth: 300,height:200,padding:5}}
+                  <TouchableOpacity style={{ maxWidth: 300, height: 200, padding: 5 }}
                     onPress={() => openFileURL(props.currentMessage.text)}
                   >
                     <AntDesign
@@ -557,7 +565,7 @@ export default function ChatGroup({ navigation, route }) {
                       size={100}
                       style={{ alignSelf: "center" }}
                     />
-                     <Text style={{maxHeight:100, color: 'black',fontSize:14,alignSelf:'center' }}>File: {props.currentMessage.text}</Text>
+                    <Text style={{ maxHeight: 100, color: 'black', fontSize: 14, alignSelf: 'center' }}>File: {props.currentMessage.text}</Text>
                   </TouchableOpacity>
                 )
                 : null
@@ -704,15 +712,15 @@ export default function ChatGroup({ navigation, route }) {
           <MaterialCommunityIcons name="phone" size={20} color="white" />
         </TouchableOpacity>
         <TouchableOpacity style={{ width: "10%" }}>
-        <Entypo
-              name="camera"
-              size={20}
-              onPress={takePicture}
-              color="white"
-            />
+          <Entypo
+            name="camera"
+            size={20}
+            onPress={takePicture}
+            color="white"
+          />
         </TouchableOpacity>
         <TouchableOpacity style={{ width: "10%" }}>
-          <Feather name="video" size={20} color="white"  onPress={takeVideo}/>
+          <Feather name="video" size={20} color="white" onPress={takeVideo} />
         </TouchableOpacity>
         <TouchableOpacity
           style={{ width: "10%" }}
@@ -869,7 +877,7 @@ export default function ChatGroup({ navigation, route }) {
                       source={
                         item.avatar
                           ? { uri: item.avatar }
-                          : {uri : "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}
+                          : { uri: "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W" }
                       }
                       style={{ width: 50, height: 50, borderRadius: 50 }}
                     />
@@ -886,30 +894,30 @@ export default function ChatGroup({ navigation, route }) {
                   </View>
                 );
               })}
-               </ScrollView>
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: 10,
-                  backgroundColor: "#006AF5",
-                }}
-                onPress={() => {
-                  const selectedItems = getSelectedItems();
-                  const selectedIds = selectedItems.map((item) => item._id);
-                  console.log(selectedItems);
-                  console.log(selectedIds);
-                  console.log(selectedMessage.text);
-                  forwardMessage(selectedIds, selectedMessage.text);
-                  setModalForward(false);
-                }}
-              >
-                <Text style={{ fontSize: 18, color: "white" }}>
-                  Chuyển tiếp
-                </Text>
-              </TouchableOpacity>
-           
+            </ScrollView>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 10,
+                backgroundColor: "#006AF5",
+              }}
+              onPress={() => {
+                const selectedItems = getSelectedItems();
+                const selectedIds = selectedItems.map((item) => item._id);
+                console.log(selectedItems);
+                console.log(selectedIds);
+                console.log(selectedMessage.text);
+                forwardMessage(selectedIds, selectedMessage.text);
+                setModalForward(false);
+              }}
+            >
+              <Text style={{ fontSize: 18, color: "white" }}>
+                Chuyển tiếp
+              </Text>
+            </TouchableOpacity>
+
           </View>
         </Modal>
       </View>

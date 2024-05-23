@@ -35,6 +35,8 @@ const DeleteMemberScreen = ({ navigation, route }) => {
             const response = await axios.get(`https://backend-chatapp-rdj6.onrender.com/group/getGroupMembers/${group._id}`);
             const groupMembers = response.data.groupMembers;
 
+            console.log('...............groupMembers:', groupMembers);
+
             //Lọc ra member có memberId trùng với userId của user hiện tại
             const userMember = groupMembers.find(member => user._id === member._id);
 
@@ -79,7 +81,7 @@ const DeleteMemberScreen = ({ navigation, route }) => {
         return friends.map((friend, index) => (
             <View key={friend._id} style={styles.friendItem}>
                 <Image
-                    source={friend.avatar ? { uri: friend.avatar } : require("../../../../../assets/AnexanderTom.jpg")}
+                    source={friend.avatar ? { uri: friend.avatar } : {uri: 'https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W'}}
                     style={{ width: 50, height: 50, borderRadius: 50 }}
                 />
                 <Text style={{ fontSize: 16 }}>{friend.name}</Text>
