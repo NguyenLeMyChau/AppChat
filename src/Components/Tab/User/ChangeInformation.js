@@ -115,7 +115,7 @@ export default function ChangeInformation({ navigation }) {
       console.log(updatedUser);
       await AsyncStorage.setItem("foundUser", JSON.stringify(updatedUser));
       setUserData(updatedUser);
-     
+      await navigation.navigate("BottomTab");
     } else {
       if (error.response) {
         alert(error.response.data.message);

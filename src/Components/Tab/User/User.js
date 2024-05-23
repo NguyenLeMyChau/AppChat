@@ -3,21 +3,22 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView 
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo, Feather } from "@expo/vector-icons";
 import Header from '../../Head/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AnexanderTom from '../../../../assets/AnexanderTom.jpg'
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function User({ navigation }) {
   const [userData, setUserData] = useState({});
 
-  async function getData() {
-    const foundUser = await AsyncStorage.getItem('foundUser');
-    console.log(JSON.parse(foundUser));
-    setUserData(JSON.parse(foundUser));
-    //JSON.parse(foundUser) chuyển chuỗi JSON thành object
-  }
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const foundUser = await AsyncStorage.getItem('foundUser');
+        console.log(JSON.parse(foundUser));
+        setUserData(JSON.parse(foundUser));
+      };
 
-  useEffect(() => {
-    getData();
-  }, []);
+      fetchData();
+    }, [])
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -32,21 +33,21 @@ export default function User({ navigation }) {
 
       </View>
 
-      
-        <TouchableOpacity onPress={() => navigation.navigate('InformationUser')}>
-          <View style={styles.user}>
-            <Image
-              style={styles.avt}
-              // require('/assets/AnexanderTom.jpg')
-              source={userData.avatar ? { uri: userData.avatar } : {uri:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}}
-            />
-            <View style={styles.columnText}>
-              <Text style={styles.bold}>{userData.name}</Text>
-              <Text style={styles.nor}>Xem trang cá nhân</Text>
-            </View>
+
+      <TouchableOpacity onPress={() => navigation.navigate('InformationUser')}>
+        <View style={styles.user}>
+          <Image
+            style={styles.avt}
+            // require('/assets/AnexanderTom.jpg')
+            source={userData.avatar ? { uri: userData.avatar } : { uri: "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W" }}
+          />
+          <View style={styles.columnText}>
+            <Text style={styles.bold}>{userData.name}</Text>
+            <Text style={styles.nor}>Xem trang cá nhân</Text>
           </View>
-        </TouchableOpacity>
-        
+        </View>
+      </TouchableOpacity>
+
 
       <View
         style={{
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop:35
+    paddingTop: 35
   },
 
   header_icon: {
