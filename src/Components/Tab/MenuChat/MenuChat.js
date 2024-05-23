@@ -402,6 +402,7 @@ export default function MenuChat({ navigation }) {
           <View style={{
             backgroundColor: "white", maxHeight: "70%", width: "100%", position: 'absolute'
           }}>
+           
             <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, width: "100%", height: 90, borderBottomWidth: 1 }}>
               <TouchableOpacity onPress={() => { selectFile() }}>
                 <ImageBackground
@@ -437,6 +438,7 @@ export default function MenuChat({ navigation }) {
                   </View>
                 )
               })}
+               </ScrollView>
               <TouchableOpacity
                 style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center", padding: 10, backgroundColor: "#006AF5" }}
                 onPress={() => {
@@ -445,7 +447,7 @@ export default function MenuChat({ navigation }) {
               >
                 <Text style={{ fontSize: 18, color: "white" }}>Tạo nhóm</Text>
               </TouchableOpacity>
-            </ScrollView>
+           
           </View>
         </Modal>
 

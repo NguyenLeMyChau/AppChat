@@ -484,15 +484,16 @@ export default function Chat({ navigation, route }) {
               )
               : isFileMessage
                 ? () => (
-                  <TouchableOpacity
+                  <TouchableOpacity style={{width: 300,height:200,padding:5}}
                     onPress={() => openFileURL(props.currentMessage.text)}
                   >
-                    {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
+                    
                     <AntDesign
                       name="file1"
                       size={100}
                       style={{ alignSelf: "center" }}
                     />
+                    <Text style={{maxHeight:100, color: 'black',fontSize:14,alignSelf:'center' }}>File: {props.currentMessage.text}</Text>
                   </TouchableOpacity>
                 )
                 : null
@@ -882,6 +883,7 @@ export default function Chat({ navigation, route }) {
                   </View>
                 );
               })}
+              </ScrollView>
               <TouchableOpacity
                 style={{
                   flexDirection: "row",
@@ -904,7 +906,7 @@ export default function Chat({ navigation, route }) {
                   Chuyển tiếp
                 </Text>
               </TouchableOpacity>
-            </ScrollView>
+            
           </View>
         </Modal>
       </View>

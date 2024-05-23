@@ -90,6 +90,7 @@ export default function ChangeInformation({ navigation }) {
     const { data } = response;
 
     if (data.success) {
+      alert(data.message);
       let updatedUser;
       if (name === "") {
         updatedUser = {
@@ -107,12 +108,14 @@ export default function ChangeInformation({ navigation }) {
           gender: gender,
           avatar: avatar,
         };
+        
       }
 
-      alert(data.message);
+      
       console.log(updatedUser);
       await AsyncStorage.setItem("foundUser", JSON.stringify(updatedUser));
       setUserData(updatedUser);
+     
     } else {
       if (error.response) {
         alert(error.response.data.message);
@@ -165,7 +168,7 @@ export default function ChangeInformation({ navigation }) {
             name="arrow-left"
             size={25}
             color="white"
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate('Information')}
           />
         </TouchableOpacity>
 
@@ -291,6 +294,7 @@ export default function ChangeInformation({ navigation }) {
             style={styles.uploadStatus}
             onPress={async () => {
               await handleChange(avatar);
+              
             }}
           >
             <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>

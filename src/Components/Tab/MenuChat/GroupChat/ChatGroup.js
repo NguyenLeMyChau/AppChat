@@ -30,6 +30,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from 'expo-image-picker';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as DocumentPicker from 'expo-document-picker';
+import ImageView from 'react-native-image-viewing';
 
 export default function ChatGroup({ navigation, route }) {
   const { group } = route.params;
@@ -43,6 +44,8 @@ export default function ChatGroup({ navigation, route }) {
   const [modalForward, setModalForward] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
+  const [isImageViewVisible, setIsImageViewVisible] = useState(false);
 
   React.useEffect(() => {
     ScreenOrientation.unlockAsync(); // Cho phép xoay màn hình
@@ -166,7 +169,7 @@ export default function ChatGroup({ navigation, route }) {
           from: userData._id,
         }
       );
-      
+
       const formattedMessages = response.data.map((msg) => ({
         _id: msg.id, // ID của tin nhắn
         text: msg.message, // Nội dung tin nhắn
@@ -174,12 +177,12 @@ export default function ChatGroup({ navigation, route }) {
         user: {
           _id: msg.fromSelf ? userData._id : msg.sender._id, // ID của người gửi tin nhắn
           name: msg.sender.name, // Tên của người gửi tin nhắn
-           avatar: msg.fromSelf ? userData.avatar : msg.avatar?msg.avatar:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"
-          
+           avatar: msg.fromSelf ? userData.avatar : msg.senderInfo.avatar?msg.avatar:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"
         },
         isHidden: msg.isHidden, // Trạng thái ẩn tin nhắn (nếu có)
       }));
       const visibleMessages = formattedMessages.filter((msg) => {
+
         if (!msg.isHidden || (msg.isHidden && msg.user._id !== userData._id)) {
           return true;
         }
@@ -224,7 +227,7 @@ export default function ChatGroup({ navigation, route }) {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
+        
         quality: 0.5,
       });
       
@@ -255,7 +258,7 @@ export default function ChatGroup({ navigation, route }) {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         allowsEditing: true,
-        aspect: [4, 3],
+
         quality: 0.5,
       });
   
@@ -510,11 +513,27 @@ export default function ChatGroup({ navigation, route }) {
         renderMessageText={
           isImageMessage
             ? () => (
-              <Image
-                source={{ uri: props.currentMessage.text }}
-                style={{ width: 300, height: 300 }}
-                resizeMode="contain"
-              />
+              <View>
+                <TouchableOpacity onPress={() => {
+                  setIsImageViewVisible(true);
+                  setSelectedImageUri(props.currentMessage.text);
+                }}
+                >
+                  <Image
+                    source={{ uri: props.currentMessage.text }}
+                    style={{ width: 250, height: 250 }}
+                  // resizeMode="contain"
+                  />
+                </TouchableOpacity>
+
+                <ImageView
+                  images={[{ uri: selectedImageUri }]}
+                  imageIndex={0}
+                  visible={isImageViewVisible}
+                  onRequestClose={() => setIsImageViewVisible(false)}
+                />
+              </View>
+
             )
             : isVideoMessage
               ? () => (
@@ -523,22 +542,22 @@ export default function ChatGroup({ navigation, route }) {
                   volume={1.0}
                   isMuted={false}
                   resizeMode="contain"
-                  style={{ width: 300, height: 300 }}
+                  style={{ width: 250, height: 300 }}
                   useNativeControls
 
                 />
               )
               : isFileMessage
                 ? () => (
-                  <TouchableOpacity
+                  <TouchableOpacity style={{maxWidth: 300,height:200,padding:5}}
                     onPress={() => openFileURL(props.currentMessage.text)}
                   >
-                    {/* <Text style={{ color: 'blue' }}>File: {props.currentMessage.text}</Text> */}
                     <AntDesign
                       name="file1"
                       size={100}
                       style={{ alignSelf: "center" }}
                     />
+                     <Text style={{maxHeight:100, color: 'black',fontSize:14,alignSelf:'center' }}>File: {props.currentMessage.text}</Text>
                   </TouchableOpacity>
                 )
                 : null
@@ -867,6 +886,7 @@ export default function ChatGroup({ navigation, route }) {
                   </View>
                 );
               })}
+               </ScrollView>
               <TouchableOpacity
                 style={{
                   flexDirection: "row",
@@ -889,7 +909,7 @@ export default function ChatGroup({ navigation, route }) {
                   Chuyển tiếp
                 </Text>
               </TouchableOpacity>
-            </ScrollView>
+           
           </View>
         </Modal>
       </View>

@@ -97,7 +97,7 @@ try {
                   source={item.avatar ? { uri: item.avatar } : require('../../../../assets/AnexanderTom.jpg')}
                   style={styles.avatar}
                 />
-                <Text style={{ fontSize: 16 }}>{item.name}</Text>
+                <Text style={{ fontSize: 18 }}>{item.name}</Text>
 
                 <MaterialCommunityIcons name="eyedropper-plus" size={24} color="black" />
 
@@ -106,13 +106,13 @@ try {
 
               <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: "center" }}>
                 <TouchableOpacity style={styles.uploadStatus} onPress={() => acceptFriendRequestAndSendMessage(item._id)}>
-                  <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
+                  <Text style={{ fontSize: 14, fontWeight: "100", color: "white" }}>
                     Đồng ý
                   </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ ...styles.uploadStatus, backgroundColor: "red" }} onPress={() => rejectFriendRequest(item._id)}>
-                  <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
+                  <Text style={{ fontSize: 14, fontWeight: "100", color: "white" }}>
                     Từ chối
                   </Text>
                 </TouchableOpacity>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 
   uploadStatus: {
     width: 85,
-    height: 40,
+    height: 50,
     backgroundColor: '#006AF5',
     borderRadius: 20,
     justifyContent: 'center',

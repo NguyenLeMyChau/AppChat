@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
-
+        paddingTop: 35
     },
     title: {
         width: '100%',
@@ -166,12 +166,12 @@ const styles = StyleSheet.create({
     },
 
     header: {
-        backgroundImage: 'linear-gradient(90deg, #006AF5 30%, #5ac8fa 100%)',
+        backgroundColor: 'blue',
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 16,
         paddingVertical: 8,
-        height: '8%',
+        height: 50,
         width: '100%'
     },
 
