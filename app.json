@@ -18,18 +18,27 @@
       "infoPlist": {
         "NSCameraUsageDescription": "Ứng dụng cần truy cập camera để chụp ảnh"
       },
-      "supportsTablet": true
-     
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pagepro.testpublishapp"
     },
     "android": {
-      "permissions": ["CAMERA"],
+      "permissions": [
+        "CAMERA"
+      ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/zalo.jpg",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.pagepro.testpublishapp",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "355a8344-0ffa-4bd0-804e-0a84612edfd9"
+      }
     }
   }
 }

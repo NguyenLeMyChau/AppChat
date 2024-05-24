@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
-        paddingTop: 35
+        
     },
     title: {
         width: '100%',

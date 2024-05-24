@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: "center",
-    paddingTop:35
+
   },
 
   avatar: {

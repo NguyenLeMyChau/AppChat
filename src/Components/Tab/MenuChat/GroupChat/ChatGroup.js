@@ -105,13 +105,9 @@ export default function ChatGroup({ navigation, route }) {
       getData();
     });
     newSocket.on("leaveGroup", (data) => {
-      console.log("123", data)
       navigation.navigate('MenuChat')
     });
     newSocket.on("message_deleted", (data) => {
-      console.log("sadsa", userData._id)
-      console.log("sadsa2", data)
-      console.log("sadsa3", data.data[0])
       if (userData._id === data.data[0])
         navigation.navigate('MenuChat')
     });
@@ -135,7 +131,7 @@ export default function ChatGroup({ navigation, route }) {
           from: userData._id,
           to: group._id,
           message: currentMessage,
-          avatar: userData.avatar,
+          avatar: group.avatar,
         }
       );
       const data = response.data.data;
@@ -928,7 +924,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E9EBED",
-    paddingTop: 35
   },
 
   chat: {
