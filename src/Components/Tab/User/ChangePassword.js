@@ -13,6 +13,29 @@ export default function ChangePassword({ navigation }) {
     const [password, setPassword] = useState('');
     const [passwordNew, setPasswordNew] = useState('');
     const [rePassword, setRePassword] = useState('');
+    const [OldpasswordValid, setOldPasswordValid] = useState('');
+
+
+    const handleCheckOldPass = async (text) => {
+        try {
+            const response = await axios.post(
+                "https://backend-chatapp-rdj6.onrender.com/user/login",
+                {
+                    email: userData.email,
+                    password: text,
+                }
+            );
+            const { data } = response; // data = response.data
+            if (data.success) {
+                setOldPasswordValid(true);
+            } else {
+                setOldPasswordValid(false);
+            }
+        } catch (error) {
+            setOldPasswordValid(false);
+        }
+    };
+    
 
 
     // const {login} = useContext(AuthContext);
@@ -39,7 +62,8 @@ export default function ChangePassword({ navigation }) {
 
 
     async function getData() {
-        const foundUser = await AsyncStorage.getItem('foundUser');      
+        const foundUser = await AsyncStorage.getItem('foundUser');     
+        console.log(foundUser) 
         setUserData(JSON.parse(foundUser));
         //JSON.parse(foundUser) chuyển chuỗi JSON thành object
     }
@@ -110,13 +134,16 @@ export default function ChangePassword({ navigation }) {
                 <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Mật khẩu hiện tại:</Text>
 
                 <TextInput
-                    style={styles.txtSDT}
+                    style={[styles.txtSDT, { borderBottomColor: OldpasswordValid ? 'black' : 'red' }]}
                     placeholder="Nhập mật khẩu hiện tại"
-
-                    value={password}
                     onChangeText={(text) => setPassword(text)}
+                    onBlur={() => handleCheckOldPass(password)}
+                    value={password}
                     underlineColorAndroid="transparent"
                 />
+
+                {!OldpasswordValid && <Text style={{color: 'red'}}>Mật khẩu hiện tại không đúng! </Text>}    
+
 
                 <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold', marginTop: 20 }}>Mật khẩu mới</Text>
 
@@ -128,7 +155,7 @@ export default function ChangePassword({ navigation }) {
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
                 />
-                {!isNewPasswordValid && <Text style={{color: 'red'}}>Mật khẩu mới không được trùng mật khẩu cũ và lớn hơn 8 kí tự </Text>}    
+                {!isNewPasswordValid && <Text style={{color: 'red'}}>Mật khẩu mới phải lớn hơn 8 kí tự </Text>}    
 
 
                 <TextInput
@@ -145,7 +172,11 @@ export default function ChangePassword({ navigation }) {
             </View>
 
             <TouchableOpacity style={styles.uploadStatus} onPress={async() => {
-                if(isNewPasswordValid && confirmRepassword){
+                if(isNewPasswordValid && confirmRepassword && OldpasswordValid ){
+                    if(password === passwordNew){
+                        Alert.alert("Vui lòng nhập mật khẩu mới khác mật khẩu cũ!")
+                    }
+                    else
                     await handleChange();
                 }
                 else{
@@ -155,6 +186,7 @@ export default function ChangePassword({ navigation }) {
                     <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
                         Cập nhật
                     </Text>
+
                 </TouchableOpacity>
 
 

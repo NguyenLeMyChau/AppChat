@@ -69,6 +69,8 @@ const ForgotPassword = ({navigation}) => {
     }
 }
 
+
+
   return (
     
     <View style={styles.container}>
