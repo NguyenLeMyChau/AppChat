@@ -27,13 +27,17 @@ export default function ChangePassword({ navigation }) {
 
     const [rePasswordFocus, setrepasswordfocus] = useState(false);
     const [confirmRepassword,setconfirmRePassword] = useState(true);
-    const handleRePasswordFocus = () => { setrepasswordfocus(true); }
-    const handleRePasswordBlur = () => { setrepasswordfocus(false); 
-        if (passwordNew !== rePassword) {
-            setconfirmRePassword(false)
-        }else setconfirmRePassword(true)
-    }
     
+    const handleRePasswordChange = (text) => {
+        setRePassword(text);
+        if (passwordNew !== text) {
+            setconfirmRePassword(false);
+        } else {
+            setconfirmRePassword(true);
+        }
+    };
+
+
     async function getData() {
         const foundUser = await AsyncStorage.getItem('foundUser');      
         setUserData(JSON.parse(foundUser));
@@ -55,6 +59,7 @@ export default function ChangePassword({ navigation }) {
             setPassword('');
             setPasswordNew('');
             setRePassword('');
+            await navigation.navigate("HomeLoginZalo");
         } else {
             Alert.alert(data.message);
             alert(data.message);
@@ -65,7 +70,7 @@ export default function ChangePassword({ navigation }) {
       
       const handleCheckNewPass = (text) => {
         setPasswordNew(text);
-        if (password === text ) {
+        if (password === text || text.length <8 ) {
           let isMatch = true;
           for (let i = 0; i < password.length; i++) {
             if (password[i] !== text[i]) {
@@ -73,15 +78,17 @@ export default function ChangePassword({ navigation }) {
               break;
             }
           }
-          if (isMatch && password.length === text.length) {
+          if ((isMatch && password.length === text.length) || text.length<8) {
             setIsNewPasswordValid(false);
-          } else if(text.length >= 6 && /^[A-Z]/.test(text)){
-            setIsNewPasswordValid(true);
-          }
-        } else {
+          } 
+
+        } 
+        else {
           setIsNewPasswordValid(true);
         }
       };
+
+      
 
 
     return (
@@ -121,24 +128,30 @@ export default function ChangePassword({ navigation }) {
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
                 />
-                {!isNewPasswordValid && <Text style={{color: 'red'}}>Mật khẩu mới phải lớn hơn 6 kí tự và ký tự đầu là ký tự in hoa. Mật khẩu mới không được giống mật khẩu cũ!</Text>}    
+                {!isNewPasswordValid && <Text style={{color: 'red'}}>Mật khẩu mới không được trùng mật khẩu cũ và lớn hơn 8 kí tự </Text>}    
 
 
                 <TextInput
                     style={styles.txtSDT}
                     placeholder="Nhập lại mật khẩu mới"
                     value={rePassword}
-                    onChangeText={(text) => setRePassword(text)}
+                    onChangeText={handleRePasswordChange}
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
-                    onFocus={handleRePasswordFocus}
-                    onBlur={handleRePasswordBlur}
+             
                 />
                 {confirmRepassword?null:<Text style={{color:'red'}}>Nhập lại mật khẩu không chính xác</Text>}
                
             </View>
 
-            <TouchableOpacity style={styles.uploadStatus} onPress={() => handleChange()}>
+            <TouchableOpacity style={styles.uploadStatus} onPress={async() => {
+                if(isNewPasswordValid && confirmRepassword){
+                    await handleChange();
+                }
+                else{
+                    console.log("Vui long kiem tra lai thong tin!");
+                }
+            }}>
                     <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
                         Cập nhật
                     </Text>

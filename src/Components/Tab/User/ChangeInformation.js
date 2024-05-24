@@ -155,6 +155,16 @@ export default function ChangeInformation({ navigation }) {
     ).start();
   }, []);
 
+  const [isNameValid, setIsNameValid] = useState(false);
+  const handleCheckName = (text) => {
+      setName(text);
+      if (text.length >= 2 && text.length <= 40) {
+        setIsNameValid(true);
+      } else {
+        setIsNameValid(false);
+      }
+    };
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -218,10 +228,11 @@ export default function ChangeInformation({ navigation }) {
                 alignItems: "center",
               }}
             >
+              <View>
               <TextInput
-                style={styles.option}
+                style={[styles.option,{ borderBottomColor: isNameValid ? 'black' : 'red' }]}
                 onChangeText={(text) => {
-                  setName(text), setChange(true);
+                  handleCheckName(text), setName(text), setChange(true);
                 }}
                 placeholder={userData.name}
               />
@@ -231,6 +242,8 @@ export default function ChangeInformation({ navigation }) {
                 color="black"
                 style={{ right: 35 }}
               />
+              {!isNameValid? <Text style={{ color: 'red' }}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>:null}
+              </View>
             </View>
 
             <View
@@ -290,13 +303,14 @@ export default function ChangeInformation({ navigation }) {
           </View>
         </View>
         {change ? (
-          <TouchableOpacity
-            style={styles.uploadStatus}
-            onPress={async () => {
+         <TouchableOpacity style={styles.uploadStatus} onPress={async () => {
+          if(isNameValid){
               await handleChange(avatar);
-              
-            }}
-          >
+          }
+          else{
+              console.log("Vui long kiem tra lai thong tin!");
+          }
+      }}>
             <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
               Lưu
             </Text>

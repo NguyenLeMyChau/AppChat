@@ -118,7 +118,7 @@ export default function Register({ navigation }) {
 
   const handleCheckPass = (text) => {
     setPassword(text);
-    if (text.length >= 6 && /^[A-Z]/.test(text)) {
+    if (text.length >= 8) {
       setIsPassValid(true);
     } else {
       setIsPassValid(false);
@@ -201,7 +201,7 @@ export default function Register({ navigation }) {
           autoCapitalize='none'
           style={[styles.txtSDT, { borderBottomColor: isPassValid ? 'black' : 'red' }]}
         />
-        {!isPassValid && password.length>0 ?<Text style={{ color: 'red' }}>Mật khẩu phải lớn hơn 6 kí tự và có kí tự đầu là kí tự in hoa</Text>:null}
+        {!isPassValid && password.length>0 ?<Text style={{ color: 'red' }}>Mật khẩu phải lớn hơn 8 kí tự </Text>:null}
 
         <Text style={{ fontSize: 16, color: 'black', padding: 10, fontWeight: 'bold' }}>Nhập lại mật khẩu</Text>
         <TextInput
