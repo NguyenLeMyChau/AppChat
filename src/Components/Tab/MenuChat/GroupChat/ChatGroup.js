@@ -135,7 +135,7 @@ export default function ChatGroup({ navigation, route }) {
           from: userData._id,
           to: group._id,
           message: currentMessage,
-          avatar: group.avatar,
+          avatar: userData.avatar,
         }
       );
       const data = response.data.data;
