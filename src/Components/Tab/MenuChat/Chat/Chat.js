@@ -385,6 +385,7 @@ export default function Chat({ navigation, route }) {
         break;
       case 'application/msword':
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        file.type = 'application/docx';
         file.name = filename;
         break;
       case 'application/pdf':
