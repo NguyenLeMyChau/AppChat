@@ -31,7 +31,9 @@ export default function ChangeInformation({ navigation }) {
 
   async function getData() {
     const foundUser = await AsyncStorage.getItem("foundUser");
-    setUserData(JSON.parse(foundUser));
+    const userData = JSON.parse(foundUser);
+    setUserData(userData);
+    setName(userData.name);
   }
 
   useEffect(() => {
@@ -81,48 +83,56 @@ export default function ChangeInformation({ navigation }) {
     }
   }
 
-  const handleChange = async () => {
-    const response = await axios.put(
-      `https://backend-chatapp-rdj6.onrender.com/user/updateUser/${userData._id}`,
-      { name, gender, avatar: avatar }
-    );
+  const [isNameValid, setIsNameValid] = useState(true);
+  const handleChange = async (text) => {
 
-    const { data } = response;
+    if (text.length >= 2 && text.length <= 40) {
+      setIsNameValid(true);
+      const response = await axios.put(
+        `https://backend-chatapp-rdj6.onrender.com/user/updateUser/${userData._id}`,
+        { name, gender, avatar: avatar }
+      );
 
-    if (data.success) {
-      alert(data.message);
-      let updatedUser;
-      if (name === "") {
-        updatedUser = {
-          _id: userData._id,
-          name: userData.name,
-          email: userData.email,
-          gender: gender,
-          avatar: avatar,
-        };
+      const { data } = response;
+
+      if (data.success) {
+        alert(data.message);
+        let updatedUser;
+
+        if (avatar === null) {
+          updatedUser = {
+            _id: userData._id,
+            name: name,
+            email: userData.email,
+            gender: gender,
+            avatar: userData.avatar,
+          }
+        } else {
+          updatedUser = {
+            _id: userData._id,
+            name: name,
+            email: userData.email,
+            gender: gender,
+            avatar: avatar,
+          };
+
+        }
+
+        console.log(updatedUser);
+        await AsyncStorage.setItem("foundUser", JSON.stringify(updatedUser));
+        setUserData(updatedUser);
+        await navigation.navigate("BottomTab");
       } else {
-        updatedUser = {
-          _id: userData._id,
-          name: name,
-          email: userData.email,
-          gender: gender,
-          avatar: avatar,
-        };
-        
+        if (error.response) {
+          alert(error.response.data.message);
+        } else {
+          console.log(error.message);
+        }
       }
-
-      
-      console.log(updatedUser);
-      await AsyncStorage.setItem("foundUser", JSON.stringify(updatedUser));
-      setUserData(updatedUser);
-      await navigation.navigate("BottomTab");
     } else {
-      if (error.response) {
-        alert(error.response.data.message);
-      } else {
-        console.log(error.message);
-      }
+      setIsNameValid(false);
     }
+
   };
 
   useEffect(() => {
@@ -155,16 +165,6 @@ export default function ChangeInformation({ navigation }) {
     ).start();
   }, []);
 
-  const [isNameValid, setIsNameValid] = useState(false);
-  const handleCheckName = (text) => {
-      setName(text);
-      if (text.length >= 2 && text.length <= 40) {
-        setIsNameValid(true);
-      } else {
-        setIsNameValid(false);
-      }
-    };
-
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -196,11 +196,11 @@ export default function ChangeInformation({ navigation }) {
               <ImageBackground
                 source={
                   avatar
-                    ? {uri:avatar}
+                    ? { uri: avatar }
                     : userData.avatar
                       ? { uri: userData.avatar }
-                      : {uri:"https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W"}
-                }     
+                      : { uri: "https://inkythuatso.com/uploads/thumbnails/800/2023/03/6-anh-dai-dien-trang-inkythuatso-03-15-26-36.jpg?gidzl=QL-ECEnPjmnbHeyrw4A_3s16W3Bo4xu5BHU2CwWUl0Wd6T4mhH2-N24LZs2h7RDU94-ADcEyCGaEvr-_3W" }
+                }
                 style={styles.avatar}
                 imageStyle={{
                   borderRadius: 75,
@@ -229,20 +229,21 @@ export default function ChangeInformation({ navigation }) {
               }}
             >
               <View>
-              <TextInput
-                style={[styles.option,{ borderBottomColor: isNameValid ? 'black' : 'red' }]}
-                onChangeText={(text) => {
-                  handleCheckName(text), setName(text), setChange(true);
-                }}
-                placeholder={userData.name}
-              />
-              <Octicons
-                name="pencil"
-                size={18}
-                color="black"
-                style={{ right: 35 }}
-              />
-              {!isNameValid? <Text style={{ color: 'red' }}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text>:null}
+                <TextInput
+                  style={[styles.option, { borderBottomColor: isNameValid ? 'black' : 'red' }]}
+                  onChangeText={(text) => {
+                    setName(text), setChange(true);
+                  }}
+                  value={name}
+                // placeholder={userData.name}
+                />
+                <Octicons
+                  name="pencil"
+                  size={18}
+                  color="black"
+                  style={{ right: 35 }}
+                />
+                {!isNameValid ? <Text style={{ color: 'red' }}>Tên phải lớn hơn 2 và nhỏ hơn hoặc bằng 40 kí tự</Text> : null}
               </View>
             </View>
 
@@ -303,14 +304,9 @@ export default function ChangeInformation({ navigation }) {
           </View>
         </View>
         {change ? (
-         <TouchableOpacity style={styles.uploadStatus} onPress={async () => {
-          if(isNameValid){
-              await handleChange(avatar);
-          }
-          else{
-              console.log("Vui long kiem tra lai thong tin!");
-          }
-      }}>
+          <TouchableOpacity style={styles.uploadStatus} onPress={async () => {
+            await handleChange(name);
+          }}>
             <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
               Lưu
             </Text>
